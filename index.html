@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <title>Bigger Season</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -26,7 +29,10 @@
     <main class="main">
       <!-- Round screen -->
       <section id="round-screen" class="screen active">
-        <div class="position-label" id="position-label"></div>
+        <div class="round-header">
+          <span class="position-badge" id="position-label"></span>
+          <p class="round-instruction">Who had the better season?</p>
+        </div>
         <div class="matchup">
           <div class="player player-a">
             <div class="player-name" id="player-a-name"></div>
@@ -46,6 +52,7 @@
 
       <!-- Results screen -->
       <section id="results-screen" class="screen">
+        <p class="results-label">Final Score</p>
         <div class="results-score" id="results-score"></div>
         <div class="results-streak" id="results-streak"></div>
         <div class="share-grid" id="share-grid"></div>
