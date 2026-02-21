@@ -46,9 +46,22 @@
       <!-- Start screen -->
       <section id="start-screen" class="screen active">
         <div class="start-content">
-          <p class="start-mode-label" id="start-mode-label">Unlimited</p>
-          <p class="start-mode-desc" id="start-mode-desc">Play as many games as you like.</p>
-          <button class="start-btn" id="start-btn">Start</button>
+          <p class="start-prompt">Choose a game mode</p>
+          <div class="mode-options">
+            <button class="mode-card" data-mode="unlimited">
+              <span class="mode-card-title">Unlimited</span>
+              <span class="mode-card-desc">Play as many games as you like.</span>
+            </button>
+            <button class="mode-card" data-mode="daily">
+              <span class="mode-card-title">Daily</span>
+              <span class="mode-card-desc">One puzzle per day. Same for everyone.</span>
+            </button>
+            <button class="mode-card" data-mode="blitz">
+              <span class="mode-card-title">Blitz</span>
+              <span class="mode-card-desc">60 seconds. As many rounds as you can.</span>
+            </button>
+          </div>
+          <button class="start-btn" id="start-btn" disabled>Start</button>
         </div>
       </section>
 

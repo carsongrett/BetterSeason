@@ -257,8 +257,6 @@ function getRound3Position(seed, rng, mode) {
 const startScreen = document.getElementById('start-screen');
 const roundScreen = document.getElementById('round-screen');
 const resultsScreen = document.getElementById('results-screen');
-const startModeLabel = document.getElementById('start-mode-label');
-const startModeDesc = document.getElementById('start-mode-desc');
 const startBtn = document.getElementById('start-btn');
 const menuBtn = document.getElementById('menu-btn');
 const menuOverlay = document.getElementById('menu-overlay');
@@ -283,7 +281,7 @@ const modalClose = document.getElementById('modal-close');
 
 let state = {
   data: null,
-  mode: MODES.UNLIMITED,
+  mode: null,
   seed: null,
   rng: null,
   rounds: [],
@@ -666,8 +664,13 @@ function goToStartScreen() {
 }
 
 function updateStartScreen() {
-  startModeLabel.textContent = MODE_LABELS[state.mode];
-  startModeDesc.textContent = MODE_DESCRIPTIONS[state.mode];
+  document.querySelectorAll('.mode-card').forEach(card => {
+    card.classList.toggle('selected', card.dataset.mode === state.mode);
+  });
+  startBtn.disabled = !state.mode;
+  document.querySelectorAll('.menu-option').forEach(opt => {
+    opt.classList.toggle('selected', opt.dataset.mode === state.mode);
+  });
 }
 
 function setupMenu() {
@@ -689,15 +692,26 @@ function setupMenu() {
       menuBtn.setAttribute('aria-expanded', 'false');
       btn.parentElement.querySelectorAll('.menu-option').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
-      updateStartScreen();
       goToStartScreen();
     });
   });
   document.querySelector(`.menu-option[data-mode="unlimited"]`).classList.add('selected');
 }
 
+function setupModeCards() {
+  document.querySelectorAll('.mode-card').forEach(card => {
+    card.addEventListener('click', () => {
+      state.mode = card.dataset.mode;
+      document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      startBtn.disabled = false;
+    });
+  });
+}
+
 function setupStartBtn() {
   startBtn.addEventListener('click', () => {
+    if (!state.mode) return;
     if (state.mode === MODES.DAILY && hasPlayedDailyToday()) {
       showDailyAlreadyPlayed();
     } else {
@@ -710,6 +724,7 @@ async function main() {
   try {
     setupHowToPlay();
     setupMenu();
+    setupModeCards();
     setupStartBtn();
     state.data = await loadData();
     goToStartScreen();
