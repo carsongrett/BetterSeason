@@ -1,0 +1,377 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #0d0d0d;
+  color: #f0f0f0;
+  min-height: 100dvh;
+  max-height: 100dvh;
+  overscroll-behavior: none;
+}
+
+#app {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+.header {
+  flex-shrink: 0;
+  padding: 0.4rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #333;
+  position: relative;
+}
+
+.how-to-btn {
+  position: absolute;
+  left: 0.75rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: 1px solid #555;
+  background: transparent;
+  color: #a0a0a0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+}
+
+.how-to-btn:hover {
+  border-color: #888;
+  color: #f0f0f0;
+}
+
+.header h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* How to Play modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 1.25rem;
+  max-width: 320px;
+}
+
+.modal h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.modal p {
+  font-size: 0.85rem;
+  color: #ccc;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+.modal p:last-of-type {
+  margin-bottom: 1rem;
+}
+
+.modal-close {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid #444;
+  background: #333;
+  color: #f0f0f0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  background: #444;
+}
+
+.main {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.screen {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding: 0.75rem 1rem;
+  animation: fadeIn 0.25s ease;
+}
+
+.screen.active {
+  display: flex;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Round screen */
+.position-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #a0a0a0;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  flex-shrink: 0;
+}
+
+.matchup {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0.35rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  flex-shrink: 0;
+}
+
+.player {
+  text-align: center;
+  padding: 0.35rem 0.25rem;
+  background: #1a1a1a;
+  border-radius: 6px;
+}
+
+.player-name {
+  font-size: clamp(0.75rem, 2.5vw, 0.9rem);
+  font-weight: 600;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+.player-meta {
+  font-size: 0.7rem;
+  color: #888;
+  margin-top: 0.25rem;
+}
+
+.vs {
+  font-size: 0.75rem;
+  color: #666;
+  font-weight: 600;
+}
+
+.stat-picks {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  justify-content: center;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.stat-label {
+  flex: 0 0 5.5rem;
+  font-size: 0.7rem;
+  color: #a0a0a0;
+}
+
+.stat-buttons {
+  flex: 1;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.stat-btn {
+  flex: 1;
+  min-height: 38px;
+  padding: 0.4rem 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #444;
+  background: #1a1a1a;
+  color: #f0f0f0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.stat-btn:hover {
+  border-color: #666;
+  background: #252525;
+}
+
+.stat-btn.selected,
+.stat-btn.picked {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.stat-btn .feedback-check {
+  margin-left: 0.25rem;
+  color: #22c55e;
+  font-size: 0.85em;
+  opacity: 0.9;
+}
+
+.stat-btn .feedback-wrong {
+  margin-left: 0.25rem;
+  color: #ef4444;
+  font-size: 0.85em;
+  opacity: 0.9;
+}
+
+.stat-row.revealed .stat-label {
+  flex: 1;
+  min-width: 0;
+}
+
+.stat-values {
+  font-size: 0.65rem;
+  color: #888;
+}
+
+.confirm-btn {
+  flex-shrink: 0;
+  margin-top: auto;
+  padding: 0.6rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: none;
+  background: #3b82f6;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.confirm-btn:hover:not(:disabled) {
+  background: #2563eb;
+}
+
+.confirm-btn:disabled {
+  background: #333;
+  color: #666;
+  cursor: not-allowed;
+}
+
+/* Results screen */
+#results-screen {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.6rem;
+}
+
+.results-score {
+  font-size: 1.75rem;
+  font-weight: 800;
+}
+
+.results-streak {
+  font-size: 0.8rem;
+  color: #a0a0a0;
+}
+
+.share-grid {
+  font-family: ui-monospace, monospace;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  background: #1a1a1a;
+  padding: 0.75rem;
+  border-radius: 8px;
+  white-space: pre;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.copy-btn, .new-game-btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 2px solid #444;
+  background: #1a1a1a;
+  color: #f0f0f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.copy-btn:hover, .new-game-btn:hover {
+  border-color: #666;
+  background: #252525;
+}
+
+.new-game-btn {
+  margin-top: 0.5rem;
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.new-game-btn:hover {
+  background: rgba(59, 130, 246, 0.3);
+}
+
+/* Desktop: centered, max-width */
+@media (min-width: 480px) {
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background: #0d0d0d;
+  }
+
+  #app {
+    width: 100%;
+    max-width: 420px;
+    min-height: 600px;
+    box-shadow: 0 0 0 1px #222;
+  }
+}

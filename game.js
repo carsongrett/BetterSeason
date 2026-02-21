@@ -1,0 +1,493 @@
+/**
+ * Bigger Season - Daily NFL comparison game
+ */
+
+// ========== DAILY MODE: replace random seed with today's date string ==========
+// For dev/replay: use random seed. For production: use getTodaySeed().
+function getGameSeed() {
+  return Math.random().toString(36).slice(2, 12);
+  // return getTodaySeed();
+}
+
+function getTodaySeed() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function getGameNumber() {
+  // In daily mode, derive puzzle number from epoch days
+  const epoch = new Date(2024, 8, 4); // NFL season start reference
+  const today = new Date();
+  const msPerDay = 86400000;
+  const days = Math.floor((today - epoch) / msPerDay);
+  return Math.max(1, days);
+}
+
+// Seeded random number generator (mulberry32)
+function createSeededRandom(seed) {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) {
+    h = Math.imul(31, h) + seed.charCodeAt(i) | 0;
+  }
+  return function() {
+    h = Math.imul(h ^ h >>> 15, h | 0);
+    h = Math.imul(h ^ h >>> 13, h | 0);
+    return ((h ^ h >>> 16) >>> 0) / 4294967296;
+  };
+}
+
+// Stat display names
+const STAT_NAMES = {
+  'Cmp%': 'Completion %',
+  'Yds': null, // contextual
+  'TD': null,
+  'Int': 'Interceptions',
+  'Rate': 'Passer Rating',
+  'Y/A': 'Yards Per Carry',
+  'Rec': 'Receptions',
+};
+
+function formatStatValue(val, stat) {
+  const n = parseFloat(val);
+  if (isNaN(n)) return String(val);
+  if (stat === 'Cmp%' || stat === 'Rate' || stat === 'Y/A') return n.toFixed(1);
+  if (Number.isInteger(n)) return n.toLocaleString();
+  return n.toFixed(1);
+}
+
+function getLastName(player) {
+  const parts = (player.Player || '').trim().split(/\s+/);
+  return parts.length > 1 ? parts[parts.length - 1] : player.Player || '?';
+}
+
+function getStatDisplayName(col, position) {
+  if (col === 'Yds') {
+    if (position === 'QB') return 'Passing Yards';
+    if (position === 'RB') return 'Rushing Yards';
+    return 'Receiving Yards';
+  }
+  if (col === 'TD') {
+    if (position === 'QB') return 'Passing Touchdowns';
+    if (position === 'RB') return 'Rushing Touchdowns';
+    return 'Receiving Touchdowns';
+  }
+  return STAT_NAMES[col] || col;
+}
+
+// Lower is better (only Int)
+const LOWER_BETTER = new Set(['Int']);
+
+function isBetter(valA, valB, statCol) {
+  const a = parseFloat(valA);
+  const b = parseFloat(valB);
+  if (LOWER_BETTER.has(statCol)) return a < b;
+  return a > b;
+}
+
+const POSITIONS = ['QB', 'RB', 'WR', 'TE'];
+const FILES = [
+  'qb_2023', 'qb_2024', 'qb_2025',
+  'rb_2023', 'rb_2024', 'rb_2025',
+  'wr_2023', 'wr_2024', 'wr_2025',
+  'te_2023', 'te_2024', 'te_2025',
+];
+
+async function loadData() {
+  const all = {};
+  for (const f of FILES) {
+    const [pos, year] = f.split('_');
+    const res = await fetch(`data/${f}.csv`);
+    const text = await res.text();
+    const lines = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim());
+    const rows = [];
+    for (let i = 1; i < lines.length; i++) {
+      const vals = parseCSVLine(lines[i]);
+      const row = {};
+      headers.forEach((h, j) => row[h] = vals[j] || '');
+      row.season = parseInt(year, 10);
+      rows.push(row);
+    }
+    const key = pos.toUpperCase();
+    if (!all[key]) all[key] = [];
+    all[key].push(...rows);
+  }
+  return all;
+}
+
+function parseCSVLine(line) {
+  const out = [];
+  let cur = '';
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') inQuotes = !inQuotes;
+    else if ((c === ',' && !inQuotes) || c === '\r') {
+      out.push(cur.trim());
+      cur = '';
+    } else {
+      cur += c;
+    }
+  }
+  out.push(cur.trim());
+  return out;
+}
+
+// QB: Yds + 2 from [Cmp%, TD, Int, Rate]
+const QB_STAT_POOL = ['Cmp%', 'TD', 'Int', 'Rate'];
+
+function pickQBStats(rng) {
+  const others = [...QB_STAT_POOL];
+  for (let i = others.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [others[i], others[j]] = [others[j], others[i]];
+  }
+  return ['Yds', others[0], others[1]];
+}
+
+// RB: Yds, TD, Y/A
+const RB_STATS = ['Yds', 'TD', 'Y/A'];
+
+// WR/TE: Rec, Yds, TD
+const WR_TE_STATS = ['Rec', 'Yds', 'TD'];
+
+function pickStatsForRound(position, rng) {
+  if (position === 'QB') return pickQBStats(rng);
+  if (position === 'RB') return RB_STATS;
+  return WR_TE_STATS;
+}
+
+function ydsColumn(position) {
+  return 'Yds';
+}
+
+function getYdsRatio(playerA, playerB, pos) {
+  const col = ydsColumn(pos);
+  const a = parseFloat(playerA[col]) || 0;
+  const b = parseFloat(playerB[col]) || 0;
+  if (a === 0 && b === 0) return 1;
+  const min = Math.min(a, b);
+  const max = Math.max(a, b);
+  if (max === 0) return 1;
+  return min / max;
+}
+
+function sameTeamSeason(a, b) {
+  return a.Team === b.Team && a.season === b.season;
+}
+
+function hasStatTie(a, b, stats) {
+  for (const s of stats) {
+    const va = parseFloat(a[s]);
+    const vb = parseFloat(b[s]);
+    if (va === vb && !isNaN(va)) return true;
+  }
+  return false;
+}
+
+function playerKey(p) {
+  return `${p.Player}|${p.Team}|${p.season}`;
+}
+
+function generateMatchup(pool, stats, usedKeys, rng) {
+  const list = pool.flat();
+  const maxAttempts = 500;
+  for (let _ = 0; _ < maxAttempts; _++) {
+    const i = Math.floor(rng() * list.length);
+    const j = Math.floor(rng() * list.length);
+    if (i === j) continue;
+
+    const a = list[i];
+    const b = list[j];
+
+    if (sameTeamSeason(a, b)) continue;
+    if (usedKeys.has(playerKey(a)) || usedKeys.has(playerKey(b))) continue;
+    if (getYdsRatio(a, b, a.Pos) < 0.70) continue;
+    if (hasStatTie(a, b, stats)) continue;
+
+    return [a, b];
+  }
+  return null;
+}
+
+// WR vs TE: alternate by game (dev) or by calendar day (daily)
+function getRound3Position(seed, rng) {
+  // DAILY MODE: use calendar day for WR/TE alternation
+  // return (new Date().getDate()) % 2 === 0 ? 'WR' : 'TE';
+
+  // Dev: alternate by seed
+  const h = seed.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+  return h % 2 === 0 ? 'WR' : 'TE';
+}
+
+// --- DOM ---
+const roundScreen = document.getElementById('round-screen');
+const resultsScreen = document.getElementById('results-screen');
+const positionLabel = document.getElementById('position-label');
+const playerAName = document.getElementById('player-a-name');
+const playerAMeta = document.getElementById('player-a-meta');
+const playerBName = document.getElementById('player-b-name');
+const playerBMeta = document.getElementById('player-b-meta');
+const statPicks = document.getElementById('stat-picks');
+const confirmBtn = document.getElementById('confirm-btn');
+const resultsScore = document.getElementById('results-score');
+const resultsStreak = document.getElementById('results-streak');
+const shareGrid = document.getElementById('share-grid');
+const copyBtn = document.getElementById('copy-btn');
+const newGameBtn = document.getElementById('new-game-btn');
+const howToBtn = document.getElementById('how-to-btn');
+const howToModal = document.getElementById('how-to-modal');
+const modalClose = document.getElementById('modal-close');
+
+let state = {
+  data: null,
+  seed: null,
+  rng: null,
+  rounds: [],
+  currentRound: 0,
+  picks: [],
+  score: 0,
+  roundScores: [],
+};
+
+function initGame() {
+  state.seed = getGameSeed();
+  state.rng = createSeededRandom(state.seed);
+  state.rounds = [];
+  state.currentRound = 0;
+  state.picks = [];
+  state.score = 0;
+  state.roundScores = [];
+
+  const posOrder = ['QB', 'RB', getRound3Position(state.seed, state.rng)];
+
+  const usedKeys = new Set();
+
+  for (let r = 0; r < 3; r++) {
+    const pos = posOrder[r];
+    const stats = pickStatsForRound(pos, state.rng);
+    const pool = state.data[pos];
+    const matchup = generateMatchup(pool, stats, usedKeys, state.rng);
+    if (!matchup) {
+      console.error('Failed to generate matchup for', pos);
+      const a = pool[0], b = pool[1];
+      usedKeys.add(playerKey(a));
+      usedKeys.add(playerKey(b));
+      const correct = stats.map(s => isBetter(a[s], b[s], s) ? 'A' : 'B');
+      state.rounds.push({ position: pos, stats, playerA: a, playerB: b, correct });
+    } else {
+      const [a, b] = matchup;
+      usedKeys.add(playerKey(a));
+      usedKeys.add(playerKey(b));
+      const correct = stats.map(s => isBetter(a[s], b[s], s) ? 'A' : 'B');
+      state.rounds.push({ position: pos, stats, playerA: a, playerB: b, correct });
+    }
+  }
+
+  renderRound();
+  roundScreen.classList.add('active');
+  resultsScreen.classList.remove('active');
+}
+
+function renderRound() {
+  const r = state.rounds[state.currentRound];
+  if (!r) return;
+
+  positionLabel.textContent = r.position;
+  playerAName.textContent = r.playerA.Player;
+  playerAMeta.textContent = `${r.playerA.Team} · ${r.playerA.season}`;
+  playerBName.textContent = r.playerB.Player;
+  playerBMeta.textContent = `${r.playerB.Team} · ${r.playerB.season}`;
+
+  state.picks = [];
+  statPicks.innerHTML = '';
+
+  const nameA = getLastName(r.playerA);
+  const nameB = getLastName(r.playerB);
+
+  for (let i = 0; i < r.stats.length; i++) {
+    const stat = r.stats[i];
+    const label = getStatDisplayName(stat, r.position);
+    const row = document.createElement('div');
+    row.className = 'stat-row';
+    row.dataset.statIndex = i;
+    row.innerHTML = `
+      <span class="stat-label">${label}</span>
+      <div class="stat-buttons">
+        <button class="stat-btn" data-pick="A" data-stat-index="${i}">${nameA}</button>
+        <button class="stat-btn" data-pick="B" data-stat-index="${i}">${nameB}</button>
+      </div>
+    `;
+    statPicks.appendChild(row);
+
+    const btnA = row.querySelector('[data-pick="A"]');
+    const btnB = row.querySelector('[data-pick="B"]');
+
+    btnA.addEventListener('click', () => pickStat(i, 'A', row));
+    btnB.addEventListener('click', () => pickStat(i, 'B', row));
+  }
+
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = 'Confirm';
+  confirmBtn.onclick = handleConfirm;
+}
+
+function pickStat(index, pick, row) {
+  state.picks[index] = pick;
+  const btns = row.querySelectorAll('.stat-btn');
+  btns.forEach(b => b.classList.remove('selected'));
+  const chosen = row.querySelector(`[data-pick="${pick}"]`);
+  chosen.classList.add('selected');
+  confirmBtn.disabled = state.picks.some(p => p == null);
+}
+
+function handleConfirm() {
+  const r = state.rounds[state.currentRound];
+  let roundScore = 0;
+
+  r.stats.forEach((stat, i) => {
+    const pick = state.picks[i];
+    const correct = r.correct[i];
+    const isCorrect = pick === correct;
+    if (isCorrect) roundScore++;
+
+    const row = statPicks.children[i];
+    row.classList.add('revealed');
+
+    const btnA = row.querySelector('[data-pick="A"]');
+    const btnB = row.querySelector('[data-pick="B"]');
+    btnA.disabled = true;
+    btnB.disabled = true;
+
+    btnA.classList.remove('selected');
+    btnB.classList.remove('selected');
+
+    const label = getStatDisplayName(stat, r.position);
+    const valA = formatStatValue(r.playerA[stat], stat);
+    const valB = formatStatValue(r.playerB[stat], stat);
+
+    btnA.textContent = valA;
+    btnB.textContent = valB;
+
+    const pickedBtn = pick === 'A' ? btnA : btnB;
+    pickedBtn.classList.add('picked');
+    const feedback = document.createElement('span');
+    feedback.className = isCorrect ? 'feedback-check' : 'feedback-wrong';
+    feedback.textContent = isCorrect ? '✓' : '✗';
+    feedback.setAttribute('aria-hidden', 'true');
+    pickedBtn.appendChild(feedback);
+
+    row.querySelector('.stat-label').textContent = label;
+  });
+
+  state.score += roundScore;
+  state.roundScores.push({ position: r.position, score: roundScore, total: 3 });
+
+  confirmBtn.textContent = state.currentRound < 2 ? 'Next round →' : 'See results';
+  confirmBtn.onclick = goNext;
+}
+
+function goNext() {
+  state.currentRound++;
+  if (state.currentRound < 3) {
+    roundScreen.classList.remove('active');
+    setTimeout(() => {
+      renderRound();
+      roundScreen.classList.add('active');
+    }, 150);
+  } else {
+    updateStreak();
+    showResults();
+  }
+}
+
+function updateStreak() {
+  const key = 'biggerseason_streak';
+  const dateKey = 'biggerseason_lastDate';
+  const today = new Date().toDateString();
+
+  let streak = parseInt(localStorage.getItem(key) || '0', 10);
+  const last = localStorage.getItem(dateKey);
+
+  if (last === today) return; // already played today
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayStr = yesterday.toDateString();
+
+  if (last === yesterdayStr) streak++;
+  else streak = 1;
+
+  localStorage.setItem(key, String(streak));
+  localStorage.setItem(dateKey, today);
+}
+
+function getStreak() {
+  return parseInt(localStorage.getItem('biggerseason_streak') || '0', 10);
+}
+
+function buildShareGrid() {
+  const num = getGameNumber();
+  let grid = `🏈 Bigger Season #${num}\n\n`;
+  state.roundScores.forEach(({ position, score, total }) => {
+    const correct = '✅'.repeat(score);
+    const wrong = '❌'.repeat(total - score);
+    grid += `${position}  ${correct}${wrong}  ${score}/${total}\n`;
+  });
+  grid += `\n${state.score}/9 — biggerseason `;
+  return grid;
+}
+
+function showResults() {
+  roundScreen.classList.remove('active');
+  resultsScreen.classList.add('active');
+
+  resultsScore.textContent = `${state.score}/9`;
+  resultsStreak.textContent = `Streak: ${getStreak()} day${getStreak() !== 1 ? 's' : ''}`;
+  shareGrid.textContent = buildShareGrid();
+
+  copyBtn.onclick = () => {
+    navigator.clipboard.writeText(buildShareGrid());
+    copyBtn.textContent = 'Copied!';
+    setTimeout(() => copyBtn.textContent = 'Copy to clipboard', 1500);
+  };
+
+  newGameBtn.onclick = () => {
+    initGame();
+  };
+}
+
+function setupHowToPlay() {
+  howToBtn.addEventListener('click', () => {
+    howToModal.classList.add('open');
+    howToModal.setAttribute('aria-hidden', 'false');
+  });
+  modalClose.addEventListener('click', closeHowToModal);
+  howToModal.addEventListener('click', (e) => {
+    if (e.target === howToModal) closeHowToModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && howToModal.classList.contains('open')) closeHowToModal();
+  });
+}
+
+function closeHowToModal() {
+  howToModal.classList.remove('open');
+  howToModal.setAttribute('aria-hidden', 'true');
+}
+
+async function main() {
+  try {
+    setupHowToPlay();
+    state.data = await loadData();
+    initGame();
+  } catch (e) {
+    document.body.innerHTML = `
+      <div style="padding:2rem;text-align:center;color:#f0f0f0;">
+        <p>Failed to load data. Run a local server (e.g. <code>npx serve</code>) — fetch does not work with file:// URLs.</p>
+        <p style="margin-top:1rem;font-size:0.9rem;color:#888;">${e.message}</p>
+      </div>
+    `;
+  }
+}
+
+main();

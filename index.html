@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>Bigger Season</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <button class="how-to-btn" id="how-to-btn" type="button" aria-label="How to play">?</button>
+      <h1>Bigger Season</h1>
+    </header>
+
+    <!-- How to Play modal -->
+    <div class="modal-overlay" id="how-to-modal" aria-hidden="true">
+      <div class="modal">
+        <h2>How to Play</h2>
+        <p>Pick which player had the better stat in each category. Three rounds — QBs, RBs, and WRs or TEs.</p>
+        <p>One point per correct pick. 9 total.</p>
+        <button class="modal-close" id="modal-close">Got it</button>
+      </div>
+    </div>
+
+    <main class="main">
+      <!-- Round screen -->
+      <section id="round-screen" class="screen active">
+        <div class="position-label" id="position-label"></div>
+        <div class="matchup">
+          <div class="player player-a">
+            <div class="player-name" id="player-a-name"></div>
+            <div class="player-meta" id="player-a-meta"></div>
+          </div>
+          <div class="vs">vs</div>
+          <div class="player player-b">
+            <div class="player-name" id="player-b-name"></div>
+            <div class="player-meta" id="player-b-meta"></div>
+          </div>
+        </div>
+        <div class="stat-picks" id="stat-picks">
+          <!-- Stat rows injected by JS -->
+        </div>
+        <button class="confirm-btn" id="confirm-btn" disabled>Confirm</button>
+      </section>
+
+      <!-- Results screen -->
+      <section id="results-screen" class="screen">
+        <div class="results-score" id="results-score"></div>
+        <div class="results-streak" id="results-streak"></div>
+        <div class="share-grid" id="share-grid"></div>
+        <button class="copy-btn" id="copy-btn">Copy to clipboard</button>
+        <!-- DEV ONLY: Remove at launch -->
+        <button class="new-game-btn" id="new-game-btn">New Game</button>
+      </section>
+    </main>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>
