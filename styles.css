@@ -252,10 +252,10 @@ body::before {
 }
 
 .player-meta {
-  font-size: 0.8rem;
-  color: #888;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #a8a8a8;
   margin-top: 0.4rem;
-  font-weight: 500;
 }
 
 .vs {

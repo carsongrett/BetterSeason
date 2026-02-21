@@ -196,23 +196,27 @@ function getYdsRatioThreshold(position) {
 function generateMatchup(pool, stats, usedKeys, rng, position) {
   const list = pool.flat();
   const minRatio = getYdsRatioThreshold(position);
-  const maxAttempts = 500;
-  for (let _ = 0; _ < maxAttempts; _++) {
-    const i = Math.floor(rng() * list.length);
-    const j = Math.floor(rng() * list.length);
-    if (i === j) continue;
+  const validPairs = [];
 
-    const a = list[i];
-    const b = list[j];
+  for (let i = 0; i < list.length; i++) {
+    for (let j = i + 1; j < list.length; j++) {
+      const a = list[i];
+      const b = list[j];
 
-    if (sameTeamSeason(a, b)) continue;
-    if (usedKeys.has(playerKey(a)) || usedKeys.has(playerKey(b))) continue;
-    if (getYdsRatio(a, b, a.Pos) < minRatio) continue;
-    if (hasStatTie(a, b, stats)) continue;
+      if (sameTeamSeason(a, b)) continue;
+      if (usedKeys.has(playerKey(a)) || usedKeys.has(playerKey(b))) continue;
+      if (getYdsRatio(a, b, a.Pos) < minRatio) continue;
+      if (hasStatTie(a, b, stats)) continue;
 
-    return [a, b];
+      validPairs.push([a, b]);
+    }
   }
-  return null;
+
+  if (validPairs.length === 0) return null;
+
+  const idx = Math.floor(rng() * validPairs.length);
+  const [a, b] = validPairs[idx];
+  return rng() < 0.5 ? [a, b] : [b, a];
 }
 
 // WR vs TE: alternate by game (dev) or by calendar day (daily)
