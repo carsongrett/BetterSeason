@@ -946,16 +946,30 @@ function getStreak(sport, mode) {
 }
 
 const SHARE_URL_PLACEHOLDER = 'https://betterseason.live';
+const SHARE_X_USERNAME = '@BetterSznGame';
+
+const SHORT_MONTHS = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
+
+function getShareDateStr() {
+  const d = new Date();
+  return `(${SHORT_MONTHS[d.getMonth()]} ${d.getDate()})`;
+}
 
 function buildShareText(mode, score, roundScores, sport) {
   const modeStr = mode === 'daily' ? 'Daily' : mode === 'blitz' ? 'Blitz' : mode === 'rookie_qb' ? 'Rookie QBs' : mode === 'mlb_batters' ? 'MLB Batters' : mode === 'mlb_pitchers' ? 'MLB Pitchers' : 'Unlimited';
   const total = mode === 'rookie_qb' ? 12 : 9;
   const scoreStr = mode === 'blitz' ? `${score} pts` : `${score}/${total}pts`;
-  const urlSuffix = SHARE_URL_PLACEHOLDER ? `\n\n${SHARE_URL_PLACEHOLDER}` : '';
+  const urlSuffix = (SHARE_X_USERNAME && SHARE_URL_PLACEHOLDER)
+    ? `\n\n${SHARE_X_USERNAME}\n${SHARE_URL_PLACEHOLDER}`
+    : SHARE_URL_PLACEHOLDER ? `\n\n${SHARE_URL_PLACEHOLDER}` : '';
+  const dailyModes = ['daily', 'rookie_qb', 'mlb_batters', 'mlb_pitchers'];
+  const isDaily = dailyModes.includes(mode);
+  const dash = isDaily ? ' - ' : ' — ';
+  const dateSuffix = isDaily ? ` ${getShareDateStr()}` : '';
   if (mode === 'blitz') {
     return `${scoreStr} — ${modeStr}${urlSuffix}`;
   }
-  let text = `${scoreStr} — ${modeStr}`;
+  let text = `${scoreStr}${dash}${modeStr}${dateSuffix}`;
   if (roundScores && roundScores.length > 0) {
     text += '\n\n';
     roundScores.forEach(({ position, score: rs, total: t }, idx) => {
