@@ -50,9 +50,9 @@ const MODE_LABELS = {
   unlimited: 'Unlimited',
   daily: 'Daily',
   blitz: 'Blitz',
-  rookie_qb: 'Rookie QBs (daily)',
-  mlb_batters: 'MLB Batters (daily)',
-  mlb_pitchers: 'MLB Pitchers (daily)',
+  rookie_qb: 'Rookie QBs',
+  mlb_batters: 'MLB Batters',
+  mlb_pitchers: 'MLB Pitchers',
 };
 
 const MODE_DESCRIPTIONS = {
@@ -948,7 +948,7 @@ function getStreak(sport, mode) {
 const SHARE_URL_PLACEHOLDER = 'https://betterseason.live';
 
 function buildShareText(mode, score, roundScores, sport) {
-  const modeStr = mode === 'daily' ? 'Daily' : mode === 'blitz' ? 'Blitz' : mode === 'rookie_qb' ? 'Rookie QBs (daily)' : mode === 'mlb_batters' ? 'MLB Batters (daily)' : mode === 'mlb_pitchers' ? 'MLB Pitchers (daily)' : 'Unlimited';
+  const modeStr = mode === 'daily' ? 'Daily' : mode === 'blitz' ? 'Blitz' : mode === 'rookie_qb' ? 'Rookie QBs' : mode === 'mlb_batters' ? 'MLB Batters' : mode === 'mlb_pitchers' ? 'MLB Pitchers' : 'Unlimited';
   const total = mode === 'rookie_qb' ? 12 : 9;
   const scoreStr = mode === 'blitz' ? `${score} pts` : `${score}/${total}pts`;
   const urlSuffix = SHARE_URL_PLACEHOLDER ? `\n\n${SHARE_URL_PLACEHOLDER}` : '';
