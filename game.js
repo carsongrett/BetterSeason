@@ -9,9 +9,27 @@ const SPORTS = {
   MLB: 'mlb',
 };
 
-const AVAILABLE_SPORTS = ['nfl'];
+const AVAILABLE_SPORTS = ['nfl', 'nba'];
 
 const SPORT_LABELS = { nfl: 'NFL', nba: 'NBA', mlb: 'MLB' };
+
+const SPORT_CONFIG = {
+  nfl: {
+    positions: ['QB', 'RB', 'WR', 'TE'],
+    ratioColumn: 'Yds',
+    ratioThreshold: (pos) => pos === 'QB' ? 0.70 : 0.65,
+    blitzPositions: ['QB', 'RB', 'WR', 'TE'],
+    round3Positions: ['WR', 'TE'],
+  },
+  nba: {
+    positions: ['PG', 'SG', 'SF', 'PF', 'C'],
+    ratioColumn: 'PTS /G',
+    ratioThreshold: () => 0.80,
+    blitzPositions: ['PG', 'SG', 'SF', 'PF', 'C'],
+    round3Positions: ['PG', 'SG', 'SF', 'PF', 'C'],
+    noMatchPairs: [['PG', 'C']],
+  },
+};
 
 const MODES = {
   UNLIMITED: 'unlimited',
@@ -69,9 +87,14 @@ const STAT_NAMES = {
   'Rec': 'Receptions',
 };
 
-function formatStatValue(val, stat) {
+function formatStatValue(val, stat, sport) {
   const n = parseFloat(val);
   if (isNaN(n)) return String(val);
+  if (sport === 'nba') {
+    if (stat === 'FT%') return (n * 100).toFixed(1) + '%';
+    if (['PTS /G', '3P /G', 'REB /G', 'AST /G'].includes(stat)) return n.toFixed(1);
+    return n.toFixed(1);
+  }
   if (stat === 'Cmp%' || stat === 'Rate' || stat === 'Y/A') return n.toFixed(1);
   if (Number.isInteger(n)) return n.toLocaleString();
   return n.toFixed(1);
@@ -89,7 +112,16 @@ function getLastName(player) {
   return last;
 }
 
-function getStatDisplayName(col, position) {
+const NBA_STAT_NAMES = {
+  'PTS /G': 'Points Per Game',
+  '3P /G': '3-Pointers Per Game',
+  'FT%': 'Free Throw %',
+  'REB /G': 'Rebounds Per Game',
+  'AST /G': 'Assists Per Game',
+};
+
+function getStatDisplayName(col, position, sport) {
+  if (sport === 'nba') return NBA_STAT_NAMES[col] || col;
   if (col === 'Yds') {
     if (position === 'QB') return 'Passing Yards';
     if (position === 'RB') return 'Rushing Yards';
@@ -104,27 +136,29 @@ function getStatDisplayName(col, position) {
   return STAT_NAMES[col] || col;
 }
 
-// Lower is better (only Int)
+// Lower is better (only Int for NFL)
 const LOWER_BETTER = new Set(['Int']);
 
-function isBetter(valA, valB, statCol) {
+function isBetter(valA, valB, statCol, sport) {
   const a = parseFloat(valA);
   const b = parseFloat(valB);
-  if (LOWER_BETTER.has(statCol)) return a < b;
+  if (sport === 'nfl' && LOWER_BETTER.has(statCol)) return a < b;
   return a > b;
 }
 
-const POSITIONS = ['QB', 'RB', 'WR', 'TE'];
-const FILES = [
+const NFL_FILES = [
   'qb_2023', 'qb_2024', 'qb_2025',
   'rb_2023', 'rb_2024', 'rb_2025',
   'wr_2023', 'wr_2024', 'wr_2025',
   'te_2023', 'te_2024', 'te_2025',
 ];
 
+const NBA_FILES = ['basketball_2026'];
+
 async function loadData() {
-  const all = {};
-  for (const f of FILES) {
+  const all = { nfl: {}, nba: {} };
+
+  for (const f of NFL_FILES) {
     try {
       const [pos, year] = f.split('_');
       const res = await fetch(`data/${f}.csv`);
@@ -141,13 +175,45 @@ async function loadData() {
         rows.push(row);
       }
       const key = pos.toUpperCase();
-      if (!all[key]) all[key] = [];
-      all[key].push(...rows);
+      if (!all.nfl[key]) all.nfl[key] = [];
+      all.nfl[key].push(...rows);
     } catch (err) {
       console.error(`Failed to load ${f}.csv:`, err);
       throw new Error(`Could not load ${f}.csv: ${err.message}`);
     }
   }
+
+  for (const f of NBA_FILES) {
+    try {
+      const [sport, year] = f.split('_');
+      const res = await fetch(`data/${f}.csv`);
+      if (!res.ok) throw new Error(`${f}.csv: ${res.status}`);
+      const text = await res.text();
+      const lines = text.trim().split('\n');
+      const headers = lines[0].split(',').map(h => h.trim());
+      const rows = [];
+      for (let i = 1; i < lines.length; i++) {
+        const vals = parseCSVLine(lines[i]);
+        const row = {};
+        headers.forEach((h, j) => row[h] = vals[j] || '');
+        row.season = parseInt(year, 10);
+        rows.push(row);
+      }
+      const byPos = {};
+      rows.forEach(r => {
+        const pos = (r.Pos || '').trim().toUpperCase() || '?';
+        if (!byPos[pos]) byPos[pos] = [];
+        byPos[pos].push(r);
+      });
+      ['PG', 'SG', 'SF', 'PF', 'C'].forEach(p => {
+        all.nba[p] = byPos[p] || [];
+      });
+    } catch (err) {
+      console.error(`Failed to load ${f}.csv:`, err);
+      throw new Error(`Could not load ${f}.csv: ${err.message}`);
+    }
+  }
+
   return all;
 }
 
@@ -187,18 +253,31 @@ const RB_STATS = ['Yds', 'TD', 'Y/A'];
 // WR/TE: Rec, Yds, TD
 const WR_TE_STATS = ['Rec', 'Yds', 'TD'];
 
-function pickStatsForRound(position, rng) {
+// NBA: PPG always + 2 from [3P/G, FT%, REB/G, AST/G]
+const NBA_STAT_POOL = ['3P /G', 'FT%', 'REB /G', 'AST /G'];
+
+function pickNBAStats(rng) {
+  const others = [...NBA_STAT_POOL];
+  for (let i = others.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [others[i], others[j]] = [others[j], others[i]];
+  }
+  return ['PTS /G', others[0], others[1]];
+}
+
+function pickStatsForRound(position, rng, sport) {
+  if (sport === 'nba') return pickNBAStats(rng);
   if (position === 'QB') return pickQBStats(rng);
   if (position === 'RB') return RB_STATS;
   return WR_TE_STATS;
 }
 
-function ydsColumn(position) {
-  return 'Yds';
+function getRatioColumn(sport) {
+  return sport === 'nba' ? 'PTS /G' : 'Yds';
 }
 
-function getYdsRatio(playerA, playerB, pos) {
-  const col = ydsColumn(pos);
+function getRatio(playerA, playerB, sport) {
+  const col = getRatioColumn(sport);
   const a = parseFloat(playerA[col]) || 0;
   const b = parseFloat(playerB[col]) || 0;
   if (a === 0 && b === 0) return 1;
@@ -225,13 +304,24 @@ function playerKey(p) {
   return `${p.Player}|${p.Team}|${p.season}`;
 }
 
-function getYdsRatioThreshold(position) {
-  return position === 'QB' ? 0.70 : 0.65;
+function getRatioThreshold(position, sport) {
+  const cfg = SPORT_CONFIG[sport];
+  return typeof cfg.ratioThreshold === 'function' ? cfg.ratioThreshold(position) : cfg.ratioThreshold;
 }
 
-function generateMatchup(pool, stats, usedKeys, rng, position, allowReuseWhenEmpty = false) {
-  const list = pool.flat();
-  const minRatio = getYdsRatioThreshold(position);
+function isNoMatchPair(posA, posB, sport) {
+  const cfg = SPORT_CONFIG[sport];
+  if (!cfg?.noMatchPairs) return false;
+  const a = (posA || '').toUpperCase();
+  const b = (posB || '').toUpperCase();
+  return cfg.noMatchPairs.some(([p1, p2]) =>
+    (a === p1 && b === p2) || (a === p2 && b === p1)
+  );
+}
+
+function generateMatchup(pool, stats, usedKeys, rng, position, allowReuseWhenEmpty = false, sport = 'nfl') {
+  const list = Array.isArray(pool) ? pool : (pool || []);
+  const minRatio = getRatioThreshold(position, sport);
   let validPairs = [];
 
   function collectPairs(keys) {
@@ -242,7 +332,8 @@ function generateMatchup(pool, stats, usedKeys, rng, position, allowReuseWhenEmp
         const b = list[j];
         if (sameTeamSeason(a, b)) continue;
         if (keys.has(playerKey(a)) || keys.has(playerKey(b))) continue;
-        if (getYdsRatio(a, b, a.Pos) < minRatio) continue;
+        if (isNoMatchPair(a.Pos, b.Pos, sport)) continue;
+        if (getRatio(a, b, sport) < minRatio) continue;
         if (hasStatTie(a, b, stats)) continue;
         pairs.push([a, b]);
       }
@@ -261,12 +352,34 @@ function generateMatchup(pool, stats, usedKeys, rng, position, allowReuseWhenEmp
   return rng() < 0.5 ? [a, b] : [b, a];
 }
 
-function getRound3Position(seed, rng, mode) {
-  if (mode === MODES.DAILY) {
-    return (new Date().getDate()) % 2 === 0 ? 'WR' : 'TE';
+function getRound3Position(seed, rng, mode, sport) {
+  if (sport === 'nfl') {
+    if (mode === MODES.DAILY) return (new Date().getDate()) % 2 === 0 ? 'WR' : 'TE';
+    const h = seed.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    return h % 2 === 0 ? 'WR' : 'TE';
   }
-  const h = seed.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
-  return h % 2 === 0 ? 'WR' : 'TE';
+  if (sport === 'nba') {
+    const positions = SPORT_CONFIG.nba.positions;
+    return positions[rng() * positions.length | 0];
+  }
+  return 'WR';
+}
+
+function getPositionOrder(sport, seed, rng, mode) {
+  const cfg = SPORT_CONFIG[sport];
+  if (!cfg) return ['QB', 'RB', 'WR'];
+  if (sport === 'nfl') {
+    return ['QB', 'RB', getRound3Position(seed, rng, mode, sport)];
+  }
+  if (sport === 'nba') {
+    const positions = [...cfg.positions];
+    for (let i = positions.length - 1; i > 0; i--) {
+      const j = Math.floor(rng() * (i + 1));
+      [positions[i], positions[j]] = [positions[j], positions[i]];
+    }
+    return positions.slice(0, 3);
+  }
+  return ['QB', 'RB', 'WR'];
 }
 
 // --- DOM ---
@@ -297,6 +410,7 @@ const modalClose = document.getElementById('modal-close');
 
 let state = {
   sport: 'nfl',
+  allData: null,
   data: null,
   mode: null,
   seed: null,
@@ -316,18 +430,26 @@ function getGameSeed(mode) {
   return Math.random().toString(36).slice(2, 12);
 }
 
-function hasPlayedDailyToday() {
+function getDailyKey(sport) {
+  const suffix = sport === 'nfl' ? '' : `_${sport}`;
+  return `betterseason${suffix}`;
+}
+
+function hasPlayedDailyToday(sport) {
+  const key = getDailyKey(sport);
   const today = new Date().toDateString();
-  return localStorage.getItem('betterseason_lastDate') === today &&
-    localStorage.getItem('betterseason_dailyScore') != null;
+  return localStorage.getItem(`${key}_lastDate`) === today &&
+    localStorage.getItem(`${key}_dailyScore`) != null;
 }
 
-function getStoredDailyScore() {
-  return localStorage.getItem('betterseason_dailyScore') || '0';
+function getStoredDailyScore(sport) {
+  const key = getDailyKey(sport);
+  return localStorage.getItem(`${key}_dailyScore`) || '0';
 }
 
-function storeDailyScore(score) {
-  localStorage.setItem('betterseason_dailyScore', String(score));
+function storeDailyScore(score, sport) {
+  const key = getDailyKey(sport);
+  localStorage.setItem(`${key}_dailyScore`, String(score));
 }
 
 function initGame(mode) {
@@ -347,6 +469,7 @@ function initGame(mode) {
   blitzTimerEl.classList.remove('visible');
 
   if (mode === MODES.BLITZ) {
+    state.data = state.allData[state.sport];
     state.blitzTimeLeft = 60;
     blitzTimerEl.classList.add('visible');
     startBlitzTimer();
@@ -355,31 +478,32 @@ function initGame(mode) {
     return;
   }
 
-  if (mode === MODES.DAILY && hasPlayedDailyToday()) {
+  if (mode === MODES.DAILY && hasPlayedDailyToday(state.sport)) {
     showDailyAlreadyPlayed();
     return;
   }
 
-  const posOrder = ['QB', 'RB', getRound3Position(state.seed, state.rng, mode)];
+  state.data = state.allData[state.sport];
+  const posOrder = getPositionOrder(state.sport, state.seed, state.rng, mode);
   const usedKeys = new Set();
 
   for (let r = 0; r < 3; r++) {
     const pos = posOrder[r];
-    const stats = pickStatsForRound(pos, state.rng);
+    const stats = pickStatsForRound(pos, state.rng, state.sport);
     const pool = state.data[pos];
-    const matchup = generateMatchup(pool, stats, usedKeys, state.rng, pos);
+    const matchup = generateMatchup(pool, stats, usedKeys, state.rng, pos, false, state.sport);
     if (!matchup) {
       if (!pool || pool.length < 2) continue;
       const a = pool[0], b = pool[1];
       usedKeys.add(playerKey(a));
       usedKeys.add(playerKey(b));
-      const correct = stats.map(s => isBetter(a[s], b[s], s) ? 'A' : 'B');
+      const correct = stats.map(s => isBetter(a[s], b[s], s, state.sport) ? 'A' : 'B');
       state.rounds.push({ position: pos, stats, playerA: a, playerB: b, correct });
     } else {
       const [a, b] = matchup;
       usedKeys.add(playerKey(a));
       usedKeys.add(playerKey(b));
-      const correct = stats.map(s => isBetter(a[s], b[s], s) ? 'A' : 'B');
+      const correct = stats.map(s => isBetter(a[s], b[s], s, state.sport) ? 'A' : 'B');
       state.rounds.push({ position: pos, stats, playerA: a, playerB: b, correct });
     }
   }
@@ -404,19 +528,20 @@ function startBlitzTimer() {
 }
 
 function addBlitzRound() {
-  const posOrder = ['QB', 'RB', 'WR', 'TE'];
+  const cfg = SPORT_CONFIG[state.sport];
+  const posOrder = cfg?.blitzPositions || ['QB', 'RB', 'WR', 'TE'];
   const roundIndex = state.rounds.length;
-  const pos = posOrder[roundIndex % 4];
-  const stats = pickStatsForRound(pos, state.rng);
+  const pos = posOrder[roundIndex % posOrder.length];
+  const stats = pickStatsForRound(pos, state.rng, state.sport);
   const pool = state.data[pos];
   const usedKeys = state.blitzUsedKeys.get(pos) || new Set();
-  const matchup = generateMatchup(pool, stats, usedKeys, state.rng, pos, true);
+  const matchup = generateMatchup(pool, stats, usedKeys, state.rng, pos, true, state.sport);
   if (!matchup) return;
   const [a, b] = matchup;
   if (!state.blitzUsedKeys.has(pos)) state.blitzUsedKeys.set(pos, new Set());
   state.blitzUsedKeys.get(pos).add(playerKey(a));
   state.blitzUsedKeys.get(pos).add(playerKey(b));
-  const correct = stats.map(s => isBetter(a[s], b[s], s) ? 'A' : 'B');
+  const correct = stats.map(s => isBetter(a[s], b[s], s, state.sport) ? 'A' : 'B');
   state.rounds.push({ position: pos, stats, playerA: a, playerB: b, correct });
 }
 
@@ -465,13 +590,13 @@ function showDailyAlreadyPlayed() {
   resultsScreen.classList.add('active');
   const score = parseInt(getStoredDailyScore(), 10);
   resultsScore.textContent = `${score}/9`;
-  resultsStreak.textContent = `Streak: ${getStreak()} day${getStreak() !== 1 ? 's' : ''}`;
+  resultsStreak.textContent = `Streak: ${getStreak(state.sport)} day${getStreak(state.sport) !== 1 ? 's' : ''}`;
   comeBackTomorrow.classList.add('visible');
-  shareGrid.textContent = buildShareGridForMode('daily', score, null);
+  shareGrid.textContent = buildShareGridForMode('daily', score, null, state.sport);
   renderResultsModeButtons(MODES.DAILY);
   renderResultsSportToolbar();
   copyBtn.onclick = () => {
-    window.location.href = 'sms:?body=' + encodeURIComponent(buildShareGridForMode('daily', score, null));
+    window.location.href = 'sms:?body=' + encodeURIComponent(buildShareGridForMode('daily', score, null, state.sport));
   };
   newGameBtn.style.display = 'none';
 }
@@ -499,7 +624,7 @@ function renderRound() {
 
   for (let i = 0; i < r.stats.length; i++) {
     const stat = r.stats[i];
-    const label = getStatDisplayName(stat, r.position);
+    const label = getStatDisplayName(stat, r.position, state.sport);
     const row = document.createElement('div');
     row.className = 'stat-row';
     row.dataset.statIndex = i;
@@ -554,9 +679,9 @@ function handleConfirm() {
     btnA.classList.remove('selected');
     btnB.classList.remove('selected');
 
-    const label = getStatDisplayName(stat, r.position);
-    const valA = formatStatValue(r.playerA[stat], stat);
-    const valB = formatStatValue(r.playerB[stat], stat);
+    const label = getStatDisplayName(stat, r.position, state.sport);
+    const valA = formatStatValue(r.playerA[stat], stat, state.sport);
+    const valB = formatStatValue(r.playerB[stat], stat, state.sport);
 
     btnA.textContent = valA;
     btnB.textContent = valB;
@@ -595,7 +720,7 @@ function goNext() {
     }, 150);
   } else {
     if (state.mode === MODES.DAILY) {
-      storeDailyScore(state.score);
+      storeDailyScore(state.score, state.sport);
     }
     updateStreak();
     showResults();
@@ -615,8 +740,9 @@ function goNextBlitz() {
 
 function updateStreak() {
   if (state.mode === MODES.BLITZ) return;
-  const key = 'betterseason_streak';
-  const dateKey = 'betterseason_lastDate';
+  const prefix = getDailyKey(state.sport);
+  const key = `${prefix}_streak`;
+  const dateKey = `${prefix}_lastDate`;
   const today = new Date().toDateString();
 
   let streak = parseInt(localStorage.getItem(key) || '0', 10);
@@ -634,16 +760,21 @@ function updateStreak() {
   localStorage.setItem(dateKey, today);
 }
 
-function getStreak() {
-  return parseInt(localStorage.getItem('betterseason_streak') || '0', 10);
+function getStreak(sport) {
+  const prefix = getDailyKey(sport || state.sport);
+  return parseInt(localStorage.getItem(`${prefix}_streak`) || '0', 10);
 }
 
-function buildShareGridForMode(mode, score, roundScores) {
+const SPORT_EMOJI = { nfl: '🏈', nba: '🏀', mlb: '⚾' };
+
+function buildShareGridForMode(mode, score, roundScores, sport) {
+  const sportKey = sport || state.sport;
+  const emoji = SPORT_EMOJI[sportKey] || '🏈';
   const modeStr = mode === 'daily' ? 'Daily' : mode === 'blitz' ? 'Blitz' : 'Unlimited';
   if (mode === 'blitz') {
-    return `🏈 ${score} pts in blitz — betterseason `;
+    return `${emoji} ${score} pts in blitz — betterseason `;
   }
-  let grid = `🏈  ${score}/9pts — ${modeStr}\n\n`;
+  let grid = `${emoji}  ${score}/9pts — ${modeStr}\n\n`;
   if (roundScores && roundScores.length > 0) {
     roundScores.forEach(({ position, score: rs, total }) => {
       const correct = '✅'.repeat(rs);
@@ -655,7 +786,7 @@ function buildShareGridForMode(mode, score, roundScores) {
 }
 
 function buildShareGrid() {
-  return buildShareGridForMode(state.mode, state.score, state.roundScores);
+  return buildShareGridForMode(state.mode, state.score, state.roundScores, state.sport);
 }
 
 function showResults() {
@@ -673,7 +804,7 @@ function showResults() {
     resultsStreak.textContent = '';
   } else {
     resultsScore.textContent = `${state.score}/9`;
-    resultsStreak.textContent = `Streak: ${getStreak()} day${getStreak() !== 1 ? 's' : ''}`;
+    resultsStreak.textContent = `Streak: ${getStreak(state.sport)} day${getStreak(state.sport) !== 1 ? 's' : ''}`;
   }
 
   comeBackTomorrow.classList.remove('visible');
@@ -775,7 +906,8 @@ async function main() {
     setupSportTabs();
     setupModeCards();
     setupStartBtn();
-    state.data = await loadData();
+    state.allData = await loadData();
+    state.data = state.allData[state.sport];
     goToStartScreen();
   } catch (e) {
     document.body.innerHTML = `
