@@ -838,7 +838,7 @@ function getStreak(sport, mode) {
   return parseInt(localStorage.getItem(`${prefix}_streak`) || '0', 10);
 }
 
-const SHARE_URL_PLACEHOLDER = 'betterseason.live';
+const SHARE_URL_PLACEHOLDER = 'https://betterseason.live';
 
 function buildShareText(mode, score, roundScores, sport) {
   const modeStr = mode === 'daily' ? 'Daily' : mode === 'blitz' ? 'Blitz' : mode === 'rookie_qb' ? 'Rookie QBs (daily)' : 'Unlimited';
