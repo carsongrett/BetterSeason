@@ -61,22 +61,21 @@
             <button class="sport-card sport-card--mlb" data-sport="mlb">
               <span class="sport-card-icon">⚾</span>
               <span class="sport-card-title">MLB</span>
-              <span class="sport-card-badge">Coming soon</span>
             </button>
           </div>
           <p class="start-prompt">Choose a game mode</p>
           <div class="mode-options">
-            <button class="mode-card" data-mode="daily">
+            <button class="mode-card mode-card--nfl-nba" data-mode="daily">
               <span class="mode-card-badge mode-card-badge--daily">Daily</span>
               <span class="mode-card-title">Daily</span>
               <span class="mode-card-desc">The classic. Resets at midnight.</span>
             </button>
-            <button class="mode-card" data-mode="unlimited">
+            <button class="mode-card mode-card--nfl-nba" data-mode="unlimited">
               <span class="mode-card-badge mode-card-badge--unlimited">Unlimited</span>
               <span class="mode-card-title">Unlimited</span>
               <span class="mode-card-desc">Daily game with new players each time.</span>
             </button>
-            <button class="mode-card" data-mode="blitz">
+            <button class="mode-card mode-card--nfl-nba" data-mode="blitz">
               <span class="mode-card-badge mode-card-badge--unlimited">Unlimited</span>
               <span class="mode-card-title">Blitz</span>
               <span class="mode-card-desc">60 seconds. As many rounds as you can.</span>
@@ -85,6 +84,16 @@
               <span class="mode-card-badge mode-card-badge--daily">Daily</span>
               <span class="mode-card-title">Rookie QBs (daily)</span>
               <span class="mode-card-desc">Rookies from 2016-2025.</span>
+            </button>
+            <button class="mode-card mode-card--mlb-only" data-mode="mlb_batters">
+              <span class="mode-card-badge mode-card-badge--daily">Daily</span>
+              <span class="mode-card-title">MLB Batters (daily)</span>
+              <span class="mode-card-desc">2025 batting stats.</span>
+            </button>
+            <button class="mode-card mode-card--mlb-only" data-mode="mlb_pitchers">
+              <span class="mode-card-badge mode-card-badge--daily">Daily</span>
+              <span class="mode-card-title">MLB Pitchers (daily)</span>
+              <span class="mode-card-desc">2025 pitching stats.</span>
             </button>
           </div>
           <button class="start-btn" id="start-btn" disabled>Start</button>

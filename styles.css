@@ -217,16 +217,21 @@ body::before {
   box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
 }
 
-/* MLB - diamond navy/red (coming soon) */
+/* MLB - diamond navy/red */
 .sport-card--mlb {
-  background: linear-gradient(145deg, rgba(30, 40, 80, 0.4) 0%, rgba(20, 28, 60, 0.5) 100%);
-  border-color: rgba(220, 80, 60, 0.2);
-  opacity: 0.6;
-  cursor: not-allowed;
+  background: linear-gradient(145deg, rgba(30, 40, 80, 0.6) 0%, rgba(20, 28, 60, 0.8) 100%);
+  border-color: rgba(220, 80, 60, 0.35);
 }
 
-.sport-card--mlb .sport-card-title {
-  color: rgba(255, 255, 255, 0.7);
+.sport-card--mlb:hover {
+  background: linear-gradient(145deg, rgba(40, 50, 90, 0.7) 0%, rgba(28, 36, 70, 0.9) 100%);
+  border-color: rgba(220, 80, 60, 0.5);
+}
+
+.sport-card--mlb.selected {
+  border-color: #dc5040;
+  background: linear-gradient(145deg, rgba(220, 80, 60, 0.25) 0%, rgba(180, 60, 50, 0.35) 100%);
+  box-shadow: 0 0 20px rgba(220, 80, 60, 0.2);
 }
 
 .start-prompt {
@@ -252,8 +257,13 @@ body::before {
   padding: 0.85rem 1.1rem;
 }
 
-.mode-options:has(.mode-card--nfl-only) .mode-card-desc {
+.mode-options:has(.mode-card--nfl-only) .mode-card-desc,
+.mode-options:has(.mode-card--mlb-only) .mode-card-desc {
   font-size: 0.8rem;
+}
+
+.mode-card--mlb-only {
+  display: none;
 }
 
 .mode-card {

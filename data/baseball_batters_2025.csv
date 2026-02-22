@@ -1,0 +1,83 @@
+﻿Player,Team,R,HR,RBI,SB,BA,OPS
+Aaron Judge,NYY,137,53,114,12,0.331,1.144
+Cal Raleigh,SEA,110,60,125,14,0.247,0.948
+Bobby Witt Jr.,KCR,99,23,88,38,0.295,0.852
+Geraldo Perdomo,ARI,98,20,100,27,0.29,0.851
+Julio Rodríguez,SEA,106,32,95,30,0.267,0.798
+Shohei Ohtani,LAD,146,55,102,20,0.282,1.014
+Juan Soto,NYM,120,43,105,38,0.263,0.921
+Nico Hoerner,CHC,89,7,61,29,0.297,0.739
+Matt Olson,ATL,98,29,95,1,0.272,0.85
+Pete Crow-Armstrong,CHC,91,31,95,35,0.247,0.768
+Fernando Tatis Jr.,SDP,111,25,71,32,0.268,0.814
+Francisco Lindor,NYM,117,31,86,31,0.267,0.811
+Corbin Carroll,ARI,107,31,84,32,0.259,0.883
+José Ramírez,CLE,103,30,85,44,0.283,0.863
+Maikel Garcia,KCR,81,16,74,23,0.286,0.8
+Jeremy Peña,HOU,68,17,62,20,0.304,0.84
+Wyatt Langford,TEX,73,22,62,22,0.241,0.775
+Brice Turang,MIL,97,18,81,24,0.288,0.794
+Trea Turner,PHI,94,15,69,36,0.304,0.812
+Gunnar Henderson,BAL,85,17,68,30,0.274,0.787
+Cody Bellinger,NYY,89,29,98,13,0.272,0.813
+Mookie Betts,LAD,95,20,82,8,0.258,0.732
+Byron Buxton,MIN,97,35,83,24,0.264,0.878
+George Springer,TOR,106,32,84,18,0.309,0.959
+Jarren Duran,BOS,86,16,84,24,0.256,0.774
+Kyle Schwarber,PHI,111,56,132,10,0.24,0.928
+Vladimir Guerrero Jr.,TOR,96,23,84,6,0.292,0.848
+Michael Busch,CHC,78,34,90,4,0.261,0.866
+Kyle Tucker,CHC,91,22,73,25,0.266,0.841
+Dansby Swanson,CHC,84,24,77,20,0.244,0.717
+Junior Caminero,TBR,93,45,110,7,0.264,0.846
+Ketel Marte,ARI,87,28,72,4,0.283,0.893
+Ernie Clement,TOR,83,9,50,6,0.277,0.711
+Tyler Soderstrom,ATH,75,25,93,8,0.276,0.82
+Jazz Chisholm Jr.,NYY,75,31,80,31,0.242,0.813
+Matt Chapman,SFG,76,21,61,9,0.231,0.77
+Manny Machado,SDP,91,27,95,14,0.275,0.795
+Randy Arozarena,SEA,95,27,76,31,0.238,0.76
+Ian Happ,CHC,87,23,79,6,0.243,0.762
+William Contreras,MIL,89,17,76,6,0.26,0.754
+Shea Langeliers,ATH,73,31,72,7,0.277,0.861
+Trevor Story,BOS,91,25,96,31,0.263,0.741
+J.P. Crawford,SEA,69,12,58,8,0.265,0.722
+Andy Pages,LAD,74,27,86,14,0.272,0.774
+Willy Adames,SFG,94,30,87,12,0.225,0.74
+Steven Kwan,CLE,81,11,56,21,0.272,0.705
+James Wood,WSN,87,31,94,15,0.256,0.825
+Elly De La Cruz,CIN,102,22,86,37,0.264,0.777
+Trent Grisham,NYY,87,34,74,3,0.235,0.811
+Bo Bichette,TOR,78,18,94,4,0.311,0.84
+Freddie Freeman,LAD,81,24,90,6,0.295,0.869
+Pete Alonso,NYM,87,38,126,1,0.272,0.871
+Yandy Díaz,TBR,79,25,83,3,0.3,0.848
+CJ Abrams,WSN,92,19,60,31,0.257,0.748
+Marcus Semien,TEX,62,15,62,11,0.23,0.669
+Brett Baty,NYM,53,18,50,8,0.254,0.748
+Christian Yelich,MIL,88,29,103,16,0.264,0.795
+Bryce Harper,PHI,72,27,75,12,0.261,0.844
+Sal Frelick,MIL,76,12,63,19,0.288,0.756
+Josh Smith,TEX,70,10,35,12,0.251,0.7
+Gleyber Torres,DET,79,16,74,4,0.256,0.745
+Brandon Nimmo,NYM,81,25,92,13,0.262,0.76
+Adolis García,TEX,58,19,75,13,0.227,0.665
+Yainer Diaz,HOU,56,20,70,1,0.256,0.701
+Jorge Polanco,SEA,64,26,78,6,0.265,0.821
+Seiya Suzuki,CHC,75,32,103,5,0.245,0.804
+J.T. Realmuto,PHI,57,12,52,8,0.257,0.7
+Brent Rooker,ATH,92,30,89,6,0.262,0.814
+Alejandro Kirk,TOR,45,15,76,1,0.282,0.769
+Jackson Chourio,MIL,88,21,78,21,0.27,0.77
+Bryson Stott,PHI,66,13,66,24,0.257,0.719
+Michael Harris II,ATL,55,20,86,20,0.249,0.678
+Jeff McNeil,NYM,42,12,54,3,0.243,0.746
+Xander Bogaerts,SDP,63,11,53,20,0.263,0.72
+Mauricio Dubón,HOU,43,7,33,3,0.241,0.644
+Marcell Ozuna,ATL,61,21,68,0,0.232,0.756
+Anthony Volpe,NYY,65,19,72,18,0.212,0.663
+Mike Trout,LAA,73,26,64,2,0.232,0.797
+Bo Naylor,CLE,46,14,47,1,0.195,0.661
+Alec Bohm,PHI,53,11,59,2,0.287,0.741
+Bryan Reynolds,PIT,68,16,73,3,0.245,0.72
+Luis Arráez,SDP,66,8,61,11,0.292,0.719

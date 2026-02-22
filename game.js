@@ -9,7 +9,7 @@ const SPORTS = {
   MLB: 'mlb',
 };
 
-const AVAILABLE_SPORTS = ['nfl', 'nba'];
+const AVAILABLE_SPORTS = ['nfl', 'nba', 'mlb'];
 
 const SPORT_LABELS = { nfl: 'NFL', nba: 'NBA', mlb: 'MLB' };
 
@@ -29,6 +29,12 @@ const SPORT_CONFIG = {
     round3Positions: ['PG', 'SG', 'SF', 'PF', 'C'],
     noMatchPairs: [['PG', 'C']],
   },
+  mlb: {
+    positions: ['BATTERS', 'PITCHERS'],
+    ratioColumn: (pos) => pos === 'BATTERS' ? 'R' : null,
+    ratioThreshold: (pos) => pos === 'BATTERS' ? 0.70 : 0,
+    blitzPositions: ['BATTERS', 'PITCHERS'],
+  },
 };
 
 const MODES = {
@@ -36,6 +42,8 @@ const MODES = {
   DAILY: 'daily',
   BLITZ: 'blitz',
   ROOKIE_QB: 'rookie_qb',
+  MLB_BATTERS: 'mlb_batters',
+  MLB_PITCHERS: 'mlb_pitchers',
 };
 
 const MODE_LABELS = {
@@ -43,6 +51,8 @@ const MODE_LABELS = {
   daily: 'Daily',
   blitz: 'Blitz',
   rookie_qb: 'Rookie QBs (daily)',
+  mlb_batters: 'MLB Batters (daily)',
+  mlb_pitchers: 'MLB Pitchers (daily)',
 };
 
 const MODE_DESCRIPTIONS = {
@@ -50,9 +60,12 @@ const MODE_DESCRIPTIONS = {
   daily: 'The classic. Resets at midnight.',
   blitz: '60 seconds. As many rounds as you can.',
   rookie_qb: 'Rookies from 2016-2025.',
+  mlb_batters: '2025 batting stats.',
+  mlb_pitchers: '2025 pitching stats.',
 };
 
 const NFL_ONLY_MODES = ['rookie_qb'];
+const MLB_ONLY_MODES = ['mlb_batters', 'mlb_pitchers'];
 
 function getTodaySeed() {
   const d = new Date();
@@ -97,6 +110,12 @@ const STAT_NAMES = {
 function formatStatValue(val, stat, sport, mode) {
   const n = parseFloat(val);
   if (isNaN(n)) return String(val);
+  if (sport === 'mlb') {
+    if (stat === 'BA' || stat === 'OPS') return n.toFixed(3);
+    if (stat === 'ERA' || stat === 'SO9') return n.toFixed(2);
+    if (Number.isInteger(n)) return n.toLocaleString();
+    return n.toFixed(1);
+  }
   if (sport === 'nba') {
     if (stat === 'FT%') return (n * 100).toFixed(1) + '%';
     if (['PTS /G', '3P /G', 'REB /G', 'AST /G'].includes(stat)) return n.toFixed(1);
@@ -127,7 +146,21 @@ const NBA_STAT_NAMES = {
   'AST /G': 'Assists Per Game',
 };
 
+const MLB_STAT_NAMES = {
+  R: 'Runs',
+  HR: 'Home Runs',
+  RBI: 'Runs Batted In',
+  SB: 'Stolen Bases',
+  BA: 'Batting Average',
+  OPS: 'OPS',
+  W: 'Wins',
+  ERA: 'ERA (select lower)',
+  BB: 'Walks (select less)',
+  SO9: 'K/9',
+};
+
 function getStatDisplayName(col, position, sport, mode) {
+  if (sport === 'mlb') return MLB_STAT_NAMES[col] || col;
   if (sport === 'nba') return NBA_STAT_NAMES[col] || col;
   if (col === 'Rush Yds') return 'Rush Yards';
   if (col === 'Team Wins') return 'Team Wins';
@@ -145,13 +178,13 @@ function getStatDisplayName(col, position, sport, mode) {
   return STAT_NAMES[col] || col;
 }
 
-// Lower is better (Int for NFL and Rookie QB)
-const LOWER_BETTER = new Set(['Int']);
+// Lower is better (Int, ERA, BB)
+const LOWER_BETTER = new Set(['Int', 'ERA', 'BB']);
 
 function isBetter(valA, valB, statCol, sport, mode) {
   const a = parseFloat(valA);
   const b = parseFloat(valB);
-  if ((sport === 'nfl' || mode === MODES.ROOKIE_QB) && LOWER_BETTER.has(statCol)) return a < b;
+  if (LOWER_BETTER.has(statCol)) return a < b;
   return a > b;
 }
 
@@ -163,6 +196,9 @@ const NFL_FILES = [
 ];
 
 const NBA_FILES = ['basketball_2026'];
+
+const MLB_BATTERS_FILE = 'baseball_batters_2025.csv';
+const MLB_PITCHERS_FILE = 'baseball_pitchers_2025.csv';
 
 const ROOKIE_QB_FILE = 'rookie qbs 2016-2025.csv';
 const ROOKIE_QB_STAT_POOL = ['TD', 'Int', 'Rush Yds', 'Team Wins'];
@@ -177,7 +213,7 @@ function pickRookieQBStats(rng) {
 }
 
 async function loadData() {
-  const all = { nfl: {}, nba: {} };
+  const all = { nfl: {}, nba: {}, mlb: {} };
 
   for (const f of NFL_FILES) {
     try {
@@ -255,6 +291,29 @@ async function loadData() {
     throw new Error(`Could not load ${ROOKIE_QB_FILE}: ${err.message}`);
   }
 
+  for (const f of [MLB_BATTERS_FILE, MLB_PITCHERS_FILE]) {
+    try {
+      const res = await fetch(`data/${encodeURIComponent(f)}`);
+      if (!res.ok) throw new Error(`${f}: ${res.status}`);
+      const text = await res.text();
+      const lines = text.trim().split('\n');
+      const headers = lines[0].split(',').map(h => h.trim());
+      const rows = [];
+      for (let i = 1; i < lines.length; i++) {
+        const vals = parseCSVLine(lines[i]);
+        const row = {};
+        headers.forEach((h, j) => row[h] = vals[j] || '');
+        row.season = 2025;
+        rows.push(row);
+      }
+      const key = f.includes('batters') ? 'BATTERS' : 'PITCHERS';
+      all.mlb[key] = rows;
+    } catch (err) {
+      console.error(`Failed to load ${f}:`, err);
+      throw new Error(`Could not load ${f}: ${err.message}`);
+    }
+  }
+
   return all;
 }
 
@@ -294,7 +353,7 @@ const RB_STATS = ['Yds', 'TD', 'Y/A'];
 // WR/TE: Rec, Yds, TD
 const WR_TE_STATS = ['Rec', 'Yds', 'TD'];
 
-// NBA: PPG always + 2 from [3P/G, FT%, REB/G, AST/G]
+// NBA: PPG always + 2 from [3P/G, FT%, REB%, AST/G]
 const NBA_STAT_POOL = ['3P /G', 'FT%', 'REB /G', 'AST /G'];
 
 function pickNBAStats(rng) {
@@ -306,19 +365,53 @@ function pickNBAStats(rng) {
   return ['PTS /G', others[0], others[1]];
 }
 
-function pickStatsForRound(position, rng, sport) {
+// MLB Batters: one of BA or OPS (never both) + 2 from [R, HR, RBI, SB]
+const MLB_BATTER_PRIMARY = ['BA', 'OPS'];
+const MLB_BATTER_OTHERS = ['R', 'HR', 'RBI', 'SB'];
+
+function pickMLBBatterStats(rng) {
+  const primary = MLB_BATTER_PRIMARY[Math.floor(rng() * 2)];
+  const others = [...MLB_BATTER_OTHERS];
+  for (let i = others.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [others[i], others[j]] = [others[j], others[i]];
+  }
+  return [primary, others[0], others[1]];
+}
+
+// MLB Pitchers: ERA always + 2 from [W, BB, SO9]
+const MLB_PITCHER_OTHERS = ['W', 'BB', 'SO9'];
+
+function pickMLBPitcherStats(rng) {
+  const others = [...MLB_PITCHER_OTHERS];
+  for (let i = others.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [others[i], others[j]] = [others[j], others[i]];
+  }
+  return ['ERA', others[0], others[1]];
+}
+
+function pickStatsForRound(position, rng, sport, mode) {
+  if (mode === MODES.MLB_BATTERS) return pickMLBBatterStats(rng);
+  if (mode === MODES.MLB_PITCHERS) return pickMLBPitcherStats(rng);
   if (sport === 'nba') return pickNBAStats(rng);
   if (position === 'QB') return pickQBStats(rng);
   if (position === 'RB') return RB_STATS;
   return WR_TE_STATS;
 }
 
-function getRatioColumn(sport) {
+function getRatioColumn(sport, position) {
+  const cfg = SPORT_CONFIG[sport];
+  if (cfg?.ratioColumn && typeof cfg.ratioColumn === 'function') {
+    const val = cfg.ratioColumn(position);
+    if (val != null) return val;
+  }
   return sport === 'nba' ? 'PTS /G' : 'Yds';
 }
 
-function getRatio(playerA, playerB, sport) {
-  const col = getRatioColumn(sport);
+function getRatio(playerA, playerB, sport, position) {
+  const col = getRatioColumn(sport, position);
+  if (!col) return 1;
   const a = parseFloat(playerA[col]) || 0;
   const b = parseFloat(playerB[col]) || 0;
   if (a === 0 && b === 0) return 1;
@@ -347,7 +440,8 @@ function playerKey(p) {
 
 function getRatioThreshold(position, sport) {
   const cfg = SPORT_CONFIG[sport];
-  return typeof cfg.ratioThreshold === 'function' ? cfg.ratioThreshold(position) : cfg.ratioThreshold;
+  const val = typeof cfg?.ratioThreshold === 'function' ? cfg.ratioThreshold(position) : cfg?.ratioThreshold;
+  return val ?? 0.65;
 }
 
 function isNoMatchPair(posA, posB, sport) {
@@ -374,7 +468,7 @@ function generateMatchup(pool, stats, usedKeys, rng, position, allowReuseWhenEmp
         if (sameTeamSeason(a, b)) continue;
         if (keys.has(playerKey(a)) || keys.has(playerKey(b))) continue;
         if (isNoMatchPair(a.Pos, b.Pos, sport)) continue;
-        if (getRatio(a, b, sport) < minRatio) continue;
+        if (getRatio(a, b, sport, position) < minRatio) continue;
         if (hasStatTie(a, b, stats)) continue;
         pairs.push([a, b]);
       }
@@ -408,6 +502,8 @@ function getRound3Position(seed, rng, mode, sport) {
 
 function getPositionOrder(sport, seed, rng, mode) {
   const cfg = SPORT_CONFIG[sport];
+  if (mode === MODES.MLB_BATTERS) return ['BATTERS', 'BATTERS', 'BATTERS'];
+  if (mode === MODES.MLB_PITCHERS) return ['PITCHERS', 'PITCHERS', 'PITCHERS'];
   if (!cfg) return ['QB', 'RB', 'WR'];
   if (sport === 'nfl') {
     return ['QB', 'RB', getRound3Position(seed, rng, mode, sport)];
@@ -469,12 +565,15 @@ let state = {
 };
 
 function getGameSeed(mode) {
-  if (mode === MODES.DAILY || mode === MODES.ROOKIE_QB) return getTodaySeed();
+  const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS];
+  if (dailyModes.includes(mode)) return getTodaySeed();
   return Math.random().toString(36).slice(2, 12);
 }
 
 function getDailyKey(sport, mode) {
   if (mode === MODES.ROOKIE_QB) return 'betterseason_rookieqb';
+  if (mode === MODES.MLB_BATTERS) return 'betterseason_mlb_batters';
+  if (mode === MODES.MLB_PITCHERS) return 'betterseason_mlb_pitchers';
   const suffix = sport === 'nfl' ? '' : `_${sport}`;
   return `betterseason${suffix}`;
 }
@@ -537,14 +636,20 @@ function initGame(mode) {
     return;
   }
 
-  if ((mode === MODES.DAILY || mode === MODES.ROOKIE_QB) && hasPlayedDailyToday(state.sport, mode)) {
+  const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS];
+  if (dailyModes.includes(mode) && hasPlayedDailyToday(state.sport, mode)) {
     showDailyAlreadyPlayed();
     return;
   }
 
   const isRookieQB = mode === MODES.ROOKIE_QB;
+  const isMLBBatters = mode === MODES.MLB_BATTERS;
+  const isMLBPitchers = mode === MODES.MLB_PITCHERS;
   if (isRookieQB) {
     state.data = { QB: state.allData.nfl.ROOKIE_QB };
+  } else if (isMLBBatters || isMLBPitchers) {
+    state.sport = 'mlb';
+    state.data = state.allData.mlb;
   } else {
     state.data = state.allData[state.sport];
   }
@@ -556,7 +661,7 @@ function initGame(mode) {
 
   for (let r = 0; r < 3; r++) {
     const pos = posOrder[r];
-    const stats = isRookieQB ? pickRookieQBStats(state.rng) : pickStatsForRound(pos, state.rng, state.sport);
+    const stats = isRookieQB ? pickRookieQBStats(state.rng) : pickStatsForRound(pos, state.rng, state.sport, mode);
     const pool = state.data[pos];
     const matchup = generateMatchup(pool, stats, usedKeys, state.rng, pos, false, state.sport);
     if (!matchup) {
@@ -599,7 +704,7 @@ function addBlitzRound() {
   const posOrder = cfg?.blitzPositions || ['QB', 'RB', 'WR', 'TE'];
   const roundIndex = state.rounds.length;
   const pos = posOrder[roundIndex % posOrder.length];
-  const stats = pickStatsForRound(pos, state.rng, state.sport);
+  const stats = pickStatsForRound(pos, state.rng, state.sport, state.mode);
   const pool = state.data[pos];
   const usedKeys = state.blitzUsedKeys.get(pos) || new Set();
   const matchup = generateMatchup(pool, stats, usedKeys, state.rng, pos, true, state.sport);
@@ -618,9 +723,10 @@ function endBlitz() {
 
 function renderResultsModeButtons(justPlayedMode) {
   resultsModeButtons.innerHTML = '';
-  const allModes = state.sport === 'nfl'
-    ? [MODES.UNLIMITED, MODES.DAILY, MODES.BLITZ, MODES.ROOKIE_QB]
-    : [MODES.UNLIMITED, MODES.DAILY, MODES.BLITZ];
+  let allModes;
+  if (state.sport === 'nfl') allModes = [MODES.UNLIMITED, MODES.DAILY, MODES.BLITZ, MODES.ROOKIE_QB];
+  else if (state.sport === 'mlb') allModes = [MODES.MLB_BATTERS, MODES.MLB_PITCHERS];
+  else allModes = [MODES.UNLIMITED, MODES.DAILY, MODES.BLITZ];
   const otherModes = allModes.filter(m => m !== justPlayedMode);
   otherModes.forEach(mode => {
     const btn = document.createElement('button');
@@ -661,7 +767,7 @@ function showDailyAlreadyPlayed() {
   homeBtn.style.display = 'flex';
   const score = parseInt(getStoredDailyScore(state.sport, state.mode), 10);
   const roundScores = getStoredRoundScores(state.sport, state.mode);
-  const total = state.mode === MODES.ROOKIE_QB ? 12 : 9;
+  const total = (state.mode === MODES.ROOKIE_QB) ? 12 : 9;
   resultsScore.textContent = `${score}/${total}`;
   resultsStreak.textContent = `Streak: ${getStreak(state.sport, state.mode)} day${getStreak(state.sport, state.mode) !== 1 ? 's' : ''}`;
   comeBackTomorrow.classList.add('visible');
@@ -792,7 +898,8 @@ function goNext() {
       roundScreen.classList.add('active');
     }, 150);
   } else {
-    if (state.mode === MODES.DAILY || state.mode === MODES.ROOKIE_QB) {
+    const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS];
+    if (dailyModes.includes(state.mode)) {
       storeDailyScore(state.score, state.sport, state.mode, state.roundScores);
     }
     updateStreak();
@@ -841,7 +948,7 @@ function getStreak(sport, mode) {
 const SHARE_URL_PLACEHOLDER = 'https://betterseason.live';
 
 function buildShareText(mode, score, roundScores, sport) {
-  const modeStr = mode === 'daily' ? 'Daily' : mode === 'blitz' ? 'Blitz' : mode === 'rookie_qb' ? 'Rookie QBs (daily)' : 'Unlimited';
+  const modeStr = mode === 'daily' ? 'Daily' : mode === 'blitz' ? 'Blitz' : mode === 'rookie_qb' ? 'Rookie QBs (daily)' : mode === 'mlb_batters' ? 'MLB Batters (daily)' : mode === 'mlb_pitchers' ? 'MLB Pitchers (daily)' : 'Unlimited';
   const total = mode === 'rookie_qb' ? 12 : 9;
   const scoreStr = mode === 'blitz' ? `${score} pts` : `${score}/${total}pts`;
   const urlSuffix = SHARE_URL_PLACEHOLDER ? `\n\n${SHARE_URL_PLACEHOLDER}` : '';
@@ -851,11 +958,11 @@ function buildShareText(mode, score, roundScores, sport) {
   let text = `${scoreStr} — ${modeStr}`;
   if (roundScores && roundScores.length > 0) {
     text += '\n\n';
-    roundScores.forEach(({ position, score: rs, total: t }) => {
+    roundScores.forEach(({ position, score: rs, total: t }, idx) => {
       const correct = '✅'.repeat(rs);
       const wrong = '❌'.repeat(t - rs);
-      if (mode === 'rookie_qb') {
-        text += `${correct}${wrong}\n`;
+      if (mode === 'rookie_qb' || mode === 'mlb_batters' || mode === 'mlb_pitchers') {
+        text += `Rd. ${idx + 1}  ${correct}${wrong}  ${rs}/${t}\n`;
       } else {
         text += `${position}  ${correct}${wrong}  ${rs}/${t}\n`;
       }
@@ -901,7 +1008,8 @@ function showResults() {
   shareSmsBtn.onclick = () => { window.location.href = 'sms:?body=' + encodeURIComponent(shareText); };
   shareXBtn.onclick = () => { window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText)); };
 
-  newGameBtn.style.display = (state.mode === MODES.DAILY || state.mode === MODES.ROOKIE_QB) ? 'none' : 'inline-flex';
+  const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS];
+  newGameBtn.style.display = dailyModes.includes(state.mode) ? 'none' : 'inline-flex';
   newGameBtn.onclick = () => {
     if (state.mode === MODES.BLITZ) {
       goToStartScreen();
@@ -949,6 +1057,12 @@ function updateStartScreen() {
   document.querySelectorAll('.mode-card--nfl-only').forEach(card => {
     card.style.display = state.sport === 'nfl' ? '' : 'none';
   });
+  document.querySelectorAll('.mode-card--mlb-only').forEach(card => {
+    card.style.display = state.sport === 'mlb' ? 'flex' : 'none';
+  });
+  document.querySelectorAll('.mode-card--nfl-nba').forEach(card => {
+    card.style.display = (state.sport === 'nfl' || state.sport === 'nba') ? '' : 'none';
+  });
   document.querySelectorAll('.mode-card').forEach(card => {
     card.classList.toggle('selected', card.dataset.mode === state.mode);
   });
@@ -964,6 +1078,8 @@ function setupSportTabs() {
     card.addEventListener('click', () => {
       state.sport = sport;
       if (sport !== 'nfl' && NFL_ONLY_MODES.includes(state.mode)) state.mode = null;
+      if (sport !== 'mlb' && MLB_ONLY_MODES.includes(state.mode)) state.mode = null;
+      if (sport === 'mlb' && !MLB_ONLY_MODES.includes(state.mode)) state.mode = null;
       document.querySelectorAll('.sport-card').forEach(c => c.classList.remove('selected'));
       card.classList.add('selected');
       document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
@@ -987,7 +1103,8 @@ function setupModeCards() {
 function setupStartBtn() {
   startBtn.addEventListener('click', () => {
     if (!state.mode) return;
-    if ((state.mode === MODES.DAILY || state.mode === MODES.ROOKIE_QB) && hasPlayedDailyToday(state.sport, state.mode)) {
+    const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS];
+    if (dailyModes.includes(state.mode) && hasPlayedDailyToday(state.sport, state.mode)) {
       showDailyAlreadyPlayed();
     } else {
       initGame(state.mode);
