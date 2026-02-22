@@ -449,6 +449,7 @@ const resultsSportToolbar = document.getElementById('results-sport-toolbar');
 const howToBtn = document.getElementById('how-to-btn');
 const howToModal = document.getElementById('how-to-modal');
 const modalClose = document.getElementById('modal-close');
+const homeBtn = document.getElementById('home-btn');
 
 let state = {
   sport: 'nfl',
@@ -490,9 +491,22 @@ function getStoredDailyScore(sport, mode) {
   return localStorage.getItem(`${key}_dailyScore`) || '0';
 }
 
-function storeDailyScore(score, sport, mode) {
+function storeDailyScore(score, sport, mode, roundScores = null) {
   const key = getDailyKey(sport, mode);
   localStorage.setItem(`${key}_dailyScore`, String(score));
+  if (roundScores && roundScores.length > 0) {
+    localStorage.setItem(`${key}_roundScores`, JSON.stringify(roundScores));
+  }
+}
+
+function getStoredRoundScores(sport, mode) {
+  const key = getDailyKey(sport, mode);
+  try {
+    const raw = localStorage.getItem(`${key}_roundScores`);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
 }
 
 function initGame(mode) {
@@ -511,6 +525,7 @@ function initGame(mode) {
   roundScreen.classList.add('active');
   resultsScreen.classList.remove('active');
   blitzTimerEl.classList.remove('visible');
+  homeBtn.style.display = 'flex';
 
   if (mode === MODES.BLITZ) {
     state.data = state.allData[state.sport];
@@ -643,15 +658,17 @@ function showDailyAlreadyPlayed() {
   startScreen.classList.remove('active');
   roundScreen.classList.remove('active');
   resultsScreen.classList.add('active');
+  homeBtn.style.display = 'flex';
   const score = parseInt(getStoredDailyScore(state.sport, state.mode), 10);
+  const roundScores = getStoredRoundScores(state.sport, state.mode);
   const total = state.mode === MODES.ROOKIE_QB ? 12 : 9;
   resultsScore.textContent = `${score}/${total}`;
   resultsStreak.textContent = `Streak: ${getStreak(state.sport, state.mode)} day${getStreak(state.sport, state.mode) !== 1 ? 's' : ''}`;
   comeBackTomorrow.classList.add('visible');
-  shareGrid.textContent = buildShareGridForMode(state.mode, score, null, state.sport);
+  shareGrid.textContent = buildShareGridForMode(state.mode, score, roundScores, state.sport);
   renderResultsModeButtons(state.mode);
   renderResultsSportToolbar();
-  const shareText = buildShareGridForMode(state.mode, score, null, state.sport);
+  const shareText = buildShareGridForMode(state.mode, score, roundScores, state.sport);
   shareSmsBtn.onclick = () => { window.location.href = 'sms:?body=' + encodeURIComponent(shareText); };
   shareXBtn.onclick = () => { window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText)); };
   newGameBtn.style.display = 'none';
@@ -775,8 +792,8 @@ function goNext() {
       roundScreen.classList.add('active');
     }, 150);
   } else {
-    if (state.mode === MODES.DAILY) {
-      storeDailyScore(state.score, state.sport, state.mode);
+    if (state.mode === MODES.DAILY || state.mode === MODES.ROOKIE_QB) {
+      storeDailyScore(state.score, state.sport, state.mode, state.roundScores);
     }
     updateStreak();
     showResults();
@@ -821,13 +838,13 @@ function getStreak(sport, mode) {
   return parseInt(localStorage.getItem(`${prefix}_streak`) || '0', 10);
 }
 
-const SHARE_URL_PLACEHOLDER = '';
+const SHARE_URL_PLACEHOLDER = 'betterseason.live';
 
 function buildShareText(mode, score, roundScores, sport) {
   const modeStr = mode === 'daily' ? 'Daily' : mode === 'blitz' ? 'Blitz' : mode === 'rookie_qb' ? 'Rookie QBs (daily)' : 'Unlimited';
   const total = mode === 'rookie_qb' ? 12 : 9;
   const scoreStr = mode === 'blitz' ? `${score} pts` : `${score}/${total}pts`;
-  const urlSuffix = SHARE_URL_PLACEHOLDER ? ` — ${SHARE_URL_PLACEHOLDER}` : '';
+  const urlSuffix = SHARE_URL_PLACEHOLDER ? `\n\n${SHARE_URL_PLACEHOLDER}` : '';
   if (mode === 'blitz') {
     return `${scoreStr} — ${modeStr}${urlSuffix}`;
   }
@@ -864,6 +881,7 @@ function showResults() {
 
   roundScreen.classList.remove('active');
   resultsScreen.classList.add('active');
+  homeBtn.style.display = 'flex';
 
   if (state.mode === MODES.BLITZ) {
     resultsScore.textContent = state.score + ' pts';
@@ -913,6 +931,11 @@ function closeHowToModal() {
 }
 
 function goToStartScreen() {
+  if (state.blitzTimerId) {
+    clearInterval(state.blitzTimerId);
+    state.blitzTimerId = null;
+  }
+  homeBtn.style.display = 'none';
   startScreen.classList.add('active');
   roundScreen.classList.remove('active');
   resultsScreen.classList.remove('active');
@@ -972,9 +995,14 @@ function setupStartBtn() {
   });
 }
 
+function setupHomeBtn() {
+  homeBtn.addEventListener('click', goToStartScreen);
+}
+
 async function main() {
   try {
     setupHowToPlay();
+    setupHomeBtn();
     setupSportTabs();
     setupModeCards();
     setupStartBtn();
