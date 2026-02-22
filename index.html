@@ -14,22 +14,7 @@
     <header class="header">
       <button class="how-to-btn" id="how-to-btn" type="button" aria-label="How to play">?</button>
       <h1>Better Season</h1>
-      <button class="menu-btn" id="menu-btn" type="button" aria-label="Menu" aria-expanded="false">
-        <span class="menu-icon"></span>
-        <span class="menu-icon"></span>
-        <span class="menu-icon"></span>
-      </button>
     </header>
-
-    <!-- Mode menu overlay -->
-    <div class="menu-overlay" id="menu-overlay" aria-hidden="true">
-      <div class="menu-panel">
-        <h3 class="menu-title">Game Mode</h3>
-        <button class="menu-option" data-mode="unlimited">Unlimited</button>
-        <button class="menu-option" data-mode="daily">Daily</button>
-        <button class="menu-option" data-mode="blitz">Blitz</button>
-      </div>
-    </div>
 
     <!-- How to Play modal -->
     <div class="modal-overlay" id="how-to-modal" aria-hidden="true">
@@ -46,15 +31,33 @@
       <!-- Start screen -->
       <section id="start-screen" class="screen active">
         <div class="start-content">
+          <p class="tagline">Better Season is an athletic resume game.</p>
+          <p class="sport-prompt">Pick a sport</p>
+          <div class="sport-tabs">
+            <button class="sport-card sport-card--nfl" data-sport="nfl">
+              <span class="sport-card-icon">🏈</span>
+              <span class="sport-card-title">NFL</span>
+            </button>
+            <button class="sport-card sport-card--nba" data-sport="nba">
+              <span class="sport-card-icon">🏀</span>
+              <span class="sport-card-title">NBA</span>
+              <span class="sport-card-badge">Coming soon</span>
+            </button>
+            <button class="sport-card sport-card--mlb" data-sport="mlb">
+              <span class="sport-card-icon">⚾</span>
+              <span class="sport-card-title">MLB</span>
+              <span class="sport-card-badge">Coming soon</span>
+            </button>
+          </div>
           <p class="start-prompt">Choose a game mode</p>
           <div class="mode-options">
-            <button class="mode-card" data-mode="unlimited">
-              <span class="mode-card-title">Unlimited</span>
-              <span class="mode-card-desc">Play as many games as you like.</span>
-            </button>
             <button class="mode-card" data-mode="daily">
               <span class="mode-card-title">Daily</span>
-              <span class="mode-card-desc">One puzzle per day. Same for everyone.</span>
+              <span class="mode-card-desc">The classic. Resets at midnight.</span>
+            </button>
+            <button class="mode-card" data-mode="unlimited">
+              <span class="mode-card-title">Unlimited</span>
+              <span class="mode-card-desc">Daily game with new players each time.</span>
             </button>
             <button class="mode-card" data-mode="blitz">
               <span class="mode-card-title">Blitz</span>
@@ -94,6 +97,8 @@
 
       <!-- Results screen -->
       <section id="results-screen" class="screen">
+        <div class="results-sport-toolbar" id="results-sport-toolbar"></div>
+        <div class="results-mode-buttons" id="results-mode-buttons"></div>
         <p class="results-label">Final Score</p>
         <div class="results-score" id="results-score"></div>
         <div class="results-streak" id="results-streak"></div>

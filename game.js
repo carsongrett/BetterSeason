@@ -1,7 +1,17 @@
 /**
- * Better Season - NFL stat comparison game
+ * Better Season - Stat comparison game (NFL, NBA, MLB)
  * Modes: Unlimited, Daily, Blitz
  */
+
+const SPORTS = {
+  NFL: 'nfl',
+  NBA: 'nba',
+  MLB: 'mlb',
+};
+
+const AVAILABLE_SPORTS = ['nfl'];
+
+const SPORT_LABELS = { nfl: 'NFL', nba: 'NBA', mlb: 'MLB' };
 
 const MODES = {
   UNLIMITED: 'unlimited',
@@ -16,8 +26,8 @@ const MODE_LABELS = {
 };
 
 const MODE_DESCRIPTIONS = {
-  unlimited: 'Play as many games as you like.',
-  daily: 'One puzzle per day. Same for everyone.',
+  unlimited: 'Daily game with new players each time.',
+  daily: 'The classic. Resets at midnight.',
   blitz: '60 seconds. As many rounds as you can.',
 };
 
@@ -115,22 +125,28 @@ const FILES = [
 async function loadData() {
   const all = {};
   for (const f of FILES) {
-    const [pos, year] = f.split('_');
-    const res = await fetch(`data/${f}.csv`);
-    const text = await res.text();
-    const lines = text.trim().split('\n');
-    const headers = lines[0].split(',').map(h => h.trim());
-    const rows = [];
-    for (let i = 1; i < lines.length; i++) {
-      const vals = parseCSVLine(lines[i]);
-      const row = {};
-      headers.forEach((h, j) => row[h] = vals[j] || '');
-      row.season = parseInt(year, 10);
-      rows.push(row);
+    try {
+      const [pos, year] = f.split('_');
+      const res = await fetch(`data/${f}.csv`);
+      if (!res.ok) throw new Error(`${f}.csv: ${res.status}`);
+      const text = await res.text();
+      const lines = text.trim().split('\n');
+      const headers = lines[0].split(',').map(h => h.trim());
+      const rows = [];
+      for (let i = 1; i < lines.length; i++) {
+        const vals = parseCSVLine(lines[i]);
+        const row = {};
+        headers.forEach((h, j) => row[h] = vals[j] || '');
+        row.season = parseInt(year, 10);
+        rows.push(row);
+      }
+      const key = pos.toUpperCase();
+      if (!all[key]) all[key] = [];
+      all[key].push(...rows);
+    } catch (err) {
+      console.error(`Failed to load ${f}.csv:`, err);
+      throw new Error(`Could not load ${f}.csv: ${err.message}`);
     }
-    const key = pos.toUpperCase();
-    if (!all[key]) all[key] = [];
-    all[key].push(...rows);
   }
   return all;
 }
@@ -210,7 +226,7 @@ function playerKey(p) {
 }
 
 function getYdsRatioThreshold(position) {
-  return position === 'QB' ? 0.70 : 0.55;
+  return position === 'QB' ? 0.70 : 0.65;
 }
 
 function generateMatchup(pool, stats, usedKeys, rng, position, allowReuseWhenEmpty = false) {
@@ -258,8 +274,6 @@ const startScreen = document.getElementById('start-screen');
 const roundScreen = document.getElementById('round-screen');
 const resultsScreen = document.getElementById('results-screen');
 const startBtn = document.getElementById('start-btn');
-const menuBtn = document.getElementById('menu-btn');
-const menuOverlay = document.getElementById('menu-overlay');
 const positionLabel = document.getElementById('position-label');
 const playerAName = document.getElementById('player-a-name');
 const playerAMeta = document.getElementById('player-a-meta');
@@ -275,11 +289,14 @@ const resultsStreak = document.getElementById('results-streak');
 const shareGrid = document.getElementById('share-grid');
 const copyBtn = document.getElementById('copy-btn');
 const newGameBtn = document.getElementById('new-game-btn');
+const resultsModeButtons = document.getElementById('results-mode-buttons');
+const resultsSportToolbar = document.getElementById('results-sport-toolbar');
 const howToBtn = document.getElementById('how-to-btn');
 const howToModal = document.getElementById('how-to-modal');
 const modalClose = document.getElementById('modal-close');
 
 let state = {
+  sport: 'nfl',
   data: null,
   mode: null,
   seed: null,
@@ -352,6 +369,7 @@ function initGame(mode) {
     const pool = state.data[pos];
     const matchup = generateMatchup(pool, stats, usedKeys, state.rng, pos);
     if (!matchup) {
+      if (!pool || pool.length < 2) continue;
       const a = pool[0], b = pool[1];
       usedKeys.add(playerKey(a));
       usedKeys.add(playerKey(b));
@@ -378,6 +396,8 @@ function startBlitzTimer() {
     if (state.blitzTimeLeft <= 0) {
       clearInterval(state.blitzTimerId);
       state.blitzTimerId = null;
+      confirmBtn.disabled = true;
+      confirmBtn.textContent = "Time's up!";
       endBlitz();
     }
   }, 1000);
@@ -404,6 +424,41 @@ function endBlitz() {
   showResults();
 }
 
+function renderResultsModeButtons(justPlayedMode) {
+  resultsModeButtons.innerHTML = '';
+  const otherModes = [MODES.UNLIMITED, MODES.DAILY, MODES.BLITZ].filter(m => m !== justPlayedMode);
+  otherModes.forEach(mode => {
+    const btn = document.createElement('button');
+    btn.className = 'results-mode-btn';
+    btn.textContent = `Play ${MODE_LABELS[mode]}`;
+    btn.onclick = () => {
+      state.mode = mode;
+      updateStartScreen();
+      initGame(mode);
+    };
+    resultsModeButtons.appendChild(btn);
+  });
+}
+
+function renderResultsSportToolbar() {
+  resultsSportToolbar.innerHTML = '';
+  ['nfl', 'nba', 'mlb'].forEach(sport => {
+    const pill = document.createElement('button');
+    pill.className = 'results-sport-pill';
+    pill.classList.add(`results-sport-pill--${sport}`);
+    if (!AVAILABLE_SPORTS.includes(sport)) pill.classList.add('coming-soon');
+    pill.textContent = SPORT_LABELS[sport];
+    if (AVAILABLE_SPORTS.includes(sport)) {
+      pill.onclick = () => {
+        state.sport = sport;
+        goToStartScreen();
+      };
+    }
+    if (sport === state.sport) pill.classList.add('selected');
+    resultsSportToolbar.appendChild(pill);
+  });
+}
+
 function showDailyAlreadyPlayed() {
   startScreen.classList.remove('active');
   roundScreen.classList.remove('active');
@@ -413,6 +468,8 @@ function showDailyAlreadyPlayed() {
   resultsStreak.textContent = `Streak: ${getStreak()} day${getStreak() !== 1 ? 's' : ''}`;
   comeBackTomorrow.classList.add('visible');
   shareGrid.textContent = buildShareGridForMode('daily', score, null);
+  renderResultsModeButtons(MODES.DAILY);
+  renderResultsSportToolbar();
   copyBtn.onclick = () => {
     window.location.href = 'sms:?body=' + encodeURIComponent(buildShareGridForMode('daily', score, null));
   };
@@ -584,9 +641,9 @@ function getStreak() {
 function buildShareGridForMode(mode, score, roundScores) {
   const modeStr = mode === 'daily' ? 'Daily' : mode === 'blitz' ? 'Blitz' : 'Unlimited';
   if (mode === 'blitz') {
-    return `🏈 Better Season — ${modeStr} — ${score} pts — betterseason `;
+    return `🏈 ${score} pts in blitz — betterseason `;
   }
-  let grid = `🏈 Better Season — ${modeStr}\n\n`;
+  let grid = `🏈  ${score}/9pts — ${modeStr}\n\n`;
   if (roundScores && roundScores.length > 0) {
     roundScores.forEach(({ position, score: rs, total }) => {
       const correct = '✅'.repeat(rs);
@@ -594,8 +651,7 @@ function buildShareGridForMode(mode, score, roundScores) {
       grid += `${position}  ${correct}${wrong}  ${rs}/${total}\n`;
     });
   }
-  grid += `\n${score}/9 — betterseason `;
-  return grid;
+  return grid.trimEnd();
 }
 
 function buildShareGrid() {
@@ -622,6 +678,8 @@ function showResults() {
 
   comeBackTomorrow.classList.remove('visible');
   shareGrid.textContent = buildShareGrid();
+  renderResultsModeButtons(state.mode);
+  renderResultsSportToolbar();
 
   copyBtn.onclick = () => {
     window.location.href = 'sms:?body=' + encodeURIComponent(buildShareGrid());
@@ -664,38 +722,29 @@ function goToStartScreen() {
 }
 
 function updateStartScreen() {
+  document.querySelectorAll('.sport-card').forEach(card => {
+    card.classList.toggle('selected', card.dataset.sport === state.sport);
+  });
   document.querySelectorAll('.mode-card').forEach(card => {
     card.classList.toggle('selected', card.dataset.mode === state.mode);
   });
-  startBtn.disabled = !state.mode;
-  document.querySelectorAll('.menu-option').forEach(opt => {
-    opt.classList.toggle('selected', opt.dataset.mode === state.mode);
-  });
+  const sportAvailable = AVAILABLE_SPORTS.includes(state.sport);
+  startBtn.disabled = !state.mode || !sportAvailable;
 }
 
-function setupMenu() {
-  menuBtn.addEventListener('click', () => {
-    const isOpen = menuOverlay.classList.toggle('open');
-    menuBtn.setAttribute('aria-expanded', isOpen);
-  });
-  menuOverlay.addEventListener('click', (e) => {
-    if (e.target === menuOverlay) {
-      menuOverlay.classList.remove('open');
-      menuBtn.setAttribute('aria-expanded', 'false');
-    }
-  });
-  document.querySelectorAll('.menu-option').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const mode = btn.dataset.mode;
-      state.mode = mode;
-      menuOverlay.classList.remove('open');
-      menuBtn.setAttribute('aria-expanded', 'false');
-      btn.parentElement.querySelectorAll('.menu-option').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      goToStartScreen();
+function setupSportTabs() {
+  document.querySelectorAll('.sport-card').forEach(card => {
+    const sport = card.dataset.sport;
+    const isAvailable = AVAILABLE_SPORTS.includes(sport);
+    if (!isAvailable) return;
+    card.addEventListener('click', () => {
+      state.sport = sport;
+      document.querySelectorAll('.sport-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      updateStartScreen();
     });
   });
-  document.querySelector(`.menu-option[data-mode="unlimited"]`).classList.add('selected');
+  document.querySelector('.sport-card--nfl').classList.add('selected');
 }
 
 function setupModeCards() {
@@ -704,7 +753,7 @@ function setupModeCards() {
       state.mode = card.dataset.mode;
       document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
       card.classList.add('selected');
-      startBtn.disabled = false;
+      updateStartScreen();
     });
   });
 }
@@ -723,7 +772,7 @@ function setupStartBtn() {
 async function main() {
   try {
     setupHowToPlay();
-    setupMenu();
+    setupSportTabs();
     setupModeCards();
     setupStartBtn();
     state.data = await loadData();

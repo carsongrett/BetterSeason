@@ -81,92 +81,6 @@ body::before {
   background: rgba(255, 255, 255, 0.08);
 }
 
-.menu-btn {
-  position: absolute;
-  right: 1rem;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 0;
-  border: none;
-  background: transparent;
-  color: #a0a0a0;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 0;
-}
-
-.menu-btn:hover {
-  color: #fff;
-}
-
-.menu-icon {
-  display: block;
-  width: 14px;
-  height: 2px;
-  background: currentColor;
-  border-radius: 1px;
-}
-
-/* Mode menu overlay */
-.menu-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  z-index: 90;
-  align-items: flex-start;
-  justify-content: flex-end;
-}
-
-.menu-overlay.open {
-  display: flex;
-}
-
-.menu-panel {
-  width: 200px;
-  background: #16181d;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0 0 0 12px;
-  padding: 1rem;
-}
-
-.menu-title {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #888;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 0.75rem;
-}
-
-.menu-option {
-  display: block;
-  width: 100%;
-  padding: 0.6rem 0.75rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #f0f0f0;
-  background: transparent;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  text-align: left;
-  transition: background 0.15s;
-}
-
-.menu-option:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.menu-option.selected {
-  background: rgba(245, 158, 11, 0.2);
-  color: #f59e0b;
-}
-
 /* Start screen */
 #start-screen {
   align-items: center;
@@ -180,6 +94,111 @@ body::before {
   align-items: center;
   gap: 1.25rem;
   width: 100%;
+}
+
+.tagline {
+  font-size: 1.35rem;
+  font-weight: 600;
+  font-style: italic;
+  color: #c0c0c0;
+  letter-spacing: 0.02em;
+  margin-bottom: -0.25rem;
+  line-height: 1.35;
+  text-align: center;
+  max-width: 280px;
+}
+
+.sport-prompt {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  color: #a0a0a0;
+}
+
+.sport-tabs {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.sport-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-width: 5rem;
+  min-height: 5.25rem;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.sport-card-icon {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.sport-card-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.25rem;
+  letter-spacing: 0.15em;
+  color: #fff;
+}
+
+.sport-card-badge {
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 0.05rem;
+}
+
+/* NFL - field green */
+.sport-card--nfl {
+  background: linear-gradient(145deg, rgba(16, 70, 40, 0.6) 0%, rgba(8, 45, 25, 0.8) 100%);
+  border-color: rgba(34, 139, 34, 0.35);
+}
+
+.sport-card--nfl:hover {
+  background: linear-gradient(145deg, rgba(20, 85, 50, 0.7) 0%, rgba(12, 55, 32, 0.9) 100%);
+  border-color: rgba(34, 139, 34, 0.5);
+}
+
+.sport-card--nfl.selected {
+  border-color: #22c55e;
+  background: linear-gradient(145deg, rgba(34, 197, 94, 0.25) 0%, rgba(22, 163, 74, 0.35) 100%);
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+}
+
+/* NBA - court orange (coming soon) */
+.sport-card--nba {
+  background: linear-gradient(145deg, rgba(60, 40, 30, 0.5) 0%, rgba(40, 28, 22, 0.6) 100%);
+  border-color: rgba(255, 120, 50, 0.2);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sport-card--nba .sport-card-title {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* MLB - diamond navy/red (coming soon) */
+.sport-card--mlb {
+  background: linear-gradient(145deg, rgba(30, 40, 80, 0.4) 0%, rgba(20, 28, 60, 0.5) 100%);
+  border-color: rgba(220, 80, 60, 0.2);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sport-card--mlb .sport-card-title {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .start-prompt {
@@ -653,6 +672,73 @@ body::before {
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.results-sport-toolbar {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+}
+
+.results-mode-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.results-sport-pill {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.results-sport-pill:hover:not(.coming-soon) {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.results-sport-pill.selected {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #f59e0b;
+}
+
+.results-sport-pill.coming-soon {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.results-mode-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0.35rem 1rem;
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.results-mode-btn:hover {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.4);
 }
 
 .copy-btn, .new-game-btn {
