@@ -1,6 +1,18 @@
 # Better Season
 
-Daily NFL stat comparison game. Pick which player had the better season across three categories.
+Athletic resume game. Pick which player had the better stat in each category. Supports NFL, NBA, and MLB.
+
+## Current game modes
+
+| Sport | Modes |
+|-------|-------|
+| NFL | Daily, Rookie QBs, Blind Resume |
+| NBA | Daily |
+| MLB | MLB Batters, MLB Pitchers |
+
+**Blind Resume** (NFL, Daily): Guess the QB from their stats. Three stats revealed initially; one more reveals after each wrong guess. Team is always last. Scoring: +100 for correct, -10/-20/-30… per wrong guess. Share shows total pts and per-round scores (no emoji grid).
+
+**Note:** Blitz and Unlimited have been removed from NFL and NBA and are planned to be replaced with new modes. The underlying code for Blitz/Unlimited remains in `game.js` but is not exposed in the UI.
 
 ## Run locally
 
@@ -14,13 +26,20 @@ Then open the URL shown (e.g. http://localhost:3000).
 
 ## Data format
 
-- CSV files live in `data/` with naming `{pos}_{year}.csv` (e.g. `qb_2024.csv`).
+- CSV files live in `data/`. NFL uses `{pos}_{year}.csv` (e.g. `qb_2024.csv`). Blind Resume uses `blind_qb_2025.csv` (columns: Player, Age, Team, Conference, Pass Yds, Pass TD, Int, Rush Yds, Game Winning Drives). MLB uses `baseball_batters_2025.csv` and `baseball_pitchers_2025.csv`. NBA uses `basketball_2026.csv`.
 - Each CSV must have headers; first row is treated as column names.
-- Quoted fields are supported. Player, Team, Pos, and stat columns (Yds, TD, Rec, Cmp%, Int, Rate, Y/A) are expected.
+- Quoted fields are supported. `Player`, `Team`, `Pos`, and sport-specific stat columns are expected.
 
-## Daily mode
+## Deployment config
 
 Before launch, update `game.js`:
+
+- `SHARE_URL_PLACEHOLDER` and `SHARE_X_USERNAME` for share links.
+- `CNAME` file for custom domain (e.g. betterseason.live) if using GitHub Pages.
+
+## Daily mode setup
+
+For daily-only launch, update `game.js`:
 
 1. In `getGameSeed()`: use `return getTodaySeed();` (line ~12)
 2. In `getRound3Position()`: use calendar day for WR/TE alternation (see DAILY MODE comment)
@@ -51,33 +70,10 @@ Alternatively, ensure all position/year CSVs have at least two players that can 
 
 ### LoadData error handling
 
-**Issue:** If any single CSV fetch or parse fails, the entire `loadData()` throws and the user sees a generic "Failed to load data" message. It's unclear which file caused the problem.
+**Status:** Per-file try/catch is already in place; the thrown error includes the filename. For even better UX, you could collect failed files and show a list instead of failing entirely.
 
-**Recommendation:** Add per-file try/catch and surface which file failed:
-
-```javascript
-for (const f of FILES) {
-  try {
-    const res = await fetch(`data/${f}.csv`);
-    if (!res.ok) throw new Error(`${f}.csv: ${res.status}`);
-    const text = await res.text();
-    // ... parse and add to all
-  } catch (err) {
-    console.error(`Failed to load ${f}.csv:`, err);
-    throw new Error(`Could not load ${f}.csv: ${err.message}`);
-  }
-}
-```
-
-You can also collect failed files and show a list to the user instead of failing entirely.
-
-### Blitz timer / Confirm button
+### Blitz timer / Confirm button (when Blitz is re-enabled)
 
 **Issue:** When Blitz time hits 0, `endBlitz()` runs on the next timer tick. Until then, the user can still click "Confirm" or "Next round" once. The click is ignored (`goNextBlitz` returns early), but the button remains enabled and can be confusing.
 
-**Recommendation:** Disable the Confirm button as soon as time expires:
-
-- In the timer callback, when `state.blitzTimeLeft <= 0`, also run something like `confirmBtn.disabled = true` (or set `confirmBtn.textContent = 'Time\'s up!'`).
-- Alternatively, set `confirmBtn.disabled = true` at the start of `endBlitz()` before calling `showResults()`.
-
-This makes it clear that no further input is allowed.
+**Recommendation:** Disable the Confirm button as soon as time expires in the timer callback (e.g. `confirmBtn.disabled = true`) or at the start of `endBlitz()`.

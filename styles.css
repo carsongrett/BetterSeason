@@ -863,6 +863,156 @@ body::before {
   border-color: #60a5fa;
 }
 
+/* ========== BLIND RESUME ========== */
+.blind-resume-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.blind-resume-score-row {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 10px;
+}
+
+.blind-resume-score-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  color: #f59e0b;
+}
+
+.blind-resume-score-value {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #fff;
+  min-width: 2.5rem;
+  text-align: right;
+}
+
+.blind-resume-stats {
+  flex: 1;
+  min-height: 0;
+  padding: 1rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.4rem;
+  overflow-y: auto;
+}
+
+.blind-resume-stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.85rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.blind-resume-stat-label {
+  color: #a0a0a0;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.blind-resume-stat-value {
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+}
+
+.blind-resume-guess-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.blind-resume-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.blind-resume-input:focus {
+  border-color: #3b82f6;
+}
+
+.blind-resume-input::placeholder {
+  color: #666;
+}
+
+.blind-resume-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  background: #16181d;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  z-index: 10;
+  display: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.blind-resume-dropdown.visible {
+  display: block;
+}
+
+.blind-resume-dropdown-item {
+  padding: 0.65rem 1rem;
+  font-size: 0.95rem;
+  color: #f0f0f0;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.blind-resume-dropdown-item:hover,
+.blind-resume-dropdown-item.highlighted {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.blind-resume-feedback {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+  min-height: 1.4em;
+}
+
+.blind-resume-feedback.wrong {
+  color: #ef4444;
+}
+
+.blind-resume-feedback.correct {
+  color: #22c55e;
+}
+
 /* Desktop */
 @media (min-width: 480px) {
   body {

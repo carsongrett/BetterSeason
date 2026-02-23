@@ -44,6 +44,7 @@ const MODES = {
   ROOKIE_QB: 'rookie_qb',
   MLB_BATTERS: 'mlb_batters',
   MLB_PITCHERS: 'mlb_pitchers',
+  BLIND_RESUME: 'blind_resume',
 };
 
 const MODE_LABELS = {
@@ -53,6 +54,7 @@ const MODE_LABELS = {
   rookie_qb: 'Rookie QBs',
   mlb_batters: 'MLB Batters',
   mlb_pitchers: 'MLB Pitchers',
+  blind_resume: 'Blind Resume',
 };
 
 const MODE_DESCRIPTIONS = {
@@ -62,9 +64,10 @@ const MODE_DESCRIPTIONS = {
   rookie_qb: 'Rookies from 2016-2025.',
   mlb_batters: '2025 batting stats.',
   mlb_pitchers: '2025 pitching stats.',
+  blind_resume: 'Guess the player as their stats are revealed.',
 };
 
-const NFL_ONLY_MODES = ['rookie_qb'];
+const NFL_ONLY_MODES = ['rookie_qb', 'blind_resume'];
 const MLB_ONLY_MODES = ['mlb_batters', 'mlb_pitchers'];
 
 function getTodaySeed() {
@@ -201,6 +204,7 @@ const MLB_BATTERS_FILE = 'baseball_batters_2025.csv';
 const MLB_PITCHERS_FILE = 'baseball_pitchers_2025.csv';
 
 const ROOKIE_QB_FILE = 'rookie qbs 2016-2025.csv';
+const BLIND_QB_FILE = 'blind_qb_2025.csv';
 const ROOKIE_QB_STAT_POOL = ['TD', 'Int', 'Rush Yds', 'Team Wins'];
 
 function pickRookieQBStats(rng) {
@@ -269,6 +273,27 @@ async function loadData() {
       console.error(`Failed to load ${f}.csv:`, err);
       throw new Error(`Could not load ${f}.csv: ${err.message}`);
     }
+  }
+
+  try {
+    const res = await fetch(`data/${encodeURIComponent(BLIND_QB_FILE)}`);
+    if (!res.ok) throw new Error(`${BLIND_QB_FILE}: ${res.status}`);
+    const text = await res.text();
+    const lines = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim()).filter(Boolean);
+    const rows = [];
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i];
+      if (!line.trim()) continue;
+      const vals = parseCSVLine(line);
+      const row = {};
+      headers.forEach((h, j) => row[h] = (vals[j] || '').trim());
+      rows.push(row);
+    }
+    all.nfl.BLIND_QB = rows;
+  } catch (err) {
+    console.error(`Failed to load ${BLIND_QB_FILE}:`, err);
+    throw new Error(`Could not load ${BLIND_QB_FILE}: ${err.message}`);
   }
 
   try {
@@ -389,6 +414,66 @@ function pickMLBPitcherStats(rng) {
     [others[i], others[j]] = [others[j], others[i]];
   }
   return ['ERA', others[0], others[1]];
+}
+
+// Blind Resume: stat columns (Pos never shown)
+const BLIND_RESUME_STAT_COLS = ['Pass Yds', 'Pass TD', 'Int', 'Rush Yds', 'Game Winning Drives'];
+const BLIND_RESUME_EXTRA_COLS = ['Conference', 'Age'];
+const BLIND_RESUME_TEAM_COL = 'Team';
+
+const BLIND_RESUME_STAT_LABELS = {
+  'Pass Yds': 'Pass Yds',
+  'Pass TD': 'Pass TD',
+  'Int': 'Int',
+  'Rush Yds': 'Rush Yds',
+  'Game Winning Drives': 'Game Winning Drives',
+  'Conference': 'Conference',
+  'Age': 'Age',
+  'Team': 'Team',
+};
+
+function buildBlindResumeRevealOrder(rng) {
+  const initialPool = [...BLIND_RESUME_STAT_COLS];
+  for (let i = initialPool.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [initialPool[i], initialPool[j]] = [initialPool[j], initialPool[i]];
+  }
+  const initial = initialPool.slice(0, 3);
+  const remaining = initialPool.slice(3);
+  const extras = [...BLIND_RESUME_EXTRA_COLS];
+  for (let i = extras.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [extras[i], extras[j]] = [extras[j], extras[i]];
+  }
+  const toShuffle = [...remaining, ...extras];
+  for (let i = toShuffle.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [toShuffle[i], toShuffle[j]] = [toShuffle[j], toShuffle[i]];
+  }
+  return [...initial, ...toShuffle, BLIND_RESUME_TEAM_COL];
+}
+
+function formatBlindStatValue(val, col) {
+  const n = parseFloat(val);
+  if (!isNaN(n) && Number.isInteger(n)) return n.toLocaleString();
+  if (!isNaN(n)) return String(n);
+  return String(val || '');
+}
+
+function normalizePlayerName(name) {
+  return (name || '').toLowerCase().trim().replace(/\s+/g, ' ');
+}
+
+function isPlayerMatch(guess, actual) {
+  const g = normalizePlayerName(guess);
+  const a = normalizePlayerName(actual);
+  if (g === a) return true;
+  const aParts = a.split(' ');
+  const gParts = g.split(' ');
+  if (aParts.length >= 2 && gParts.length >= 2) {
+    if (aParts[aParts.length - 1] === gParts[gParts.length - 1] && aParts[0] === gParts[0]) return true;
+  }
+  return false;
 }
 
 function pickStatsForRound(position, rng, sport, mode) {
@@ -546,6 +631,15 @@ const howToBtn = document.getElementById('how-to-btn');
 const howToModal = document.getElementById('how-to-modal');
 const modalClose = document.getElementById('modal-close');
 const homeBtn = document.getElementById('home-btn');
+const blindResumeWrap = document.getElementById('blind-resume-wrap');
+const blindResumeScoreEl = document.getElementById('blind-resume-score');
+const blindResumeStats = document.getElementById('blind-resume-stats');
+const blindResumeInput = document.getElementById('blind-resume-input');
+const blindResumeDropdown = document.getElementById('blind-resume-dropdown');
+const blindResumeSubmit = document.getElementById('blind-resume-submit');
+const blindResumeFeedback = document.getElementById('blind-resume-feedback');
+const matchupWrap = document.getElementById('matchup-wrap');
+const roundInstruction = document.getElementById('round-instruction');
 
 let state = {
   sport: 'nfl',
@@ -565,7 +659,7 @@ let state = {
 };
 
 function getGameSeed(mode) {
-  const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS];
+  const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS, MODES.BLIND_RESUME];
   if (dailyModes.includes(mode)) return getTodaySeed();
   return Math.random().toString(36).slice(2, 12);
 }
@@ -574,6 +668,7 @@ function getDailyKey(sport, mode) {
   if (mode === MODES.ROOKIE_QB) return 'betterseason_rookieqb';
   if (mode === MODES.MLB_BATTERS) return 'betterseason_mlb_batters';
   if (mode === MODES.MLB_PITCHERS) return 'betterseason_mlb_pitchers';
+  if (mode === MODES.BLIND_RESUME) return 'betterseason_blindresume';
   const suffix = sport === 'nfl' ? '' : `_${sport}`;
   return `betterseason${suffix}`;
 }
@@ -636,9 +731,14 @@ function initGame(mode) {
     return;
   }
 
-  const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS];
+  const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS, MODES.BLIND_RESUME];
   if (dailyModes.includes(mode) && hasPlayedDailyToday(state.sport, mode)) {
     showDailyAlreadyPlayed();
+    return;
+  }
+
+  if (mode === MODES.BLIND_RESUME) {
+    initBlindResume();
     return;
   }
 
@@ -721,12 +821,213 @@ function endBlitz() {
   showResults();
 }
 
+// --- Blind Resume ---
+function initBlindResume() {
+  state.data = state.allData.nfl.BLIND_QB;
+  state.rounds = [];
+  const pool = [...(state.data || [])];
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(state.rng() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  for (let r = 0; r < 3; r++) {
+    const player = pool[r];
+    const revealOrder = buildBlindResumeRevealOrder(state.rng);
+    state.rounds.push({
+      player,
+      revealOrder,
+      revealedCount: 3,
+      wrongGuessCount: 0,
+      roundScore: 0,
+    });
+  }
+  state.currentRound = 0;
+  state.score = 0;
+  state.roundScores = [];
+
+  blindResumeWrap.style.display = 'flex';
+  matchupWrap.style.display = 'none';
+  statPicks.style.display = 'none';
+  confirmBtn.style.display = 'none';
+  positionLabel.textContent = 'QB';
+  roundInstruction.textContent = 'Guess the player from their stats';
+  renderBlindResumeRound();
+}
+
+function getBlindResumeDisplayScore() {
+  const r = state.rounds[state.currentRound];
+  if (!r) return state.score;
+  const penaltySoFar = r.wrongGuessCount * (r.wrongGuessCount + 1) * 5;
+  const currentRoundPotential = Math.max(0, 100 - penaltySoFar);
+  return state.score + currentRoundPotential;
+}
+
+function updateBlindResumeScoreDisplay() {
+  blindResumeScoreEl.textContent = getBlindResumeDisplayScore();
+}
+
+function renderBlindResumeRound() {
+  const r = state.rounds[state.currentRound];
+  if (!r) return;
+
+  roundIndicator.textContent = `Round ${state.currentRound + 1}/3`;
+  updateBlindResumeScoreDisplay();
+  blindResumeStats.innerHTML = '';
+  for (let i = 0; i < r.revealedCount && i < r.revealOrder.length; i++) {
+    const col = r.revealOrder[i];
+    const val = r.player[col];
+    const label = BLIND_RESUME_STAT_LABELS[col] || col;
+    const displayVal = formatBlindStatValue(val, col);
+    const row = document.createElement('div');
+    row.className = 'blind-resume-stat-row';
+    row.innerHTML = `<span class="blind-resume-stat-label">${label}</span><span class="blind-resume-stat-value">${displayVal}</span>`;
+    blindResumeStats.appendChild(row);
+  }
+
+  blindResumeInput.value = '';
+  blindResumeInput.disabled = false;
+  blindResumeDropdown.innerHTML = '';
+  blindResumeDropdown.classList.remove('visible');
+  blindResumeSubmit.disabled = true;
+  blindResumeFeedback.textContent = '';
+  blindResumeFeedback.className = 'blind-resume-feedback';
+
+  setupBlindResumeInput();
+}
+
+function setupBlindResumeInput() {
+  const pool = state.allData.nfl.BLIND_QB;
+
+  function filterNames(q) {
+    const lower = q.toLowerCase().trim();
+    if (!lower) return [];
+    return pool.filter(p => {
+      const name = (p.Player || '').toLowerCase();
+      return name.includes(lower);
+    }).map(p => p.Player).slice(0, 8);
+  }
+
+  function showDropdown(items) {
+    blindResumeDropdown.innerHTML = '';
+    items.forEach((name, i) => {
+      const el = document.createElement('div');
+      el.className = 'blind-resume-dropdown-item' + (i === 0 ? ' highlighted' : '');
+      el.textContent = name;
+      el.onclick = () => {
+        blindResumeInput.value = name;
+        blindResumeDropdown.classList.remove('visible');
+        blindResumeSubmit.disabled = false;
+      };
+      blindResumeDropdown.appendChild(el);
+    });
+    blindResumeDropdown.classList.toggle('visible', items.length > 0);
+  }
+
+  blindResumeInput.oninput = () => {
+    const q = blindResumeInput.value.trim();
+    blindResumeSubmit.disabled = !q;
+    showDropdown(filterNames(q));
+  };
+
+  blindResumeInput.onfocus = () => {
+    const q = blindResumeInput.value.trim();
+    if (q) showDropdown(filterNames(q));
+  };
+
+  blindResumeInput.onkeydown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (blindResumeInput.value.trim()) handleBlindResumeGuess();
+    }
+    if (e.key === 'Escape') {
+      blindResumeDropdown.classList.remove('visible');
+    }
+  };
+
+  setTimeout(() => {
+    document.addEventListener('click', function closeDropdown(e) {
+      if (!blindResumeInput.contains(e.target) && !blindResumeDropdown.contains(e.target)) {
+        blindResumeDropdown.classList.remove('visible');
+        document.removeEventListener('click', closeDropdown);
+      }
+    });
+  }, 0);
+
+  blindResumeSubmit.onclick = handleBlindResumeGuess;
+}
+
+function handleBlindResumeGuess() {
+  const guess = blindResumeInput.value.trim();
+  if (!guess) return;
+
+  const r = state.rounds[state.currentRound];
+  const correct = isPlayerMatch(guess, r.player.Player);
+
+  if (correct) {
+    const penalty = r.wrongGuessCount * (r.wrongGuessCount + 1) * 5;
+    r.roundScore = Math.max(0, 100 - penalty);
+    state.score += r.roundScore;
+    state.roundScores.push({ round: state.currentRound + 1, score: r.roundScore });
+    updateBlindResumeScoreDisplay();
+    blindResumeFeedback.textContent = `Correct! ${r.player.Player} (+${r.roundScore} pts)`;
+    blindResumeFeedback.className = 'blind-resume-feedback correct';
+    blindResumeInput.disabled = true;
+    blindResumeSubmit.disabled = true;
+    blindResumeDropdown.classList.remove('visible');
+    setTimeout(() => goNextBlindResumeRound(), 1200);
+  } else {
+    r.wrongGuessCount++;
+    const penalty = 10 * r.wrongGuessCount;
+    updateBlindResumeScoreDisplay();
+    if (r.revealedCount < r.revealOrder.length) {
+      blindResumeFeedback.textContent = `Wrong (-${penalty} pts). One more stat revealed.`;
+      blindResumeFeedback.className = 'blind-resume-feedback wrong';
+      r.revealedCount++;
+      setTimeout(() => renderBlindResumeRound(), 800);
+    } else {
+      r.roundScore = Math.max(0, 100 - r.wrongGuessCount * (r.wrongGuessCount + 1) * 5);
+      state.score += r.roundScore;
+      state.roundScores.push({ round: state.currentRound + 1, score: r.roundScore });
+      updateBlindResumeScoreDisplay();
+      blindResumeFeedback.textContent = `It was ${r.player.Player}. Round score: ${r.roundScore} pts.`;
+      blindResumeFeedback.className = 'blind-resume-feedback wrong';
+      blindResumeInput.disabled = true;
+      blindResumeSubmit.disabled = false;
+      blindResumeSubmit.textContent = 'Next round →';
+      blindResumeSubmit.onclick = () => {
+        blindResumeSubmit.textContent = 'Guess';
+        blindResumeSubmit.onclick = handleBlindResumeGuess;
+        goNextBlindResumeRound();
+      };
+    }
+  }
+}
+
+function goNextBlindResumeRound() {
+  state.currentRound++;
+  if (state.currentRound < 3) {
+    roundScreen.classList.remove('active');
+    setTimeout(() => {
+      roundScreen.classList.add('active');
+      renderBlindResumeRound();
+    }, 150);
+  } else {
+    storeDailyScore(state.score, state.sport, state.mode, state.roundScores);
+    updateStreak();
+    blindResumeWrap.style.display = 'none';
+    matchupWrap.style.display = '';
+    statPicks.style.display = '';
+    confirmBtn.style.display = '';
+    showResults();
+  }
+}
+
 function renderResultsModeButtons(justPlayedMode) {
   resultsModeButtons.innerHTML = '';
   let allModes;
-  if (state.sport === 'nfl') allModes = [MODES.UNLIMITED, MODES.DAILY, MODES.BLITZ, MODES.ROOKIE_QB];
+  if (state.sport === 'nfl') allModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.BLIND_RESUME];
   else if (state.sport === 'mlb') allModes = [MODES.MLB_BATTERS, MODES.MLB_PITCHERS];
-  else allModes = [MODES.UNLIMITED, MODES.DAILY, MODES.BLITZ];
+  else allModes = [MODES.DAILY];
   const otherModes = allModes.filter(m => m !== justPlayedMode);
   otherModes.forEach(mode => {
     const btn = document.createElement('button');
@@ -767,8 +1068,8 @@ function showDailyAlreadyPlayed() {
   homeBtn.style.display = 'flex';
   const score = parseInt(getStoredDailyScore(state.sport, state.mode), 10);
   const roundScores = getStoredRoundScores(state.sport, state.mode);
-  const total = (state.mode === MODES.ROOKIE_QB) ? 12 : 9;
-  resultsScore.textContent = `${score}/${total}`;
+  const total = (state.mode === MODES.ROOKIE_QB) ? 12 : (state.mode === MODES.BLIND_RESUME) ? null : 9;
+  resultsScore.textContent = total != null ? `${score}/${total}` : `${score} pts`;
   resultsStreak.textContent = `Streak: ${getStreak(state.sport, state.mode)} day${getStreak(state.sport, state.mode) !== 1 ? 's' : ''}`;
   comeBackTomorrow.classList.add('visible');
   shareGrid.textContent = buildShareGridForMode(state.mode, score, roundScores, state.sport);
@@ -956,18 +1257,25 @@ function getShareDateStr() {
 }
 
 function buildShareText(mode, score, roundScores, sport) {
-  const modeStr = mode === 'daily' ? 'Daily' : mode === 'blitz' ? 'Blitz' : mode === 'rookie_qb' ? 'Rookie QBs' : mode === 'mlb_batters' ? 'MLB Batters' : mode === 'mlb_pitchers' ? 'MLB Pitchers' : 'Unlimited';
+  const modeStr = mode === 'daily' ? 'Daily' : mode === 'blitz' ? 'Blitz' : mode === 'rookie_qb' ? 'Rookie QBs' : mode === 'mlb_batters' ? 'MLB Batters' : mode === 'mlb_pitchers' ? 'MLB Pitchers' : mode === 'blind_resume' ? 'Blind Resume' : 'Unlimited';
   const total = mode === 'rookie_qb' ? 12 : 9;
-  const scoreStr = mode === 'blitz' ? `${score} pts` : `${score}/${total}pts`;
+  const scoreStr = (mode === 'blitz' || mode === 'blind_resume') ? `${score} pts` : `${score}/${total}pts`;
   const urlSuffix = (SHARE_X_USERNAME && SHARE_URL_PLACEHOLDER)
     ? `\n\n${SHARE_X_USERNAME}\n${SHARE_URL_PLACEHOLDER}`
     : SHARE_URL_PLACEHOLDER ? `\n\n${SHARE_URL_PLACEHOLDER}` : '';
-  const dailyModes = ['daily', 'rookie_qb', 'mlb_batters', 'mlb_pitchers'];
+  const dailyModes = ['daily', 'rookie_qb', 'mlb_batters', 'mlb_pitchers', 'blind_resume'];
   const isDaily = dailyModes.includes(mode);
   const dash = isDaily ? ' - ' : ' — ';
   const dateSuffix = isDaily ? ` ${getShareDateStr()}` : '';
   if (mode === 'blitz') {
     return `${scoreStr} — ${modeStr}${urlSuffix}`;
+  }
+  if (mode === 'blind_resume') {
+    let text = `${scoreStr} — ${modeStr}${dateSuffix}`;
+    if (roundScores && roundScores.length > 0) {
+      text += '\n' + roundScores.map(({ round, score: rs }) => `Rd ${round}: ${rs}`).join('  ');
+    }
+    return text + urlSuffix;
   }
   let text = `${scoreStr}${dash}${modeStr}${dateSuffix}`;
   if (roundScores && roundScores.length > 0) {
@@ -1007,6 +1315,9 @@ function showResults() {
   if (state.mode === MODES.BLITZ) {
     resultsScore.textContent = state.score + ' pts';
     resultsStreak.textContent = '';
+  } else if (state.mode === MODES.BLIND_RESUME) {
+    resultsScore.textContent = state.score + ' pts';
+    resultsStreak.textContent = `Streak: ${getStreak(state.sport, state.mode)} day${getStreak(state.sport, state.mode) !== 1 ? 's' : ''}`;
   } else {
     const total = state.totalPoints || 9;
     resultsScore.textContent = `${state.score}/${total}`;
@@ -1022,7 +1333,7 @@ function showResults() {
   shareSmsBtn.onclick = () => { window.location.href = 'sms:?body=' + encodeURIComponent(shareText); };
   shareXBtn.onclick = () => { window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText)); };
 
-  const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS];
+  const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS, MODES.BLIND_RESUME];
   newGameBtn.style.display = dailyModes.includes(state.mode) ? 'none' : 'inline-flex';
   newGameBtn.onclick = () => {
     if (state.mode === MODES.BLITZ) {
@@ -1057,10 +1368,15 @@ function goToStartScreen() {
     clearInterval(state.blitzTimerId);
     state.blitzTimerId = null;
   }
+  blindResumeWrap.style.display = 'none';
+  matchupWrap.style.display = '';
+  statPicks.style.display = '';
+  confirmBtn.style.display = '';
   homeBtn.style.display = 'none';
   startScreen.classList.add('active');
   roundScreen.classList.remove('active');
   resultsScreen.classList.remove('active');
+  roundInstruction.textContent = 'Who had the better season?';
   updateStartScreen();
 }
 
@@ -1117,7 +1433,7 @@ function setupModeCards() {
 function setupStartBtn() {
   startBtn.addEventListener('click', () => {
     if (!state.mode) return;
-    const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS];
+    const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS, MODES.BLIND_RESUME];
     if (dailyModes.includes(state.mode) && hasPlayedDailyToday(state.sport, state.mode)) {
       showDailyAlreadyPlayed();
     } else {

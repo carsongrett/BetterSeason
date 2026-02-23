@@ -70,20 +70,15 @@
               <span class="mode-card-title">Daily</span>
               <span class="mode-card-desc">The classic. Resets at midnight.</span>
             </button>
-            <button class="mode-card mode-card--nfl-nba" data-mode="unlimited">
-              <span class="mode-card-badge mode-card-badge--unlimited">Unlimited</span>
-              <span class="mode-card-title">Unlimited</span>
-              <span class="mode-card-desc">Daily game with new players each time.</span>
-            </button>
-            <button class="mode-card mode-card--nfl-nba" data-mode="blitz">
-              <span class="mode-card-badge mode-card-badge--unlimited">Unlimited</span>
-              <span class="mode-card-title">Blitz</span>
-              <span class="mode-card-desc">60 seconds. As many rounds as you can.</span>
-            </button>
             <button class="mode-card mode-card--nfl-only" data-mode="rookie_qb">
               <span class="mode-card-badge mode-card-badge--daily">Daily</span>
               <span class="mode-card-title">Rookie QBs</span>
               <span class="mode-card-desc">Rookies from 2016-2025.</span>
+            </button>
+            <button class="mode-card mode-card--nfl-only" data-mode="blind_resume">
+              <span class="mode-card-badge mode-card-badge--daily">Daily</span>
+              <span class="mode-card-title">Blind Resume</span>
+              <span class="mode-card-desc">Guess the player as their stats are revealed.</span>
             </button>
             <button class="mode-card mode-card--mlb-only" data-mode="mlb_batters">
               <span class="mode-card-badge mode-card-badge--daily">Daily</span>
@@ -108,9 +103,23 @@
             <span class="round-badge" id="round-indicator"></span>
             <span class="blitz-timer" id="blitz-timer" aria-hidden="true">60</span>
           </div>
-          <p class="round-instruction">Who had the better season?</p>
+          <p class="round-instruction" id="round-instruction">Who had the better season?</p>
         </div>
-        <div class="matchup">
+        <!-- Blind Resume (shown when mode = blind_resume) -->
+        <div class="blind-resume-wrap" id="blind-resume-wrap" style="display: none;">
+          <div class="blind-resume-score-row">
+            <span class="blind-resume-score-label">Score</span>
+            <span class="blind-resume-score-value" id="blind-resume-score">0</span>
+          </div>
+          <div class="blind-resume-guess-wrap">
+            <input type="text" class="blind-resume-input" id="blind-resume-input" placeholder="Type player name..." autocomplete="off">
+            <div class="blind-resume-dropdown" id="blind-resume-dropdown"></div>
+            <button class="confirm-btn blind-resume-submit" id="blind-resume-submit" disabled>Guess</button>
+          </div>
+          <div class="blind-resume-stats" id="blind-resume-stats"></div>
+          <p class="blind-resume-feedback" id="blind-resume-feedback"></p>
+        </div>
+        <div class="matchup" id="matchup-wrap">
           <div class="player player-a">
             <div class="player-name" id="player-a-name"></div>
             <div class="player-meta" id="player-a-meta"></div>
