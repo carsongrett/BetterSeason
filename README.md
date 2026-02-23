@@ -10,7 +10,7 @@ Athletic resume game. Pick which player had the better stat in each category. Su
 | NBA | Daily |
 | MLB | MLB Batters, MLB Pitchers |
 
-**Blind Resume** (NFL, Daily): Guess the QB from their stats. Three stats revealed initially; one more reveals after each wrong guess. Team is always last. Scoring: +100 for correct, -10/-20/-30… per wrong guess. Share shows total pts and per-round scores (no emoji grid).
+**Blind Resume** (NFL, Daily): Guess the QB from their stats. Start at 0. +100 per correct guess, -10 per wrong. Score carries across rounds.
 
 **Note:** Blitz and Unlimited have been removed from NFL and NBA and are planned to be replaced with new modes. The underlying code for Blitz/Unlimited remains in `game.js` but is not exposed in the UI.
 

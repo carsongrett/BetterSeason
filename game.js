@@ -64,7 +64,7 @@ const MODE_DESCRIPTIONS = {
   rookie_qb: 'Rookies from 2016-2025.',
   mlb_batters: '2025 batting stats.',
   mlb_pitchers: '2025 pitching stats.',
-  blind_resume: 'Guess the player as their stats are revealed.',
+  blind_resume: 'Start at 0. +100 per correct, -10 per wrong. Score carries.',
 };
 
 const NFL_ONLY_MODES = ['rookie_qb', 'blind_resume'];
@@ -838,7 +838,6 @@ function initBlindResume() {
       revealOrder,
       revealedCount: 3,
       wrongGuessCount: 0,
-      roundScore: 0,
     });
   }
   state.currentRound = 0;
@@ -855,11 +854,7 @@ function initBlindResume() {
 }
 
 function getBlindResumeDisplayScore() {
-  const r = state.rounds[state.currentRound];
-  if (!r) return state.score;
-  const penaltySoFar = r.wrongGuessCount * (r.wrongGuessCount + 1) * 5;
-  const currentRoundPotential = Math.max(0, 100 - penaltySoFar);
-  return state.score + currentRoundPotential;
+  return state.score;
 }
 
 function updateBlindResumeScoreDisplay() {
@@ -964,12 +959,9 @@ function handleBlindResumeGuess() {
   const correct = isPlayerMatch(guess, r.player.Player);
 
   if (correct) {
-    const penalty = r.wrongGuessCount * (r.wrongGuessCount + 1) * 5;
-    r.roundScore = Math.max(0, 100 - penalty);
-    state.score += r.roundScore;
-    state.roundScores.push({ round: state.currentRound + 1, score: r.roundScore });
-    updateBlindResumeScoreDisplay();
-    blindResumeFeedback.textContent = `Correct! ${r.player.Player} (+${r.roundScore} pts)`;
+    state.score += 100;
+    blindResumeScoreEl.textContent = state.score;
+    blindResumeFeedback.textContent = `Correct! ${r.player.Player} (+100 pts)`;
     blindResumeFeedback.className = 'blind-resume-feedback correct';
     blindResumeInput.disabled = true;
     blindResumeSubmit.disabled = true;
@@ -977,19 +969,15 @@ function handleBlindResumeGuess() {
     setTimeout(() => goNextBlindResumeRound(), 1200);
   } else {
     r.wrongGuessCount++;
-    const penalty = 10 * r.wrongGuessCount;
+    state.score -= 10;
     updateBlindResumeScoreDisplay();
     if (r.revealedCount < r.revealOrder.length) {
-      blindResumeFeedback.textContent = `Wrong (-${penalty} pts). One more stat revealed.`;
+      blindResumeFeedback.textContent = `Wrong (-10 pts). One more stat revealed.`;
       blindResumeFeedback.className = 'blind-resume-feedback wrong';
       r.revealedCount++;
       setTimeout(() => renderBlindResumeRound(), 800);
     } else {
-      r.roundScore = Math.max(0, 100 - r.wrongGuessCount * (r.wrongGuessCount + 1) * 5);
-      state.score += r.roundScore;
-      state.roundScores.push({ round: state.currentRound + 1, score: r.roundScore });
-      updateBlindResumeScoreDisplay();
-      blindResumeFeedback.textContent = `It was ${r.player.Player}. Round score: ${r.roundScore} pts.`;
+      blindResumeFeedback.textContent = `It was ${r.player.Player}. (-10 pts)`;
       blindResumeFeedback.className = 'blind-resume-feedback wrong';
       blindResumeInput.disabled = true;
       blindResumeSubmit.disabled = false;
@@ -1012,7 +1000,7 @@ function goNextBlindResumeRound() {
       renderBlindResumeRound();
     }, 150);
   } else {
-    storeDailyScore(state.score, state.sport, state.mode, state.roundScores);
+    storeDailyScore(state.score, state.sport, state.mode, []);
     updateStreak();
     blindResumeWrap.style.display = 'none';
     matchupWrap.style.display = '';
@@ -1271,11 +1259,7 @@ function buildShareText(mode, score, roundScores, sport) {
     return `${scoreStr} — ${modeStr}${urlSuffix}`;
   }
   if (mode === 'blind_resume') {
-    let text = `${scoreStr} — ${modeStr}${dateSuffix}`;
-    if (roundScores && roundScores.length > 0) {
-      text += '\n' + roundScores.map(({ round, score: rs }) => `Rd ${round}: ${rs}`).join('  ');
-    }
-    return text + urlSuffix;
+    return `${scoreStr} — ${modeStr}${dateSuffix}` + urlSuffix;
   }
   let text = `${scoreStr}${dash}${modeStr}${dateSuffix}`;
   if (roundScores && roundScores.length > 0) {
