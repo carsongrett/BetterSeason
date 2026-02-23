@@ -64,7 +64,7 @@ const MODE_DESCRIPTIONS = {
   rookie_qb: 'Rookies from 2016-2025.',
   mlb_batters: '2025 batting stats.',
   mlb_pitchers: '2025 pitching stats.',
-  blind_resume: 'Start at 0. +100 per correct, -10 per wrong. Score carries.',
+  blind_resume: 'Guess the player as stats are revealed.',
 };
 
 const NFL_ONLY_MODES = ['rookie_qb', 'blind_resume'];
