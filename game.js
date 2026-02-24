@@ -94,6 +94,8 @@ function createSeededRandom(seed) {
   h = Math.imul(h ^ h >>> 16, 0x85ebca6b) | 0;
   h = Math.imul(h ^ h >>> 13, 0xc2b2ae35) | 0;
   h = (h ^ h >>> 16) >>> 0;
+  // Mulberry32 requires non-zero state; otherwise all outputs are 0 and shuffle is deterministic
+  if (h === 0) h = 1;
   return function() {
     h = Math.imul(h ^ h >>> 15, h | 0);
     h = Math.imul(h ^ h >>> 13, h | 0);
@@ -745,13 +747,19 @@ let state = {
   blitzUsedKeys: null,
 };
 
+function getBlindResumeDaySeed() {
+  // Epoch days (local calendar day) so the seed changes every day; numeric to avoid hash collisions
+  const now = new Date();
+  const dayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  return Math.floor(dayStart / 86400000);
+}
+
 function getGameSeed(mode) {
   const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS, MODES.BLIND_RESUME];
   if (dailyModes.includes(mode)) {
-    const dateSeed = getTodaySeed();
-    // Blind Resume: use a distinct seed so similar dates don't produce similar RNG (same 3 players)
-    if (mode === MODES.BLIND_RESUME) return dateSeed + '-blind_resume';
-    return dateSeed;
+    // Blind Resume: use epoch day number so we get a different puzzle every calendar day (UTC)
+    if (mode === MODES.BLIND_RESUME) return String(getBlindResumeDaySeed()) + '-blind_resume';
+    return getTodaySeed();
   }
   return Math.random().toString(36).slice(2, 12);
 }
@@ -1358,37 +1366,40 @@ function getShareDateStr() {
   return `(${SHORT_MONTHS[d.getMonth()]} ${d.getDate()})`;
 }
 
+// Build one single share message (score + optional round breakdown + handle + URL as plain text). Used for both SMS and X so link stays in one message.
 function buildShareText(mode, score, roundScores, sport) {
   const modeStr = mode === 'daily' ? 'Daily' : mode === 'blitz' ? 'Blitz' : mode === 'rookie_qb' ? 'Rookie QBs' : mode === 'mlb_batters' ? 'MLB Batters' : mode === 'mlb_pitchers' ? 'MLB Pitchers' : mode === 'blind_resume' ? 'Blind Resume' : 'Unlimited';
   const total = mode === 'rookie_qb' ? 12 : 9;
   const scoreStr = (mode === 'blitz' || mode === 'blind_resume') ? `${score} pts` : `${score}/${total}pts`;
-  const urlSuffix = (SHARE_X_USERNAME && SHARE_URL_PLACEHOLDER)
-    ? `\n\n${SHARE_X_USERNAME}\n${SHARE_URL_PLACEHOLDER}`
-    : SHARE_URL_PLACEHOLDER ? `\n\n${SHARE_URL_PLACEHOLDER}` : '';
   const dailyModes = ['daily', 'rookie_qb', 'mlb_batters', 'mlb_pitchers', 'blind_resume'];
   const isDaily = dailyModes.includes(mode);
   const dash = isDaily ? ' - ' : ' — ';
   const dateSuffix = isDaily ? ` ${getShareDateStr()}` : '';
+  // Link and handle as plain text on one line so SMS sends a single message (recipient can tap link)
+  const linkLine = (SHARE_X_USERNAME && SHARE_URL_PLACEHOLDER)
+    ? `\n${SHARE_X_USERNAME} ${SHARE_URL_PLACEHOLDER}`
+    : SHARE_URL_PLACEHOLDER ? `\n${SHARE_URL_PLACEHOLDER}` : '';
+  let text;
   if (mode === 'blitz') {
-    return `${scoreStr} — ${modeStr}${urlSuffix}`;
+    text = `${scoreStr} — ${modeStr}`;
+  } else if (mode === 'blind_resume') {
+    text = `${scoreStr} — ${modeStr}${dateSuffix}`;
+  } else {
+    text = `${scoreStr}${dash}${modeStr}${dateSuffix}`;
+    if (roundScores && roundScores.length > 0) {
+      text += '\n\n';
+      roundScores.forEach(({ position, score: rs, total: t }, idx) => {
+        const correct = '✅'.repeat(rs);
+        const wrong = '❌'.repeat(t - rs);
+        if (mode === 'rookie_qb' || mode === 'mlb_batters' || mode === 'mlb_pitchers') {
+          text += `Rd. ${idx + 1}  ${correct}${wrong}  ${rs}/${t}\n`;
+        } else {
+          text += `${position}  ${correct}${wrong}  ${rs}/${t}\n`;
+        }
+      });
+    }
   }
-  if (mode === 'blind_resume') {
-    return `${scoreStr} — ${modeStr}${dateSuffix}` + urlSuffix;
-  }
-  let text = `${scoreStr}${dash}${modeStr}${dateSuffix}`;
-  if (roundScores && roundScores.length > 0) {
-    text += '\n\n';
-    roundScores.forEach(({ position, score: rs, total: t }, idx) => {
-      const correct = '✅'.repeat(rs);
-      const wrong = '❌'.repeat(t - rs);
-      if (mode === 'rookie_qb' || mode === 'mlb_batters' || mode === 'mlb_pitchers') {
-        text += `Rd. ${idx + 1}  ${correct}${wrong}  ${rs}/${t}\n`;
-      } else {
-        text += `${position}  ${correct}${wrong}  ${rs}/${t}\n`;
-      }
-    });
-  }
-  return text.trimEnd() + urlSuffix;
+  return text.trimEnd() + linkLine;
 }
 
 function buildShareGridForMode(mode, score, roundScores, sport) {
@@ -1415,13 +1426,9 @@ function recordPlay() {
 
 function formatTodayStats(gamesPlayed, averageScore, mode) {
   if (gamesPlayed == null || gamesPlayed === 0) return '';
-  const isPoints = mode === MODES.BLITZ || mode === MODES.BLIND_RESUME;
-  const avgStr = averageScore != null
-    ? (isPoints ? `Avg ${averageScore} pts` : `Avg ${averageScore}/9`)
-    : '';
-  const parts = [`${gamesPlayed} game${gamesPlayed !== 1 ? 's' : ''} today`];
-  if (avgStr) parts.push(avgStr);
-  return parts.join(' · ');
+  const playerStr = `${gamesPlayed} player${gamesPlayed !== 1 ? 's' : ''} today`;
+  if (averageScore == null) return playerStr + '.';
+  return `${playerStr}. Avg Score is ${averageScore} pts.`;
 }
 
 function renderTodayStats(text) {

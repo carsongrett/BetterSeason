@@ -280,6 +280,11 @@ body::before {
   position: relative;
 }
 
+/* Hide MLB-only modes until sport is MLB (overrides .mode-card so no flash on load) */
+.mode-card.mode-card--mlb-only {
+  display: none;
+}
+
 .mode-card-badge {
   position: absolute;
   top: 0.5rem;
@@ -746,9 +751,10 @@ body::before {
 
 .today-stats {
   display: none;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #94a3b8;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.2em;
+  color: #fff;
   margin-top: 0.35rem;
 }
 
