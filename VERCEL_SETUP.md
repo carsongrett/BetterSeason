@@ -19,10 +19,10 @@ Your game stays on **GitHub Pages** (betterseason.live). Only the **stats API** 
 **Option A – Deploy from the Vercel dashboard**
 
 1. In the Vercel dashboard, click **Add New… → Project**.
-2. Import your **Bigger Season** repo (the one that contains `api/`, `game.js`, `index.html`).
+2. Import your **BetterSeason** repo (the one that contains `api/`, `game.js`, `index.html`).
 3. Leave **Root Directory** as `.` and **Framework Preset** as **Other** (or **Vite** if it detects something; it doesn’t matter for the API).
 4. Click **Deploy**. Wait for the build to finish.
-5. Copy your project URL, e.g. `https://bigger-season-xxxx.vercel.app`.
+5. Copy your project URL, e.g. `https://betterseason-xxxx.vercel.app`.
 
 **Option B – Deploy from the CLI**
 
@@ -32,7 +32,7 @@ Your game stays on **GitHub Pages** (betterseason.live). Only the **stats API** 
    vercel
    ```
 2. Log in or link the project when prompted. Follow the prompts to deploy.
-3. Copy the deployment URL Vercel prints (e.g. `https://bigger-season-xxxx.vercel.app`).
+3. Copy the deployment URL Vercel prints (e.g. `https://betterseason-xxxx.vercel.app`).
 
 ---
 
@@ -40,10 +40,10 @@ Your game stays on **GitHub Pages** (betterseason.live). Only the **stats API** 
 
 Vercel KV is deprecated; use **Upstash Redis** from the Vercel Marketplace.
 
-1. In the Vercel dashboard, open your **Bigger Season** project.
+1. In the Vercel dashboard, open your **BetterSeason** project.
 2. Go to the **Storage** tab (or **Integrations**).
 3. Click **Create Database** / **Add Integration** and choose **Upstash Redis** (or search “Redis” in the Marketplace).
-4. Create a new Upstash Redis database (or connect an existing one). Name it e.g. `bigger-season-stats`.
+4. Create a new Upstash Redis database (or connect an existing one). Name it e.g. `betterseason-stats`.
 5. Attach it to this **Vercel project**. Vercel will add env vars like:
    - `UPSTASH_REDIS_REST_URL`
    - `UPSTASH_REDIS_REST_TOKEN`
@@ -93,3 +93,27 @@ To run and test the API locally with your Redis database:
 - **GET /api/stats?date=YYYY-MM-DD&sport=nfl&mode=daily** – returns `gamesPlayed` and `averageScore` for that day and mode.
 
 If you add a custom domain for the Vercel project later, update `STATS_API_BASE` in `game.js` to that domain and add it to `api/lib/cors.js` in `ALLOWED_ORIGINS`.
+
+---
+
+## Troubleshooting: stats never show / wrong commit deployed
+
+**Symptom:** Vercel builds an old commit (e.g. `47534c6`), but your API and recent changes are in commits like `d26d165`, `531d330`. Stats never appear on the results screen.
+
+**Cause:** Vercel is connected to the **wrong GitHub repo**. This project’s code lives in:
+
+- **Correct repo:** `https://github.com/carsongrett/BetterSeason` (has `api/`, `vercel.json`, `game.js`)
+
+If Vercel is linked to a different repo (e.g. `betterseasonvercel` or an old `Bigger-Season`), it will only have that repo’s commits, so it never deploys your API.
+
+**Fix:**
+
+1. In Vercel: open your project → **Settings** → **Git**.
+2. **Disconnect** the current repository (e.g. betterseasonvercel).
+3. **Connect** the repo that has your code: **BetterSeason** (`carsongrett/BetterSeason`).
+4. Set **Production Branch** to `main` (or the branch you push to).
+5. Trigger a deploy (push a commit to that branch, or **Deployments** → … → **Redeploy**).
+6. In **Settings** → **Environment Variables**, re-add Upstash Redis vars (`UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`) if this is a new project link—they don’t carry over.
+7. In **game.js**, set `STATS_API_BASE` to the **new** Vercel URL (e.g. `https://betterseason-xxxx.vercel.app`) and add that URL to `api/lib/cors.js` in `ALLOWED_ORIGINS` if needed. Commit and push.
+
+After this, Vercel will build from BetterSeason and your stats API will be what the game calls.
