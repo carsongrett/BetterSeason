@@ -30,6 +30,13 @@ Then open the URL shown (e.g. http://localhost:3000).
 - Each CSV must have headers; first row is treated as column names.
 - Quoted fields are supported. `Player`, `Team`, `Pos`, and sport-specific stat columns are expected.
 
+## Player headshots (NBA & MLB)
+
+Headshots are loaded from `data/nba-player-ids.json` and `data/mlb-player-ids.json`. To refresh:
+
+- **NBA:** `node scripts/fetch-nba-roster.js` (uses Basketball-GM roster from GitHub).
+- **MLB:** `node scripts/fetch-mlb-roster.js` (uses statsapi.mlb.com; takes ~15–20 seconds for all teams).
+
 ## Deployment config
 
 Before launch, update `game.js`:

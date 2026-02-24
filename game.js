@@ -169,6 +169,18 @@ function getNbaHeadshotUrl(playerName) {
   return `${NBA_HEADSHOT_URL}/${id}.png`;
 }
 
+const MLB_HEADSHOT_URL = 'https://img.mlbstatic.com/mlb-images/image/upload/v1/people';
+
+function getMlbHeadshotUrl(playerName) {
+  const playerIds = state.allData?.mlb?.playerIds;
+  if (!playerIds || typeof playerIds !== 'object') return null;
+  const raw = (playerName || '').trim();
+  if (!raw) return null;
+  const id = playerIds[raw] || playerIds[normalizeNameForLookup(raw)];
+  if (!id) return null;
+  return `${MLB_HEADSHOT_URL}/${id}/headshot/silo/current`;
+}
+
 const MLB_STAT_NAMES = {
   R: 'Runs',
   HR: 'Home Runs',
@@ -369,6 +381,18 @@ async function loadData() {
       console.error(`Failed to load ${f}:`, err);
       throw new Error(`Could not load ${f}: ${err.message}`);
     }
+  }
+
+  try {
+    const mlbRosterRes = await fetch('data/mlb-player-ids.json');
+    if (mlbRosterRes.ok) {
+      const mlbRosterJson = await mlbRosterRes.json();
+      all.mlb.playerIds = mlbRosterJson.players || {};
+    } else {
+      all.mlb.playerIds = {};
+    }
+  } catch {
+    all.mlb.playerIds = {};
   }
 
   return all;
@@ -1118,9 +1142,11 @@ function renderRound() {
   playerBName.textContent = r.playerB.Player;
   playerBMeta.textContent = `${r.playerB.Team} · ${r.playerB.season}`;
 
-  if (state.sport === 'nba' && state.allData?.nba?.playerIds) {
-    const urlA = getNbaHeadshotUrl(r.playerA.Player);
-    const urlB = getNbaHeadshotUrl(r.playerB.Player);
+  const showHeadshots = (state.sport === 'nba' && state.allData?.nba?.playerIds) ||
+    (state.sport === 'mlb' && state.allData?.mlb?.playerIds);
+  if (showHeadshots) {
+    const urlA = state.sport === 'nba' ? getNbaHeadshotUrl(r.playerA.Player) : getMlbHeadshotUrl(r.playerA.Player);
+    const urlB = state.sport === 'nba' ? getNbaHeadshotUrl(r.playerB.Player) : getMlbHeadshotUrl(r.playerB.Player);
     playerAHeadshot.style.display = '';
     playerBHeadshot.style.display = '';
     playerAHeadshot.innerHTML = '<img src="' + (urlA || NBA_HEADSHOT_FALLBACK_SVG) + '" alt="" loading="lazy">';
