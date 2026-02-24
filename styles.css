@@ -562,6 +562,23 @@ body::before {
   margin-top: 0.4rem;
 }
 
+.player-headshot {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 0.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.player-headshot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .vs {
   display: flex;
   align-items: center;

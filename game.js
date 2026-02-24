@@ -149,6 +149,26 @@ const NBA_STAT_NAMES = {
   'AST /G': 'Assists Per Game',
 };
 
+const NBA_HEADSHOT_URL = 'https://cdn.nba.com/headshots/nba/latest/1040x760';
+const NBA_HEADSHOT_FALLBACK_SVG = 'data:image/svg+xml,' + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" fill="%234a5568"><ellipse cx="50" cy="38" rx="22" ry="26"/><path d="M15 120c0-22 15-40 35-40s35 18 35 40z"/></svg>'
+);
+
+function normalizeNameForLookup(name) {
+  if (!name || typeof name !== 'string') return '';
+  return name.trim().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+}
+
+function getNbaHeadshotUrl(playerName) {
+  const playerIds = state.allData?.nba?.playerIds;
+  if (!playerIds || typeof playerIds !== 'object') return null;
+  const raw = (playerName || '').trim();
+  if (!raw) return null;
+  const id = playerIds[raw] || playerIds[normalizeNameForLookup(raw)];
+  if (!id) return null;
+  return `${NBA_HEADSHOT_URL}/${id}.png`;
+}
+
 const MLB_STAT_NAMES = {
   R: 'Runs',
   HR: 'Home Runs',
@@ -273,6 +293,18 @@ async function loadData() {
       console.error(`Failed to load ${f}.csv:`, err);
       throw new Error(`Could not load ${f}.csv: ${err.message}`);
     }
+  }
+
+  try {
+    const rosterRes = await fetch('data/nba-player-ids.json');
+    if (rosterRes.ok) {
+      const rosterJson = await rosterRes.json();
+      all.nba.playerIds = rosterJson.players || {};
+    } else {
+      all.nba.playerIds = {};
+    }
+  } catch {
+    all.nba.playerIds = {};
   }
 
   try {
@@ -640,6 +672,8 @@ const blindResumeSubmit = document.getElementById('blind-resume-submit');
 const blindResumeFeedback = document.getElementById('blind-resume-feedback');
 const matchupWrap = document.getElementById('matchup-wrap');
 const roundInstruction = document.getElementById('round-instruction');
+const playerAHeadshot = document.getElementById('player-a-headshot');
+const playerBHeadshot = document.getElementById('player-b-headshot');
 
 let state = {
   sport: 'nfl',
@@ -1083,6 +1117,22 @@ function renderRound() {
   playerAMeta.textContent = `${r.playerA.Team} · ${r.playerA.season}`;
   playerBName.textContent = r.playerB.Player;
   playerBMeta.textContent = `${r.playerB.Team} · ${r.playerB.season}`;
+
+  if (state.sport === 'nba' && state.allData?.nba?.playerIds) {
+    const urlA = getNbaHeadshotUrl(r.playerA.Player);
+    const urlB = getNbaHeadshotUrl(r.playerB.Player);
+    playerAHeadshot.style.display = '';
+    playerBHeadshot.style.display = '';
+    playerAHeadshot.innerHTML = '<img src="' + (urlA || NBA_HEADSHOT_FALLBACK_SVG) + '" alt="" loading="lazy">';
+    playerBHeadshot.innerHTML = '<img src="' + (urlB || NBA_HEADSHOT_FALLBACK_SVG) + '" alt="" loading="lazy">';
+    playerAHeadshot.querySelector('img').onerror = function () { this.src = NBA_HEADSHOT_FALLBACK_SVG; };
+    playerBHeadshot.querySelector('img').onerror = function () { this.src = NBA_HEADSHOT_FALLBACK_SVG; };
+  } else {
+    playerAHeadshot.style.display = 'none';
+    playerAHeadshot.innerHTML = '';
+    playerBHeadshot.style.display = 'none';
+    playerBHeadshot.innerHTML = '';
+  }
 
   state.picks = [];
   statPicks.innerHTML = '';
