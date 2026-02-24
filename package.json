@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Better Season game + Vercel API for stats",
+  "engines": { "node": "20.x" },
   "dependencies": {
     "@upstash/redis": "^1.34.0",
     "redis": "^4.6.0"
