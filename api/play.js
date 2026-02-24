@@ -19,44 +19,44 @@ function send(res, status, body, origin) {
 }
 
 module.exports = async (req, res) => {
-  const origin = req.headers.origin;
-
-  if (req.method === 'OPTIONS') {
-    setCors(res, origin);
-    res.writeHead(204);
-    res.end();
-    return;
-  }
-
-  if (req.method !== 'POST') {
-    send(res, 405, { error: 'Method not allowed' }, origin);
-    return;
-  }
-
-  let body;
-  try {
-    body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
-  } catch {
-    send(res, 400, { error: 'Invalid JSON' }, origin);
-    return;
-  }
-
-  const { sport, mode, score } = body;
-  if (!sport || !mode || typeof score !== 'number') {
-    send(res, 400, { error: 'Missing sport, mode, or score' }, origin);
-    return;
-  }
-
-  const allowedSports = ['nfl', 'nba', 'mlb'];
-  if (!allowedSports.includes(sport)) {
-    send(res, 400, { error: 'Invalid sport' }, origin);
-    return;
-  }
-
-  const date = todayUTC();
-  const key = statsKey(date, sport, mode);
+  const origin = req.headers.origin || '';
 
   try {
+    if (req.method === 'OPTIONS') {
+      setCors(res, origin);
+      res.writeHead(204);
+      res.end();
+      return;
+    }
+
+    if (req.method !== 'POST') {
+      send(res, 405, { error: 'Method not allowed' }, origin);
+      return;
+    }
+
+    let body;
+    try {
+      body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
+    } catch {
+      send(res, 400, { error: 'Invalid JSON' }, origin);
+      return;
+    }
+
+    const { sport, mode, score } = body;
+    if (!sport || !mode || typeof score !== 'number') {
+      send(res, 400, { error: 'Missing sport, mode, or score' }, origin);
+      return;
+    }
+
+    const allowedSports = ['nfl', 'nba', 'mlb'];
+    if (!allowedSports.includes(sport)) {
+      send(res, 400, { error: 'Invalid sport' }, origin);
+      return;
+    }
+
+    const date = todayUTC();
+    const key = statsKey(date, sport, mode);
+
     const redis = await getRedis();
     const raw = await redis.get(key);
     const data = raw ? { gamesPlayed: raw.gamesPlayed || 0, totalScore: raw.totalScore || 0 } : { gamesPlayed: 0, totalScore: 0 };

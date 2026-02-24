@@ -14,30 +14,30 @@ function send(res, status, body, origin) {
 }
 
 module.exports = async (req, res) => {
-  const origin = req.headers.origin;
-
-  if (req.method === 'OPTIONS') {
-    setCors(res, origin);
-    res.writeHead(204);
-    res.end();
-    return;
-  }
-
-  if (req.method !== 'GET') {
-    send(res, 405, { error: 'Method not allowed' }, origin);
-    return;
-  }
-
-  const date = req.query.date || new Date().toISOString().slice(0, 10);
-  const sport = req.query.sport || '';
-  const mode = req.query.mode || '';
-
-  if (!sport || !mode) {
-    send(res, 200, { gamesPlayed: 0, averageScore: null }, origin);
-    return;
-  }
+  const origin = req.headers.origin || '';
 
   try {
+    if (req.method === 'OPTIONS') {
+      setCors(res, origin);
+      res.writeHead(204);
+      res.end();
+      return;
+    }
+
+    if (req.method !== 'GET') {
+      send(res, 405, { error: 'Method not allowed' }, origin);
+      return;
+    }
+
+    const date = req.query?.date || new Date().toISOString().slice(0, 10);
+    const sport = req.query?.sport || '';
+    const mode = req.query?.mode || '';
+
+    if (!sport || !mode) {
+      send(res, 200, { gamesPlayed: 0, averageScore: null }, origin);
+      return;
+    }
+
     const redis = await getRedis();
     const key = statsKey(date, sport, mode);
     const data = await redis.get(key);
