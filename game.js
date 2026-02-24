@@ -1141,8 +1141,7 @@ function showDailyAlreadyPlayed() {
   const roundScores = getStoredRoundScores(state.sport, state.mode);
   const total = (state.mode === MODES.ROOKIE_QB) ? 12 : (state.mode === MODES.BLIND_RESUME) ? null : 9;
   resultsScore.textContent = total != null ? `${score}/${total}` : `${score} pts`;
-  resultsStreak.textContent = `Streak: ${getStreak(state.sport, state.mode)} day${getStreak(state.sport, state.mode) !== 1 ? 's' : ''}`;
-  comeBackTomorrow.classList.add('visible');
+  resultsStreak.textContent = '';
   shareGrid.textContent = buildShareGridForMode(state.mode, score, roundScores, state.sport);
   renderResultsModeButtons(state.mode);
   renderResultsSportToolbar();
@@ -1449,17 +1448,13 @@ function showResults() {
 
   if (state.mode === MODES.BLITZ) {
     resultsScore.textContent = state.score + ' pts';
-    resultsStreak.textContent = '';
   } else if (state.mode === MODES.BLIND_RESUME) {
     resultsScore.textContent = state.score + ' pts';
-    resultsStreak.textContent = `Streak: ${getStreak(state.sport, state.mode)} day${getStreak(state.sport, state.mode) !== 1 ? 's' : ''}`;
   } else {
     const total = state.totalPoints || 9;
     resultsScore.textContent = `${state.score}/${total}`;
-    resultsStreak.textContent = `Streak: ${getStreak(state.sport, state.mode)} day${getStreak(state.sport, state.mode) !== 1 ? 's' : ''}`;
   }
-
-  comeBackTomorrow.classList.remove('visible');
+  resultsStreak.textContent = '';
   shareGrid.textContent = buildShareGrid();
   renderResultsModeButtons(state.mode);
   renderResultsSportToolbar();
