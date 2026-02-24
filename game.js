@@ -1366,7 +1366,6 @@ function getShareDateStr() {
   return `(${SHORT_MONTHS[d.getMonth()]} ${d.getDate()})`;
 }
 
-// Build one single share message (score + optional round breakdown + handle + URL as plain text). Used for both SMS and X so link stays in one message.
 function buildShareText(mode, score, roundScores, sport) {
   const modeStr = mode === 'daily' ? 'Daily' : mode === 'blitz' ? 'Blitz' : mode === 'rookie_qb' ? 'Rookie QBs' : mode === 'mlb_batters' ? 'MLB Batters' : mode === 'mlb_pitchers' ? 'MLB Pitchers' : mode === 'blind_resume' ? 'Blind Resume' : 'Unlimited';
   const total = mode === 'rookie_qb' ? 12 : 9;
@@ -1375,31 +1374,30 @@ function buildShareText(mode, score, roundScores, sport) {
   const isDaily = dailyModes.includes(mode);
   const dash = isDaily ? ' - ' : ' — ';
   const dateSuffix = isDaily ? ` ${getShareDateStr()}` : '';
-  // Link and handle as plain text on one line so SMS sends a single message (recipient can tap link)
-  const linkLine = (SHARE_X_USERNAME && SHARE_URL_PLACEHOLDER)
-    ? `\n${SHARE_X_USERNAME} ${SHARE_URL_PLACEHOLDER}`
-    : SHARE_URL_PLACEHOLDER ? `\n${SHARE_URL_PLACEHOLDER}` : '';
-  let text;
+  // URL on its own line so SMS clients treat it as a clickable link (can send as second message on some clients)
+  const urlSuffix = (SHARE_X_USERNAME && SHARE_URL_PLACEHOLDER)
+    ? `\n\n${SHARE_X_USERNAME}\n${SHARE_URL_PLACEHOLDER}`
+    : SHARE_URL_PLACEHOLDER ? `\n\n${SHARE_URL_PLACEHOLDER}` : '';
   if (mode === 'blitz') {
-    text = `${scoreStr} — ${modeStr}`;
-  } else if (mode === 'blind_resume') {
-    text = `${scoreStr} — ${modeStr}${dateSuffix}`;
-  } else {
-    text = `${scoreStr}${dash}${modeStr}${dateSuffix}`;
-    if (roundScores && roundScores.length > 0) {
-      text += '\n\n';
-      roundScores.forEach(({ position, score: rs, total: t }, idx) => {
-        const correct = '✅'.repeat(rs);
-        const wrong = '❌'.repeat(t - rs);
-        if (mode === 'rookie_qb' || mode === 'mlb_batters' || mode === 'mlb_pitchers') {
-          text += `Rd. ${idx + 1}  ${correct}${wrong}  ${rs}/${t}\n`;
-        } else {
-          text += `${position}  ${correct}${wrong}  ${rs}/${t}\n`;
-        }
-      });
-    }
+    return `${scoreStr} — ${modeStr}${urlSuffix}`;
   }
-  return text.trimEnd() + linkLine;
+  if (mode === 'blind_resume') {
+    return `${scoreStr} — ${modeStr}${dateSuffix}` + urlSuffix;
+  }
+  let text = `${scoreStr}${dash}${modeStr}${dateSuffix}`;
+  if (roundScores && roundScores.length > 0) {
+    text += '\n\n';
+    roundScores.forEach(({ position, score: rs, total: t }, idx) => {
+      const correct = '✅'.repeat(rs);
+      const wrong = '❌'.repeat(t - rs);
+      if (mode === 'rookie_qb' || mode === 'mlb_batters' || mode === 'mlb_pitchers') {
+        text += `Rd. ${idx + 1}  ${correct}${wrong}  ${rs}/${t}\n`;
+      } else {
+        text += `${position}  ${correct}${wrong}  ${rs}/${t}\n`;
+      }
+    });
+  }
+  return text.trimEnd() + urlSuffix;
 }
 
 function buildShareGridForMode(mode, score, roundScores, sport) {
