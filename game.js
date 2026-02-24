@@ -45,6 +45,7 @@ const MODES = {
   MLB_BATTERS: 'mlb_batters',
   MLB_PITCHERS: 'mlb_pitchers',
   BLIND_RESUME: 'blind_resume',
+  BLIND_RESUME_NBA: 'blind_resume_nba',
 };
 
 const MODE_LABELS = {
@@ -55,6 +56,7 @@ const MODE_LABELS = {
   mlb_batters: 'MLB Batters',
   mlb_pitchers: 'MLB Pitchers',
   blind_resume: 'Blind Resume',
+  blind_resume_nba: 'Blind Resume',
 };
 
 const MODE_DESCRIPTIONS = {
@@ -65,9 +67,11 @@ const MODE_DESCRIPTIONS = {
   mlb_batters: '2025 batting stats.',
   mlb_pitchers: '2025 pitching stats.',
   blind_resume: 'Guess the player as stats are revealed.',
+  blind_resume_nba: 'Guess the player as stats are revealed.',
 };
 
 const NFL_ONLY_MODES = ['rookie_qb', 'blind_resume'];
+const NBA_ONLY_MODES = ['blind_resume_nba'];
 const MLB_ONLY_MODES = ['mlb_batters', 'mlb_pitchers'];
 
 function getTodaySeed() {
@@ -255,6 +259,7 @@ const MLB_PITCHERS_FILE = 'baseball_pitchers_2025.csv';
 
 const ROOKIE_QB_FILE = 'rookie qbs 2016-2025.csv';
 const BLIND_QB_FILE = 'blind_qb_2025.csv';
+const BLIND_BASKETBALL_FILE = 'blind_basketball_2026.csv';
 const ROOKIE_QB_STAT_POOL = ['TD', 'Int', 'Rush Yds', 'Team Wins'];
 
 function pickRookieQBStats(rng) {
@@ -356,6 +361,27 @@ async function loadData() {
   } catch (err) {
     console.error(`Failed to load ${BLIND_QB_FILE}:`, err);
     throw new Error(`Could not load ${BLIND_QB_FILE}: ${err.message}`);
+  }
+
+  try {
+    const res = await fetch(`data/${encodeURIComponent(BLIND_BASKETBALL_FILE)}`);
+    if (!res.ok) throw new Error(`${BLIND_BASKETBALL_FILE}: ${res.status}`);
+    const text = await res.text();
+    const lines = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim()).filter(Boolean);
+    const rows = [];
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i];
+      if (!line.trim()) continue;
+      const vals = parseCSVLine(line);
+      const row = {};
+      headers.forEach((h, j) => row[h] = (vals[j] || '').trim());
+      rows.push(row);
+    }
+    all.nba.BLIND_BASKETBALL = rows;
+  } catch (err) {
+    console.error(`Failed to load ${BLIND_BASKETBALL_FILE}:`, err);
+    throw new Error(`Could not load ${BLIND_BASKETBALL_FILE}: ${err.message}`);
   }
 
   try {
@@ -518,6 +544,22 @@ const BLIND_RESUME_STAT_LABELS = {
   'Team': 'Team',
 };
 
+// NBA Blind Resume: PPG, RPG, APG first; then any combo of other stats; Team last
+const BLIND_RESUME_NBA_FIRST = ['PTS /G', 'REB /G', 'AST /G'];
+const BLIND_RESUME_NBA_OTHER = ['3P /G', 'FT%', 'Conference', 'Age'];
+const BLIND_RESUME_NBA_TEAM = 'Team';
+
+const BLIND_RESUME_NBA_STAT_LABELS = {
+  'PTS /G': 'PPG',
+  'REB /G': 'RPG',
+  'AST /G': 'APG',
+  '3P /G': '3P/G',
+  'FT%': 'FT%',
+  'Conference': 'Conference',
+  'Age': 'Age',
+  'Team': 'Team',
+};
+
 function buildBlindResumeRevealOrder(rng) {
   const initialPool = [...BLIND_RESUME_STAT_COLS];
   for (let i = initialPool.length - 1; i > 0; i--) {
@@ -537,6 +579,15 @@ function buildBlindResumeRevealOrder(rng) {
     [toShuffle[i], toShuffle[j]] = [toShuffle[j], toShuffle[i]];
   }
   return [...initial, ...toShuffle, BLIND_RESUME_TEAM_COL];
+}
+
+function buildBlindResumeRevealOrderNBA(rng) {
+  const others = [...BLIND_RESUME_NBA_OTHER];
+  for (let i = others.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [others[i], others[j]] = [others[j], others[i]];
+  }
+  return [...BLIND_RESUME_NBA_FIRST, ...others, BLIND_RESUME_NBA_TEAM];
 }
 
 function formatBlindStatValue(val, col) {
@@ -755,10 +806,10 @@ function getBlindResumeDaySeed() {
 }
 
 function getGameSeed(mode) {
-  const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS, MODES.BLIND_RESUME];
+  const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS, MODES.BLIND_RESUME, MODES.BLIND_RESUME_NBA];
   if (dailyModes.includes(mode)) {
-    // Blind Resume: use epoch day number so we get a different puzzle every calendar day (UTC)
     if (mode === MODES.BLIND_RESUME) return String(getBlindResumeDaySeed()) + '-blind_resume';
+    if (mode === MODES.BLIND_RESUME_NBA) return String(getBlindResumeDaySeed()) + '-blind_resume_nba';
     return getTodaySeed();
   }
   return Math.random().toString(36).slice(2, 12);
@@ -769,6 +820,7 @@ function getDailyKey(sport, mode) {
   if (mode === MODES.MLB_BATTERS) return 'betterseason_mlb_batters';
   if (mode === MODES.MLB_PITCHERS) return 'betterseason_mlb_pitchers';
   if (mode === MODES.BLIND_RESUME) return 'betterseason_blindresume';
+  if (mode === MODES.BLIND_RESUME_NBA) return 'betterseason_blindresume_nba';
   const suffix = sport === 'nfl' ? '' : `_${sport}`;
   return `betterseason${suffix}`;
 }
@@ -831,7 +883,7 @@ function initGame(mode) {
     return;
   }
 
-  const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS, MODES.BLIND_RESUME];
+  const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS, MODES.BLIND_RESUME, MODES.BLIND_RESUME_NBA];
   if (dailyModes.includes(mode) && hasPlayedDailyToday(state.sport, mode)) {
     showDailyAlreadyPlayed();
     return;
@@ -839,6 +891,10 @@ function initGame(mode) {
 
   if (mode === MODES.BLIND_RESUME) {
     initBlindResume();
+    return;
+  }
+  if (mode === MODES.BLIND_RESUME_NBA) {
+    initBlindResumeNBA();
     return;
   }
 
@@ -921,8 +977,9 @@ function endBlitz() {
   showResults();
 }
 
-// --- Blind Resume ---
+// --- Blind Resume (NFL QB) ---
 function initBlindResume() {
+  state.blindResumeKind = 'nfl';
   state.data = state.allData.nfl.BLIND_QB;
   state.rounds = [];
   const pool = [...(state.data || [])];
@@ -953,6 +1010,40 @@ function initBlindResume() {
   renderBlindResumeRound();
 }
 
+// --- Blind Resume (NBA) ---
+function initBlindResumeNBA() {
+  state.sport = 'nba';
+  state.blindResumeKind = 'nba';
+  state.data = state.allData.nba.BLIND_BASKETBALL;
+  state.rounds = [];
+  const pool = [...(state.data || [])];
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(state.rng() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  for (let r = 0; r < 3; r++) {
+    const player = pool[r];
+    const revealOrder = buildBlindResumeRevealOrderNBA(state.rng);
+    state.rounds.push({
+      player,
+      revealOrder,
+      revealedCount: 3,
+      wrongGuessCount: 0,
+    });
+  }
+  state.currentRound = 0;
+  state.score = 0;
+  state.roundScores = [];
+
+  blindResumeWrap.style.display = 'flex';
+  matchupWrap.style.display = 'none';
+  statPicks.style.display = 'none';
+  confirmBtn.style.display = 'none';
+  positionLabel.textContent = 'Player';
+  roundInstruction.textContent = 'Guess the player from their stats';
+  renderBlindResumeRound();
+}
+
 function getBlindResumeDisplayScore() {
   return state.score;
 }
@@ -968,10 +1059,11 @@ function renderBlindResumeRound() {
   roundIndicator.textContent = `Round ${state.currentRound + 1}/3`;
   updateBlindResumeScoreDisplay();
   blindResumeStats.innerHTML = '';
+  const statLabels = state.blindResumeKind === 'nba' ? BLIND_RESUME_NBA_STAT_LABELS : BLIND_RESUME_STAT_LABELS;
   for (let i = 0; i < r.revealedCount && i < r.revealOrder.length; i++) {
     const col = r.revealOrder[i];
     const val = r.player[col];
-    const label = BLIND_RESUME_STAT_LABELS[col] || col;
+    const label = statLabels[col] || col;
     const displayVal = formatBlindStatValue(val, col);
     const row = document.createElement('div');
     row.className = 'blind-resume-stat-row';
@@ -991,7 +1083,7 @@ function renderBlindResumeRound() {
 }
 
 function setupBlindResumeInput() {
-  const pool = state.allData.nfl.BLIND_QB;
+  const pool = state.blindResumeKind === 'nba' ? state.allData.nba.BLIND_BASKETBALL : state.allData.nfl.BLIND_QB;
 
   function filterNames(q) {
     const lower = q.toLowerCase().trim();
@@ -1114,6 +1206,7 @@ function renderResultsModeButtons(justPlayedMode) {
   resultsModeButtons.innerHTML = '';
   let allModes;
   if (state.sport === 'nfl') allModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.BLIND_RESUME];
+  else if (state.sport === 'nba') allModes = [MODES.DAILY, MODES.BLIND_RESUME_NBA];
   else if (state.sport === 'mlb') allModes = [MODES.MLB_BATTERS, MODES.MLB_PITCHERS];
   else allModes = [MODES.DAILY];
   const otherModes = allModes.filter(m => m !== justPlayedMode);
@@ -1156,7 +1249,7 @@ function showDailyAlreadyPlayed() {
   homeBtn.style.display = 'flex';
   const score = parseInt(getStoredDailyScore(state.sport, state.mode), 10);
   const roundScores = getStoredRoundScores(state.sport, state.mode);
-  const total = (state.mode === MODES.ROOKIE_QB) ? 12 : (state.mode === MODES.BLIND_RESUME) ? null : 9;
+  const total = (state.mode === MODES.ROOKIE_QB) ? 12 : (state.mode === MODES.BLIND_RESUME || state.mode === MODES.BLIND_RESUME_NBA) ? null : 9;
   resultsScore.textContent = total != null ? `${score}/${total}` : `${score} pts`;
   resultsStreak.textContent = '';
   shareGrid.textContent = buildShareGridForMode(state.mode, score, roundScores, state.sport);
@@ -1373,6 +1466,7 @@ function getShareTitle(mode, sport) {
   if (mode === 'daily') return `${s === 'NFL' ? 'NFL' : s === 'NBA' ? 'NBA' : 'MLB'} Daily`;
   if (mode === 'rookie_qb') return 'NFL Rookie QB Daily';
   if (mode === 'blind_resume') return 'NFL Blind Resume';
+  if (mode === 'blind_resume_nba') return 'NBA Blind Resume';
   if (mode === 'mlb_batters') return 'MLB Batters Daily';
   if (mode === 'mlb_pitchers') return 'MLB Pitchers Daily';
   if (mode === 'blitz') return `${s === 'NFL' ? 'NFL' : s === 'NBA' ? 'NBA' : 'MLB'} Blitz`;
@@ -1383,7 +1477,7 @@ function buildShareText(mode, score, roundScores, sport) {
   const scoreStr = `${score}pts`;
   const shareTitle = getShareTitle(mode, sport);
   const dateStr = getShareDateStr();
-  const dailyModes = ['daily', 'rookie_qb', 'mlb_batters', 'mlb_pitchers', 'blind_resume'];
+  const dailyModes = ['daily', 'rookie_qb', 'mlb_batters', 'mlb_pitchers', 'blind_resume', 'blind_resume_nba'];
   const includeDate = dailyModes.includes(mode) || mode === 'blitz';
   const firstLine = includeDate ? `${scoreStr} - ${shareTitle} ${dateStr}` : `${scoreStr} - ${shareTitle}`;
   const urlSuffix = (SHARE_X_USERNAME && SHARE_URL_PLACEHOLDER)
@@ -1467,7 +1561,7 @@ function showResults() {
 
   if (state.mode === MODES.BLITZ) {
     resultsScore.textContent = state.score + ' pts';
-  } else if (state.mode === MODES.BLIND_RESUME) {
+  } else if (state.mode === MODES.BLIND_RESUME || state.mode === MODES.BLIND_RESUME_NBA) {
     resultsScore.textContent = state.score + ' pts';
   } else {
     const total = state.totalPoints || 9;
@@ -1485,7 +1579,7 @@ function showResults() {
   shareSmsBtn.onclick = () => { window.location.href = 'sms:?body=' + encodeURIComponent(shareText); };
   shareXBtn.onclick = () => { window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText)); };
 
-  const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS, MODES.BLIND_RESUME];
+  const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS, MODES.BLIND_RESUME, MODES.BLIND_RESUME_NBA];
   newGameBtn.style.display = dailyModes.includes(state.mode) ? 'none' : 'inline-flex';
   newGameBtn.onclick = () => {
     if (state.mode === MODES.BLITZ) {
@@ -1545,6 +1639,9 @@ function updateStartScreen() {
   document.querySelectorAll('.mode-card--nfl-nba').forEach(card => {
     card.style.display = (state.sport === 'nfl' || state.sport === 'nba') ? '' : 'none';
   });
+  document.querySelectorAll('.mode-card--nba-only').forEach(card => {
+    card.style.display = state.sport === 'nba' ? 'flex' : 'none';
+  });
   document.querySelectorAll('.mode-card').forEach(card => {
     card.classList.toggle('selected', card.dataset.mode === state.mode);
   });
@@ -1560,6 +1657,7 @@ function setupSportTabs() {
     card.addEventListener('click', () => {
       state.sport = sport;
       if (sport !== 'nfl' && NFL_ONLY_MODES.includes(state.mode)) state.mode = null;
+      if (sport !== 'nba' && NBA_ONLY_MODES.includes(state.mode)) state.mode = null;
       if (sport !== 'mlb' && MLB_ONLY_MODES.includes(state.mode)) state.mode = null;
       if (sport === 'mlb' && !MLB_ONLY_MODES.includes(state.mode)) state.mode = null;
       document.querySelectorAll('.sport-card').forEach(c => c.classList.remove('selected'));
@@ -1585,7 +1683,7 @@ function setupModeCards() {
 function setupStartBtn() {
   startBtn.addEventListener('click', () => {
     if (!state.mode) return;
-    const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS, MODES.BLIND_RESUME];
+    const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS, MODES.BLIND_RESUME, MODES.BLIND_RESUME_NBA];
     if (dailyModes.includes(state.mode) && hasPlayedDailyToday(state.sport, state.mode)) {
       showDailyAlreadyPlayed();
     } else {

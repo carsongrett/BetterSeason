@@ -280,8 +280,9 @@ body::before {
   position: relative;
 }
 
-/* Hide MLB-only modes until sport is MLB (overrides .mode-card so no flash on load) */
-.mode-card.mode-card--mlb-only {
+/* Hide MLB-only and NBA-only modes until sport is selected (overrides .mode-card so no flash on load) */
+.mode-card.mode-card--mlb-only,
+.mode-card.mode-card--nba-only {
   display: none;
 }
 
