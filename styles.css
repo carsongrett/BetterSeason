@@ -161,6 +161,11 @@ body::before {
   position: relative;
 }
 
+a.sport-card {
+  text-decoration: none;
+  color: inherit;
+}
+
 .sport-card-icon {
   font-size: 1.75rem;
   line-height: 1;
@@ -234,6 +239,17 @@ body::before {
   box-shadow: 0 0 20px rgba(220, 80, 60, 0.2);
 }
 
+/* PGA - golf green */
+.sport-card--pga {
+  background: linear-gradient(145deg, rgba(20, 80, 50, 0.6) 0%, rgba(10, 50, 30, 0.8) 100%);
+  border-color: rgba(45, 157, 100, 0.35);
+}
+
+.sport-card--pga:hover {
+  background: linear-gradient(145deg, rgba(28, 95, 60, 0.7) 0%, rgba(15, 60, 38, 0.9) 100%);
+  border-color: rgba(45, 157, 100, 0.5);
+}
+
 .start-prompt {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 1.25rem;
@@ -280,9 +296,10 @@ body::before {
   position: relative;
 }
 
-/* Hide MLB-only and NBA-only modes until sport is selected (overrides .mode-card so no flash on load) */
+/* Hide sport-specific modes until that sport is selected */
 .mode-card.mode-card--mlb-only,
-.mode-card.mode-card--nba-only {
+.mode-card.mode-card--nba-only,
+.mode-card.mode-card--pga-only {
   display: none;
 }
 

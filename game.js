@@ -9,7 +9,7 @@ const SPORTS = {
   MLB: 'mlb',
 };
 
-const AVAILABLE_SPORTS = ['nfl', 'nba', 'mlb'];
+const AVAILABLE_SPORTS = ['nfl', 'nba', 'mlb', 'pga'];
 
 const SPORT_LABELS = { nfl: 'NFL', nba: 'NBA', mlb: 'MLB' };
 
@@ -268,7 +268,7 @@ function pickRookieQBStats(rng) {
     const j = Math.floor(rng() * (i + 1));
     [others[i], others[j]] = [others[j], others[i]];
   }
-  return ['Yds', others[0], others[1], others[2]];
+  return ['Yds', others[0], others[1]];
 }
 
 async function loadData() {
@@ -911,8 +911,8 @@ function initGame(mode) {
 
   const posOrder = isRookieQB ? ['QB', 'QB', 'QB'] : getPositionOrder(state.sport, state.seed, state.rng, mode);
   const usedKeys = new Set();
-  const statsPerRound = isRookieQB ? 4 : 3;
-  const totalPoints = isRookieQB ? 12 : 9;
+  const statsPerRound = 3;
+  const totalPoints = 9;
 
   for (let r = 0; r < 3; r++) {
     const pos = posOrder[r];
@@ -1581,6 +1581,9 @@ function updateStartScreen() {
   document.querySelectorAll('.sport-card').forEach(card => {
     card.classList.toggle('selected', card.dataset.sport === state.sport);
   });
+  document.querySelectorAll('.mode-card--pga-only').forEach(card => {
+    card.style.display = state.sport === 'pga' ? 'flex' : 'none';
+  });
   document.querySelectorAll('.mode-card--nfl-only').forEach(card => {
     card.style.display = state.sport === 'nfl' ? '' : 'none';
   });
@@ -1597,7 +1600,8 @@ function updateStartScreen() {
     card.classList.toggle('selected', card.dataset.mode === state.mode);
   });
   const sportAvailable = AVAILABLE_SPORTS.includes(state.sport);
-  startBtn.disabled = !state.mode || !sportAvailable;
+  const pgaReady = state.sport === 'pga' && state.mode === 'pick_the_round';
+  startBtn.disabled = state.sport === 'pga' ? !pgaReady : (!state.mode || !sportAvailable);
 }
 
 function setupSportTabs() {
@@ -1611,6 +1615,7 @@ function setupSportTabs() {
       if (sport !== 'nba' && NBA_ONLY_MODES.includes(state.mode)) state.mode = null;
       if (sport !== 'mlb' && MLB_ONLY_MODES.includes(state.mode)) state.mode = null;
       if (sport === 'mlb' && !MLB_ONLY_MODES.includes(state.mode)) state.mode = null;
+      if (sport === 'pga') state.mode = null;
       document.querySelectorAll('.sport-card').forEach(c => c.classList.remove('selected'));
       card.classList.add('selected');
       document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
@@ -1633,6 +1638,10 @@ function setupModeCards() {
 
 function setupStartBtn() {
   startBtn.addEventListener('click', () => {
+    if (state.sport === 'pga' && state.mode === 'pick_the_round') {
+      window.location.href = 'golf/';
+      return;
+    }
     if (!state.mode) return;
     const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS, MODES.BLIND_RESUME, MODES.BLIND_RESUME_NBA];
     if (dailyModes.includes(state.mode) && hasPlayedDailyToday(state.sport, state.mode)) {

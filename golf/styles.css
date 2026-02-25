@@ -1,0 +1,402 @@
+/* Pick the Round — Golf game */
+
+:root {
+  --bg: #0f1412;
+  --surface: #1a211d;
+  --card-face: #232d28;
+  --text: #e8edea;
+  --muted: #8a9a92;
+  --accent: #2d9d64;
+  --accent-dim: #1e6b44;
+  --border: #2d3834;
+  --radius: 12px;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  min-height: 100vh;
+  padding: 0 1rem 5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  padding: 1.25rem 0 1rem;
+  text-align: center;
+  position: relative;
+}
+
+.golf-home-link {
+  position: absolute;
+  left: 0;
+  top: 1.25rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.golf-home-link:hover {
+  color: var(--accent);
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.tagline {
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.main {
+  padding: 0 0 1.5rem;
+}
+
+.grid-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.grid-wrapper.hidden {
+  display: none;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: min(100%, 640px);
+}
+
+.grid-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.golfer-name {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0 0.25rem;
+  color: var(--text);
+}
+
+.card {
+  aspect-ratio: 3/4;
+  max-height: 140px;
+  cursor: pointer;
+  perspective: 400px;
+}
+
+.card.picked {
+  cursor: default;
+}
+
+.row-picked .card:not(.flipped) {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.row-picked .card.flipped:not(.picked) {
+  opacity: 0.82;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: transform 0.45s ease;
+  transform-style: preserve-3d;
+}
+
+.card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 0.45rem 0.5rem;
+  text-align: center;
+}
+
+.card-front {
+  background: var(--card-face);
+  border: 1px solid var(--border);
+}
+
+.card-back {
+  background: var(--score-bg, var(--accent-dim));
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transform: rotateY(180deg);
+  gap: 0.2rem;
+}
+
+.card-back .card-back-event,
+.card-back .score,
+.card-back .pick-label {
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.card-back .card-back-event {
+  font-size: clamp(0.6rem, 2.2vw, 0.8rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: #fff;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.card-back .pick-label {
+  display: none;
+  font-size: clamp(0.5rem, 1.8vw, 0.65rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.card.picked .card-back .pick-label {
+  display: block;
+}
+
+.card.picked .card-back {
+  border-color: #4ade80;
+  box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.4);
+}
+
+.event-name {
+  font-size: clamp(0.7rem, 2.5vw, 0.95rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+  min-height: 0;
+}
+
+.event-year {
+  font-size: clamp(0.7rem, 2vw, 0.85rem);
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.card-back .score {
+  font-size: clamp(1.25rem, 4vw, 1.65rem);
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+/* Results modal — overlay, grid stays visible behind */
+.results-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  pointer-events: none;
+}
+
+.results-modal.hidden {
+  display: none;
+}
+
+.results-modal:not(.hidden) {
+  pointer-events: auto;
+}
+
+.results-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.results-modal-box {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem 2rem;
+  text-align: center;
+  max-width: 20rem;
+  width: 100%;
+  box-shadow: var(--shadow);
+}
+
+.results-modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.results-modal-close:hover {
+  color: var(--text);
+}
+
+.results-modal-title {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.results-modal-total {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+}
+
+.results-modal-vs-par {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin: 0 0 1.5rem;
+}
+
+.play-again-btn {
+  font: inherit;
+  font-weight: 600;
+  padding: 0.65rem 1.5rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.play-again-btn:hover {
+  background: #38b86c;
+}
+
+.load-error {
+  color: #e07c7c;
+  padding: 1rem;
+  text-align: center;
+}
+
+/* Scorebug — fixed bar at bottom, leaderboard style */
+.scorebug {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  background: linear-gradient(180deg, #0d2818 0%, #1a3d29 100%);
+  border-top: 2px solid rgba(45, 157, 100, 0.4);
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.scorebug.hidden {
+  display: none;
+}
+
+.scorebug-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.scorebug-value {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  min-width: 2.5rem;
+  text-align: center;
+}
+
+.scorebug--under .scorebug-value {
+  color: #4ade80;
+}
+
+.scorebug--over .scorebug-value {
+  color: #f87171;
+}
+
+.scorebug--even .scorebug-value {
+  color: #fff;
+}
+
+.scorebug:not(.scorebug--under):not(.scorebug--over):not(.scorebug--even) .scorebug-value {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@media (max-width: 520px) {
+  .grid-row {
+    grid-template-columns: 0.85fr repeat(4, 1fr);
+    gap: 0.35rem;
+  }
+
+  .golfer-name {
+    font-size: 0.7rem;
+  }
+
+  .event-name {
+    font-size: 0.6rem;
+  }
+
+  .event-year {
+    font-size: 0.65rem;
+  }
+
+  .card-back .score {
+    font-size: 1.2rem;
+  }
+}

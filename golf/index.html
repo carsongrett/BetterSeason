@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Pick the Round — Golf</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <a href="../" class="golf-home-link" aria-label="Back to Better Season">← Better Season</a>
+      <h1>Pick the Round</h1>
+      <p class="tagline">Choose the best tournament result for each golfer.</p>
+    </header>
+
+    <main class="main">
+      <div class="grid-wrapper" id="grid-wrapper">
+        <div class="grid" id="grid" role="grid" aria-label="Golfers and rounds"></div>
+      </div>
+
+      <div class="results-modal hidden" id="results-modal" aria-modal="true" aria-labelledby="results-title">
+        <div class="results-modal-backdrop" id="results-modal-backdrop"></div>
+        <div class="results-modal-box">
+          <button type="button" class="results-modal-close" id="results-modal-close" aria-label="Close">×</button>
+          <h2 class="results-modal-title" id="results-title">Your score</h2>
+          <p class="results-modal-total" id="final-total"></p>
+          <p class="results-modal-vs-par" id="vs-par"></p>
+          <button type="button" class="play-again-btn" id="play-again-btn">Play again</button>
+        </div>
+      </div>
+    </main>
+
+    <footer class="scorebug" id="scorebug" aria-live="polite">
+      <span class="scorebug-label">YOUR SCORE</span>
+      <span class="scorebug-value" id="scorebug-value">—</span>
+    </footer>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>
