@@ -151,22 +151,22 @@ function getScoreBackgroundColor(scoreToPar) {
 
 function renderGrid() {
   grid.innerHTML = '';
-  state.puzzle.forEach((golfer, rowIndex) => {
-    const rowEl = document.createElement('div');
-    rowEl.className = 'grid-row';
-    rowEl.setAttribute('role', 'row');
+  state.puzzle.forEach((golfer, colIndex) => {
+    const colEl = document.createElement('div');
+    colEl.className = 'grid-col';
+    colEl.setAttribute('role', 'column');
     const nameCell = document.createElement('div');
     nameCell.className = 'golfer-name';
-    nameCell.textContent = golfer.player_name;
-    rowEl.appendChild(nameCell);
-    golfer.cards.forEach((card, colIndex) => {
-      const picked = state.picks[rowIndex] !== undefined;
-      const isThisPicked = picked && state.picks[rowIndex] === card.score_to_par;
+    nameCell.innerHTML = `<span class="golfer-name-inner">${escapeHtml(golfer.player_name)}</span>`;
+    colEl.appendChild(nameCell);
+    golfer.cards.forEach((card, cardIndex) => {
+      const picked = state.picks[colIndex] !== undefined;
+      const isThisPicked = picked && state.picks[colIndex] === card.score_to_par;
       const cardEl = document.createElement('div');
       cardEl.className = 'card' + (picked ? ' flipped' : '') + (isThisPicked ? ' picked' : '');
       cardEl.setAttribute('role', 'gridcell');
-      cardEl.dataset.row = rowIndex;
       cardEl.dataset.col = colIndex;
+      cardEl.dataset.card = cardIndex;
       const scoreBg = getScoreBackgroundColor(card.score_to_par);
       cardEl.innerHTML = `
         <div class="card-inner">
@@ -177,17 +177,16 @@ function renderGrid() {
           <div class="card-back" style="--score-bg: ${scoreBg}">
             <span class="card-back-event">${escapeHtml(card.event_name)} ${card.year}</span>
             <span class="score">${formatScore(card.score_to_par)}</span>
-            <span class="pick-label">Your pick</span>
           </div>
         </div>
       `;
       if (!picked) {
-        cardEl.addEventListener('click', () => pickCard(rowIndex, card.score_to_par, cardEl));
+        cardEl.addEventListener('click', () => pickCard(colIndex, card.score_to_par, cardEl));
       }
-      rowEl.appendChild(cardEl);
+      colEl.appendChild(cardEl);
     });
-    if (state.picks[rowIndex] !== undefined) rowEl.classList.add('row-picked');
-    grid.appendChild(rowEl);
+    if (state.picks[colIndex] !== undefined) colEl.classList.add('column-picked');
+    grid.appendChild(colEl);
   });
 }
 
@@ -197,13 +196,13 @@ function escapeHtml(s) {
   return div.innerHTML;
 }
 
-function pickCard(rowIndex, scoreToPar, cardEl) {
-  if (state.picks[rowIndex] !== undefined) return;
-  state.picks[rowIndex] = scoreToPar;
+function pickCard(colIndex, scoreToPar, cardEl) {
+  if (state.picks[colIndex] !== undefined) return;
+  state.picks[colIndex] = scoreToPar;
   cardEl.classList.add('picked', 'flipped');
-  const row = cardEl.closest('.grid-row');
-  row.classList.add('row-picked');
-  row.querySelectorAll('.card').forEach((c) => c.classList.add('flipped'));
+  const col = cardEl.closest('.grid-col');
+  col.classList.add('column-picked');
+  col.querySelectorAll('.card').forEach((c) => c.classList.add('flipped'));
   updateScorebug();
   const definedCount = state.picks.filter((p) => p !== undefined).length;
   if (definedCount === 4) {
