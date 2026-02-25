@@ -362,6 +362,27 @@ body {
   text-align: center;
 }
 
+.scorebug-play-again {
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.4rem 0.75rem;
+  margin-left: 0.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.scorebug-play-again:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.scorebug-play-again.hidden {
+  display: none;
+}
+
 .scorebug--under .scorebug-value {
   color: #4ade80;
 }

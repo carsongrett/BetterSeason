@@ -9,6 +9,13 @@ const GOLFERS_PER_GAME = 4;
 const CARDS_PER_GOLFER = 4;
 const DATA_URL = 'data/golf_results.csv';
 
+// Year range for this mode (CSV is unchanged; filter in memory so other modes can use full data)
+const MIN_YEAR = 2020;
+const MAX_YEAR = 2025;
+
+// Only use results where the player made the cut (exclude CUT, WD, DQ, MDF)
+const EXCLUDED_POSITIONS = new Set(['cut', 'wd', 'dq', 'mdf']);
+
 // Seeded RNG for repeatable puzzles (use date string later for daily)
 function mulberry32(seed) {
   return function () {
@@ -52,13 +59,18 @@ function loadData() {
     .then((rows) => {
       return rows
         .filter((r) => r.score_to_par !== '' && r.score_to_par !== undefined)
+        .filter((r) => {
+          const pos = (r.position || '').trim().toLowerCase();
+          return !EXCLUDED_POSITIONS.has(pos);
+        })
         .map((r) => ({
           player_name: (r.player_name || '').trim(),
           event_name: (r.event_name || '').trim(),
           year: parseInt(r.year, 10) || 0,
           score_to_par: parseInt(r.score_to_par, 10),
         }))
-        .filter((r) => r.player_name && !isNaN(r.score_to_par));
+        .filter((r) => r.player_name && !isNaN(r.score_to_par))
+        .filter((r) => r.year >= MIN_YEAR && r.year <= MAX_YEAR);
     });
 }
 
@@ -103,6 +115,7 @@ const vsPar = document.getElementById('vs-par');
 const playAgainBtn = document.getElementById('play-again-btn');
 const scorebugEl = document.getElementById('scorebug');
 const scorebugValue = document.getElementById('scorebug-value');
+const scorebugPlayAgain = document.getElementById('scorebug-play-again');
 
 let state = {
   puzzle: null,
@@ -111,8 +124,7 @@ let state = {
 };
 
 function getSeed() {
-  // Repeatable for testing; change to date string for daily
-  return 20250224;
+  return Date.now();
 }
 
 function formatScore(n) {
@@ -203,6 +215,9 @@ function updateScorebug() {
   if (!scorebugEl || !scorebugValue) return;
   const defined = state.picks.filter((p) => p !== undefined);
   scorebugEl.classList.remove('scorebug--under', 'scorebug--over', 'scorebug--even');
+  if (scorebugPlayAgain) {
+    scorebugPlayAgain.classList.toggle('hidden', defined.length !== 4);
+  }
   if (defined.length === 0) {
     scorebugValue.textContent = '—';
     return;
@@ -229,10 +244,13 @@ function closeResultsModal() {
 if (resultsModalClose) resultsModalClose.addEventListener('click', closeResultsModal);
 if (resultsModalBackdrop) resultsModalBackdrop.addEventListener('click', closeResultsModal);
 
-playAgainBtn.addEventListener('click', () => {
+function handlePlayAgain() {
   closeResultsModal();
   initGame();
-});
+}
+
+playAgainBtn.addEventListener('click', handlePlayAgain);
+if (scorebugPlayAgain) scorebugPlayAgain.addEventListener('click', handlePlayAgain);
 
 function initGame() {
   const seed = getSeed();
