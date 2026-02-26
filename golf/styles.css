@@ -32,7 +32,7 @@ body {
 #app {
   min-height: 100vh;
   min-height: 100dvh;
-  padding: env(safe-area-inset-top) max(1rem, env(safe-area-inset-left)) 5rem max(1rem, env(safe-area-inset-right));
+  padding: env(safe-area-inset-top) max(1rem, env(safe-area-inset-right)) 5rem max(1rem, env(safe-area-inset-left));
   max-width: 1200px;
   margin: 0 auto;
 }
