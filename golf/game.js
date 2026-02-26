@@ -1,12 +1,12 @@
 /**
  * Pick the Round — Golf game
- * 4 golfers × 4 cards (events). Tap a card → flip → score locks in. Total = sum of 4 picks.
+ * 4 golfers × 3 cards (events). Tap a card → flip → score locks in. Total = sum of 4 picks.
  * Data: golf_results.csv (player_name, event_name, year, score_to_par, position)
  */
 
 const PAR_4_ROUNDS = 288; // 4 × 72
 const GOLFERS_PER_GAME = 4;
-const CARDS_PER_GOLFER = 4;
+const CARDS_PER_GOLFER = 3;
 const DATA_URL = 'data/golf_results.csv';
 
 // Year range for this mode (CSV is unchanged; filter in memory so other modes can use full data)

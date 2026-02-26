@@ -472,6 +472,9 @@ a.sport-card {
   min-height: 0;
   padding: 1.25rem 1.25rem;
   animation: fadeIn 0.3s ease;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 .screen.active {

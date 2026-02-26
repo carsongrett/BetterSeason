@@ -1,4 +1,4 @@
-/* Pick the Round — Golf game */
+/* Best Ball — Golf game */
 
 :root {
   --bg: #0f1412;
@@ -83,13 +83,21 @@ body {
 
 .golf-home-link {
   flex-shrink: 0;
-  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: var(--muted);
   text-decoration: none;
+  padding: 0.25rem;
+  border-radius: 6px;
 }
 
 .golf-home-link:hover {
   color: var(--accent);
+}
+
+.golf-home-icon {
+  display: block;
 }
 
 .header-title-wrap {
@@ -122,6 +130,7 @@ body {
 }
 
 .grid-wrapper {
+  margin-top: 1.25rem;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -132,6 +141,7 @@ body {
 
 @media (max-width: 620px) {
   .grid-wrapper {
+    margin-top: 1.5rem;
     overflow-x: hidden;
     min-width: 0;
     width: 100%;
@@ -177,14 +187,14 @@ body {
   }
 
   .grid-col .golfer-name {
-    flex: 0 0 24%;
+    flex: 0 0 26%;
     min-width: 0;
-    max-width: 24%;
+    max-width: 26%;
     height: auto;
-    min-height: 2.5em;
-    font-size: 0.6rem;
-    line-height: 1.15;
-    padding: 0.15rem 3px;
+    min-height: 2.75em;
+    font-size: 0.8rem;
+    line-height: 1.2;
+    padding: 0.2rem 4px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -199,7 +209,7 @@ body {
   .grid-col .card {
     flex: 1 1 0;
     min-width: 0;
-    max-height: 82px;
+    max-height: 110px;
     aspect-ratio: 3/4;
   }
 
@@ -532,15 +542,19 @@ body {
   }
 
   .event-name {
-    font-size: clamp(0.6rem, 2vw, 0.8rem);
+    font-size: clamp(0.75rem, 2.2vw, 0.95rem);
   }
 
   .event-year {
-    font-size: 0.65rem;
+    font-size: 0.75rem;
   }
 
   .card-back .score {
-    font-size: 1.15rem;
+    font-size: 1.35rem;
+  }
+
+  .card-back .card-back-event {
+    font-size: 0.8rem;
   }
 
   .card-inner,
