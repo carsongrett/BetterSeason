@@ -135,8 +135,6 @@ body {
     overflow-x: hidden;
     min-width: 0;
     width: 100%;
-    display: flex;
-    justify-content: center;
   }
 }
 
@@ -150,12 +148,15 @@ body {
   margin-right: auto;
 }
 
+/* Mobile: one row per golfer — name left, 4 cards in a row right. Uses full width, no centering issues. */
 @media (max-width: 620px) {
   .grid {
-    gap: 0.2rem;
-    max-width: 100%;
-    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    max-width: none;
     width: 100%;
+    min-width: 0;
   }
 }
 
@@ -168,7 +169,38 @@ body {
 
 @media (max-width: 620px) {
   .grid-col {
-    gap: 0.15rem;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .grid-col .golfer-name {
+    flex: 0 0 24%;
+    min-width: 0;
+    max-width: 24%;
+    height: auto;
+    min-height: 2.5em;
+    font-size: 0.6rem;
+    line-height: 1.15;
+    padding: 0.15rem 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .grid-col .golfer-name-inner {
+    word-break: break-word;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .grid-col .card {
+    flex: 1 1 0;
+    min-width: 0;
+    max-height: 82px;
+    aspect-ratio: 3/4;
   }
 
   .card {
