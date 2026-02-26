@@ -37,12 +37,28 @@ body {
   margin: 0 auto;
 }
 
+@media (max-width: 620px) {
+  #app {
+    display: flex;
+    flex-direction: column;
+    padding-left: max(0.5rem, env(safe-area-inset-left));
+    padding-right: max(0.5rem, env(safe-area-inset-right));
+  }
+}
+
 .header {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 1.25rem 0 1rem;
   position: relative;
+}
+
+@media (max-width: 620px) {
+  .header {
+    flex-shrink: 0;
+    padding: 0.75rem 0 0.5rem;
+  }
 }
 
 .golf-home-link {
@@ -79,6 +95,16 @@ body {
   padding: 0 0 1.5rem;
 }
 
+@media (max-width: 620px) {
+  .main {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 0.5rem;
+  }
+}
+
 .grid-wrapper {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -86,6 +112,15 @@ body {
 
 .grid-wrapper.hidden {
   display: none;
+}
+
+@media (max-width: 620px) {
+  .grid-wrapper {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    overflow: hidden;
+  }
 }
 
 .grid {
@@ -96,11 +131,28 @@ body {
   max-width: 900px;
 }
 
+@media (max-width: 620px) {
+  .grid {
+    height: 100%;
+    min-height: 0;
+    grid-template-rows: 1fr;
+    gap: 0.25rem;
+    max-width: none;
+  }
+}
+
 .grid-col {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
   min-width: 0;
+}
+
+@media (max-width: 620px) {
+  .grid-col {
+    min-height: 0;
+    gap: 0.2rem;
+  }
 }
 
 .golfer-name {
@@ -131,6 +183,14 @@ body {
   perspective: 400px;
   flex: 1;
   min-height: 0;
+}
+
+@media (max-width: 620px) {
+  .card {
+    max-height: none;
+    aspect-ratio: auto;
+    min-height: 0;
+  }
 }
 
 .card.picked {
@@ -413,23 +473,27 @@ body {
 }
 
 @media (max-width: 620px) {
-  .grid {
-    gap: 0.5rem;
-  }
-
   .golfer-name {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
+    height: 2em;
+    min-height: 2em;
+    padding: 0.15rem 0.1rem;
   }
 
   .event-name {
-    font-size: clamp(0.65rem, 2vw, 0.85rem);
+    font-size: clamp(0.6rem, 2vw, 0.8rem);
   }
 
   .event-year {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
   }
 
   .card-back .score {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
+  }
+
+  .card-front,
+  .card-back {
+    padding: 0.25rem 0.3rem;
   }
 }
