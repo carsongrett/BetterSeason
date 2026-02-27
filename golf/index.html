@@ -16,7 +16,7 @@
         <svg class="golf-home-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       </a>
       <div class="header-title-wrap">
-        <h1>Best Ball</h1>
+        <h1 id="golf-page-title">Best Ball</h1>
         <p class="tagline">Select each golfer's lowest event score</p>
       </div>
     </header>
@@ -27,6 +27,13 @@
       </div>
 
       <div class="mode-toggle-wrap">
+        <div class="mode-toggle-group hidden" id="hard-mode-btn-wrap">
+          <button type="button" class="how-to-play-btn hard-mode-btn" id="hard-mode-btn" aria-label="Switch to daily hard mode" title="Daily hard mode">
+            <span class="hard-mode-btn-icon" aria-hidden="true">H</span>
+            <span class="how-to-play-btn-text">Hard mode</span>
+          </button>
+          <span class="mode-toggle-label how-to-play-label">Hard</span>
+        </div>
         <div class="mode-toggle-group">
           <button type="button" class="how-to-play-btn" id="how-to-play-btn" aria-label="How to play" title="How to play">
             <span class="how-to-play-btn-icon" aria-hidden="true">?</span>
@@ -65,6 +72,17 @@
           <p><strong>Your 4 golfer's scores will be your final score.</strong></p>
           <p class="how-to-modal-note">*All players made the cut.</p>
           <button type="button" class="how-to-modal-btn" id="how-to-modal-btn">Got it</button>
+        </div>
+      </div>
+
+      <div class="how-to-modal leave-game-hard-modal hidden" id="leave-game-hard-modal" aria-modal="true" aria-labelledby="leave-game-hard-title">
+        <div class="how-to-modal-backdrop" id="leave-game-hard-modal-backdrop"></div>
+        <div class="how-to-modal-box">
+          <h2 class="how-to-modal-title" id="leave-game-hard-title">Switch to hard mode?</h2>
+          <div class="leave-game-hard-actions">
+            <button type="button" class="how-to-modal-btn leave-game-hard-go" id="leave-game-hard-go">Go</button>
+            <button type="button" class="how-to-modal-btn leave-game-hard-stay" id="leave-game-hard-stay">Stay</button>
+          </div>
         </div>
       </div>
 

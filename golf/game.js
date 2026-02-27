@@ -171,8 +171,11 @@ function buildPuzzle(rows, seed, rankMap) {
     let picked = shuffleWithRng([...events], rng).slice(0, CARDS_PER_GOLFER);
     const allGreen = picked.every((e) => e.score_to_par < 0);
     const yellowOrRed = events.filter((e) => e.score_to_par >= 0);
-    if (allGreen && yellowOrRed.length > 0 && rng() < 0.25) {
-      const swapIn = yellowOrRed[Math.floor(rng() * yellowOrRed.length)];
+    const pickedKey = (e) => `${e.event_name}|${e.year}`;
+    const pickedSet = new Set(picked.map(pickedKey));
+    const available = yellowOrRed.filter((e) => !pickedSet.has(pickedKey(e)));
+    if (allGreen && available.length > 0 && rng() < 0.25) {
+      const swapIn = available[Math.floor(rng() * available.length)];
       const swapIdx = Math.floor(rng() * picked.length);
       picked = [...picked];
       picked[swapIdx] = swapIn;
@@ -211,6 +214,11 @@ const howToPlayBtn = document.getElementById('how-to-play-btn');
 const howToDetailModal = document.getElementById('how-to-detail-modal');
 const howToDetailModalBackdrop = document.getElementById('how-to-detail-modal-backdrop');
 const howToDetailModalClose = document.getElementById('how-to-detail-modal-close');
+const hardModeBtn = document.getElementById('hard-mode-btn');
+const leaveGameHardModal = document.getElementById('leave-game-hard-modal');
+const leaveGameHardModalBackdrop = document.getElementById('leave-game-hard-modal-backdrop');
+const leaveGameHardGo = document.getElementById('leave-game-hard-go');
+const leaveGameHardStay = document.getElementById('leave-game-hard-stay');
 
 let state = {
   puzzle: null,
@@ -218,8 +226,8 @@ let state = {
   seed: 0,
   golfPlayerIds: {}, // name -> ESPN id for headshots
   easyMode: (function () {
-    return new URLSearchParams(window.location.search).get('mode') === 'majors';
-  })(), // set from URL: ?mode=majors = majors only, otherwise normal
+    return new URLSearchParams(window.location.search).get('mode') !== 'normal';
+  })(), // default = majors; ?mode=normal = Best Ball (Hard)
 };
 let hasShownHowToThisSession = false;
 
@@ -473,9 +481,27 @@ function closeHowToDetailModal() {
 if (howToPlayBtn) howToPlayBtn.addEventListener('click', showHowToDetailModal);
 if (howToDetailModalBackdrop) howToDetailModalBackdrop.addEventListener('click', closeHowToDetailModal);
 if (howToDetailModalClose) howToDetailModalClose.addEventListener('click', closeHowToDetailModal);
+
+function showLeaveGameHardModal() {
+  if (leaveGameHardModal) leaveGameHardModal.classList.remove('hidden');
+}
+function closeLeaveGameHardModal() {
+  if (leaveGameHardModal) leaveGameHardModal.classList.add('hidden');
+}
+if (hardModeBtn) hardModeBtn.addEventListener('click', showLeaveGameHardModal);
+if (leaveGameHardModalBackdrop) leaveGameHardModalBackdrop.addEventListener('click', closeLeaveGameHardModal);
+if (leaveGameHardStay) leaveGameHardStay.addEventListener('click', closeLeaveGameHardModal);
+if (leaveGameHardGo) leaveGameHardGo.addEventListener('click', () => {
+  closeLeaveGameHardModal();
+  window.location.href = window.location.pathname + '?mode=normal';
+});
+
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && howToDetailModal && !howToDetailModal.classList.contains('hidden')) {
     closeHowToDetailModal();
+  }
+  if (e.key === 'Escape' && leaveGameHardModal && !leaveGameHardModal.classList.contains('hidden')) {
+    closeLeaveGameHardModal();
   }
 });
 
@@ -525,6 +551,18 @@ function loadRankings() {
     .catch(() => new Map());
 }
 
+function updatePageTitleAndHeader() {
+  const title = state.easyMode ? 'Best Ball' : 'Best Ball (Hard)';
+  document.title = title + ' — Golf';
+  const titleEl = document.getElementById('golf-page-title');
+  if (titleEl) titleEl.textContent = title;
+  const hardWrap = document.getElementById('hard-mode-btn-wrap');
+  if (hardWrap) {
+    if (state.easyMode) hardWrap.classList.remove('hidden');
+    else hardWrap.classList.add('hidden');
+  }
+}
+
 function initGame() {
   const seed = getSeed();
   state = {
@@ -534,6 +572,7 @@ function initGame() {
     golfPlayerIds: state.golfPlayerIds || {},
     easyMode: state.easyMode,
   };
+  updatePageTitleAndHeader();
   Promise.all([loadGolfPlayerIds(), loadData(state.easyMode), loadRankings()])
     .then(([, rows, rankMap]) => {
       state.puzzle = buildPuzzle(rows, seed, rankMap);

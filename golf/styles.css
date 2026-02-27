@@ -263,6 +263,46 @@ body {
   border-color: var(--muted);
 }
 
+#hard-mode-btn-wrap.hidden {
+  display: none;
+}
+
+.hard-mode-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+}
+
+.how-to-play-btn:hover .hard-mode-btn-icon {
+  color: var(--text);
+  border-color: var(--muted);
+}
+
+.leave-game-hard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1.25rem;
+}
+
+.leave-game-hard-stay {
+  background: var(--card-face);
+  color: var(--muted);
+}
+
+.leave-game-hard-stay:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+
 .how-to-play-btn-text {
   position: absolute;
   width: 1px;
