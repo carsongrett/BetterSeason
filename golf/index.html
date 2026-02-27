@@ -26,6 +26,22 @@
         <div class="grid" id="grid" role="grid" aria-label="Golfers and rounds"></div>
       </div>
 
+      <div class="mode-toggle-wrap">
+        <div class="mode-toggle-group">
+          <button type="button" class="mode-toggle" id="mode-toggle" role="switch" aria-checked="false" aria-label="Game mode: Normal or Majors">
+            <span class="mode-toggle-slider"></span>
+          </button>
+          <span class="mode-toggle-label" id="mode-toggle-label">Normal</span>
+        </div>
+        <div class="mode-toggle-group">
+          <button type="button" class="how-to-play-btn" id="how-to-play-btn" aria-label="How to play" title="How to play">
+            <span class="how-to-play-btn-icon" aria-hidden="true">?</span>
+            <span class="how-to-play-btn-text">How to play</span>
+          </button>
+          <span class="mode-toggle-label how-to-play-label">How to</span>
+        </div>
+      </div>
+
       <div class="results-modal hidden" id="results-modal" aria-modal="true" aria-labelledby="results-title">
         <div class="results-modal-backdrop" id="results-modal-backdrop"></div>
         <div class="results-modal-box">
@@ -53,6 +69,36 @@
           <p><strong>Your 4 golfer's scores will be your final score.</strong></p>
           <p class="how-to-modal-note">*All players made the cut.</p>
           <button type="button" class="how-to-modal-btn" id="how-to-modal-btn">Got it</button>
+        </div>
+      </div>
+
+      <div class="how-to-detail-modal hidden" id="how-to-detail-modal" aria-modal="true" aria-labelledby="how-to-detail-title">
+        <div class="how-to-detail-modal-backdrop" id="how-to-detail-modal-backdrop"></div>
+        <div class="how-to-detail-modal-box">
+          <div class="how-to-detail-modal-header">
+            <h2 class="how-to-detail-modal-title" id="how-to-detail-title">How to play</h2>
+            <button type="button" class="how-to-detail-modal-close" id="how-to-detail-modal-close" aria-label="Close">Close</button>
+          </div>
+          <div class="how-to-detail-modal-body">
+            <section class="how-to-detail-section">
+              <h3 class="how-to-detail-heading">Objective</h3>
+              <p>Pick one historical event per golfer to minimize your total score to par. The score of the event chosen will contribute to your score. Lower is better (e.g. −5 beats +3).</p>
+            </section>
+            <section class="how-to-detail-section">
+              <h3 class="how-to-detail-heading">How to play</h3>
+              <ul>
+                <li>Each column is one golfer with three face-down score cards.</li>
+                <li>Flip a card to reveal that round's score to par.</li>
+                <li>Once flipped, that golfer's score is locked in.</li>
+                <li>Pick one card per golfer — lowest total wins.</li>
+              </ul>
+            </section>
+            <section class="how-to-detail-section">
+              <h3 class="how-to-detail-heading">Normal vs Majors</h3>
+              <p><strong>Normal</strong> uses all tournaments in the data. <strong>Majors</strong> uses only the four majors: Masters Tournament, PGA Championship, U.S. Open, and The Open Championship. Use the toggle below the grid to switch.</p>
+            </section>
+            <p class="how-to-detail-note">*All players in the data made the cut for the events shown.</p>
+          </div>
         </div>
       </div>
     </main>

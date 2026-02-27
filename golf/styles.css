@@ -148,6 +148,134 @@ body {
   }
 }
 
+/* Mode toggle + How to play (below grid) */
+.mode-toggle-wrap {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.mode-toggle-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mode-toggle {
+  position: relative;
+  width: 55px;
+  height: 25px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card-face);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mode-toggle:hover {
+  border-color: var(--muted);
+}
+
+.mode-toggle--majors {
+  background: var(--accent);
+  border-color: hsl(152, 38%, 42%);
+}
+
+.mode-toggle--majors:hover {
+  border-color: #38b86c;
+}
+
+.mode-toggle-slider {
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  transform: translateY(-50%);
+  transition: left 0.2s ease;
+  pointer-events: none;
+}
+
+.mode-toggle--majors .mode-toggle-slider {
+  left: calc(100% - 22px);
+}
+
+.mode-toggle-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.how-to-play-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 55px;
+  height: 25px;
+  padding: 0;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--card-face);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.how-to-play-btn:hover {
+  background: var(--surface);
+  border-color: var(--muted);
+}
+
+.how-to-play-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+}
+
+.how-to-play-btn:hover .how-to-play-btn-icon {
+  color: var(--text);
+  border-color: var(--muted);
+}
+
+.how-to-play-btn-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -494,23 +622,19 @@ body {
 }
 
 .results-share-buttons .share-btn {
-  flex: 1;
-  min-width: 4rem;
-  max-width: 6rem;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.9rem;
+  font: inherit;
   font-weight: 600;
-  border: 1px solid var(--border);
-  background: var(--card-face);
-  color: var(--text);
+  padding: 0.65rem 1.5rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
   border-radius: var(--radius);
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .results-share-buttons .share-btn:hover {
-  background: var(--surface);
-  border-color: var(--accent);
+  background: #38b86c;
 }
 
 .results-share-buttons .share-btn.hidden {
@@ -670,6 +794,143 @@ body {
 
 .how-to-modal-btn:hover {
   background: #38b86c;
+}
+
+/* How to play — detail modal (more details, opened via button) */
+.how-to-detail-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 26;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  pointer-events: none;
+}
+
+.how-to-detail-modal.hidden {
+  display: none;
+}
+
+.how-to-detail-modal:not(.hidden) {
+  pointer-events: auto;
+}
+
+.how-to-detail-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+
+.how-to-detail-modal-box {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  max-width: 24rem;
+  width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow), 0 0 0 1px rgba(45, 157, 100, 0.15);
+}
+
+.how-to-detail-modal-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-dim), var(--accent));
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.how-to-detail-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem 0.75rem;
+  flex-shrink: 0;
+}
+
+.how-to-detail-modal-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text);
+}
+
+.how-to-detail-modal-close {
+  padding: 0.4rem 0.75rem;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--muted);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.how-to-detail-modal-close:hover {
+  color: var(--text);
+  border-color: var(--muted);
+}
+
+.how-to-detail-modal-body {
+  padding: 0 1.5rem 1.5rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.how-to-detail-section {
+  margin-bottom: 1.25rem;
+}
+
+.how-to-detail-section:last-of-type {
+  margin-bottom: 0;
+}
+
+.how-to-detail-heading {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.how-to-detail-section p,
+.how-to-detail-section ul {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.how-to-detail-section ul {
+  padding-left: 1.25rem;
+}
+
+.how-to-detail-section li {
+  margin-bottom: 0.35rem;
+}
+
+.how-to-detail-section li:last-child {
+  margin-bottom: 0;
+}
+
+.how-to-detail-note {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--muted);
 }
 
 .load-error {

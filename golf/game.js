@@ -30,6 +30,14 @@ const MAX_YEAR = 2025;
 // Only use results where the player made the cut (exclude CUT, WD, DQ, MDF)
 const EXCLUDED_POSITIONS = new Set(['cut', 'wd', 'dq', 'mdf']);
 
+// Easy mode: only these four majors (exact event_name match in CSV)
+const MAJOR_EVENT_NAMES = new Set([
+  'Masters Tournament',
+  'PGA Championship',
+  'U.S. Open',
+  'The Open',
+]);
+
 // Seeded RNG for repeatable puzzles (use date string later for daily)
 function mulberry32(seed) {
   return function () {
@@ -91,7 +99,7 @@ function parseCSV(text) {
   return rows;
 }
 
-function loadData() {
+function loadData(easyMode) {
   return fetch(DATA_URL)
     .then((r) => {
       if (!r.ok) throw new Error(`Failed to load ${DATA_URL}: ${r.status}`);
@@ -99,7 +107,7 @@ function loadData() {
     })
     .then(parseCSV)
     .then((rows) => {
-      return rows
+      let out = rows
         .filter((r) => r.score_to_par !== '' && r.score_to_par !== undefined)
         .filter((r) => {
           const pos = (r.position || '').trim().toLowerCase();
@@ -113,6 +121,10 @@ function loadData() {
         }))
         .filter((r) => r.player_name && !isNaN(r.score_to_par))
         .filter((r) => r.year >= MIN_YEAR && r.year <= MAX_YEAR);
+      if (easyMode) {
+        out = out.filter((r) => MAJOR_EVENT_NAMES.has(r.event_name));
+      }
+      return out;
     });
 }
 
@@ -186,12 +198,19 @@ const golfShareGrid = document.getElementById('golf-share-grid');
 const golfShareNativeBtn = document.getElementById('golf-share-native-btn');
 const golfShareSmsBtn = document.getElementById('golf-share-sms-btn');
 const golfShareXBtn = document.getElementById('golf-share-x-btn');
+const modeToggle = document.getElementById('mode-toggle');
+const modeToggleLabel = document.getElementById('mode-toggle-label');
+const howToPlayBtn = document.getElementById('how-to-play-btn');
+const howToDetailModal = document.getElementById('how-to-detail-modal');
+const howToDetailModalBackdrop = document.getElementById('how-to-detail-modal-backdrop');
+const howToDetailModalClose = document.getElementById('how-to-detail-modal-close');
 
 let state = {
   puzzle: null,
   picks: [], // one score_to_par per row (index = row)
   seed: 0,
   golfPlayerIds: {}, // name -> ESPN id for headshots
+  easyMode: false, // false = normal (all events), true = majors only
 };
 let hasShownHowToThisSession = false;
 
@@ -226,6 +245,7 @@ function formatEventNameForDisplay(name) {
   s = s.replace(/^\d{4}\s+/, ''); // remove leading year (e.g. "2017 Masters Tournament")
   s = s.replace(/^World\s+Golf\s+Championships-\s*/i, ''); // remove "World Golf Championships-" prefix
   if (!s) return name.trim();
+  if (s === 'The Open') return 'The Open Championship';
   if (s.startsWith('the ')) s = 'The ' + s.slice(4);
   else if (s.length > 0) s = s.charAt(0).toUpperCase() + s.slice(1);
   return s;
@@ -418,6 +438,23 @@ if (howToModalBackdrop) howToModalBackdrop.addEventListener('click', closeHowToM
 if (howToModalClose) howToModalClose.addEventListener('click', closeHowToModal);
 if (howToModalBtn) howToModalBtn.addEventListener('click', closeHowToModal);
 
+function showHowToDetailModal() {
+  if (howToDetailModal) howToDetailModal.classList.remove('hidden');
+}
+
+function closeHowToDetailModal() {
+  if (howToDetailModal) howToDetailModal.classList.add('hidden');
+}
+
+if (howToPlayBtn) howToPlayBtn.addEventListener('click', showHowToDetailModal);
+if (howToDetailModalBackdrop) howToDetailModalBackdrop.addEventListener('click', closeHowToDetailModal);
+if (howToDetailModalClose) howToDetailModalClose.addEventListener('click', closeHowToDetailModal);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && howToDetailModal && !howToDetailModal.classList.contains('hidden')) {
+    closeHowToDetailModal();
+  }
+});
+
 function handlePlayAgain() {
   closeResultsModal();
   initGame();
@@ -464,10 +501,27 @@ function loadRankings() {
     .catch(() => new Map());
 }
 
+function updateModeToggleUI() {
+  if (modeToggle) {
+    modeToggle.classList.toggle('mode-toggle--majors', state.easyMode);
+    modeToggle.setAttribute('aria-checked', state.easyMode ? 'true' : 'false');
+  }
+  if (modeToggleLabel) {
+    modeToggleLabel.textContent = state.easyMode ? 'Majors' : 'Normal';
+  }
+}
+
 function initGame() {
   const seed = getSeed();
-  state = { puzzle: null, picks: [], seed, golfPlayerIds: state.golfPlayerIds || {} };
-  Promise.all([loadGolfPlayerIds(), loadData(), loadRankings()])
+  state = {
+    puzzle: null,
+    picks: [],
+    seed,
+    golfPlayerIds: state.golfPlayerIds || {},
+    easyMode: state.easyMode,
+  };
+  updateModeToggleUI();
+  Promise.all([loadGolfPlayerIds(), loadData(state.easyMode), loadRankings()])
     .then(([, rows, rankMap]) => {
       state.puzzle = buildPuzzle(rows, seed, rankMap);
       updateScorebug();
@@ -481,6 +535,13 @@ function initGame() {
       if (scorebugValue) scorebugValue.textContent = '—';
       grid.innerHTML = `<p class="load-error">${escapeHtml(err.message)}</p>`;
     });
+}
+
+if (modeToggle) {
+  modeToggle.addEventListener('click', () => {
+    state.easyMode = !state.easyMode;
+    initGame();
+  });
 }
 
 initGame();
