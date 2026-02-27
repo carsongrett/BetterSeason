@@ -860,8 +860,10 @@ a.sport-card {
 
 .share-buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
   justify-content: center;
+  align-items: center;
 }
 
 .share-btn {
@@ -890,14 +892,18 @@ a.sport-card {
 .share-btn-x {
   flex: 0 0 auto;
   width: 2.75rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
   padding: 0.75rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
 }
 
 .share-btn-x .share-x-icon {
   display: block;
+  flex-shrink: 0;
 }
 
 .new-game-btn {

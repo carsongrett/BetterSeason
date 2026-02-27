@@ -606,9 +606,10 @@ body {
 
 .results-share-buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
   justify-content: center;
-  flex-wrap: wrap;
+  align-items: center;
 }
 
 .results-share-buttons .share-btn {
@@ -633,15 +634,19 @@ body {
 
 .results-share-buttons .share-btn-x {
   flex: 0 0 auto;
-  min-width: 2.5rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  width: 2.75rem;
   padding: 0.65rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
 }
 
 .results-share-buttons .share-btn-x .share-x-icon {
   display: block;
+  flex-shrink: 0;
 }
 
 .play-again-btn {
