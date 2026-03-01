@@ -8,10 +8,13 @@ Run from repo root:
 Output:
   golf_data.db      — SQLite (events + results)
   event_ids.json    — checkpoint of event IDs
-  golf/data/golf_results.csv — export for the Pick the Round game (overwrites sample)
+  golf/data/golf_results.csv — used by the Pick the Round game
+  golf/data/golf_results_backup.csv — backup of CSV before each run (one file, overwritten)
 """
 
 import json
+import re
+import shutil
 import sqlite3
 import time
 from pathlib import Path
@@ -25,7 +28,7 @@ except ImportError:
 # --- config
 SCOREBOARD_URL = "https://site.api.espn.com/apis/site/v2/sports/golf/pga/scoreboard"
 LEADERBOARD_URL = "https://site.web.api.espn.com/apis/site/v2/sports/golf/leaderboard"
-YEARS = [2025]  # one year for testing; expand to list(range(2016, 2026)) for full history
+YEARS = list(range(1999, 2027))  # 1999 through 2026
 SLEEP_SEC = 1.5
 RETRIES = 3
 BACKOFF = 2.0
@@ -35,6 +38,25 @@ REPO_ROOT = Path(__file__).resolve().parent
 EVENT_IDS_JSON = REPO_ROOT / "event_ids.json"
 DB_PATH = REPO_ROOT / "golf_data.db"
 CSV_PATH = REPO_ROOT / "golf" / "data" / "golf_results.csv"
+BACKUP_PATH = REPO_ROOT / "golf" / "data" / "golf_results_backup.csv"
+
+
+def clean_event_name(name):
+    """Remove 'Pres. by X' / 'presented by X' sponsor suffix from event names."""
+    if not name or not isinstance(name, str):
+        return name or ""
+    return re.sub(r"\s+([Pp]res\.?|[Pp]resented)\s+[Bb]y\s+.+$", "", name).strip()
+
+
+def is_ascii_player_name(name):
+    """True if name is pure ASCII (avoids mojibake / encoding display issues)."""
+    if not name or not isinstance(name, str):
+        return False
+    try:
+        name.encode("ascii")
+        return True
+    except UnicodeEncodeError:
+        return False
 
 
 def get_session():
@@ -132,17 +154,20 @@ def scrape_leaderboard(session, event):
     if not competitions:
         return []
     competitors = competitions[0].get("competitors") or []
-    event_name = ev.get("name") or event.get("name") or ""
+    event_name = clean_event_name(ev.get("name") or event.get("name") or "")
     event_date = ev.get("date") or event.get("date") or ""
     year = event_date[:4] if event_date else (event.get("date", "")[:4] or "")
 
     rows = []
     for c in competitors:
         name = (c.get("athlete") or {}).get("displayName") or ""
+        name = name.strip()
+        if not is_ascii_player_name(name):
+            continue
         pos = (c.get("status") or {}).get("displayValue") or ""
         score_to_par = parse_score_to_par(c)
         rows.append({
-            "player_name": name.strip(),
+            "player_name": name,
             "event_name": event_name.strip(),
             "year": int(year) if year.isdigit() else 0,
             "score_to_par": score_to_par,
@@ -204,7 +229,7 @@ def get_scraped_event_ids(conn):
 
 
 def export_csv(conn, path):
-    """Export results to CSV (only rows with non-null score_to_par)."""
+    """Export all results to CSV (full overwrite). Used for --clear runs."""
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     cur = conn.execute(
@@ -215,6 +240,30 @@ def export_csv(conn, path):
     rows = cur.fetchall()
     with path.open("w", encoding="utf-8") as f:
         f.write("player_name,event_name,year,score_to_par,position\n")
+        for r in rows:
+            f.write(",".join(str(x) for x in r) + "\n")
+    return len(rows)
+
+
+def append_results_to_csv(conn, path, event_ids):
+    """Append only results for the given event_ids to CSV (no header). Creates file with header if missing."""
+    if not event_ids:
+        return 0
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    placeholders = ",".join("?" for _ in event_ids)
+    cur = conn.execute(
+        """SELECT player_name, event_name, year, score_to_par, position
+           FROM results WHERE score_to_par IS NOT NULL AND event_id IN (%s)
+           ORDER BY year, event_name, player_name"""
+        % placeholders,
+        list(event_ids),
+    )
+    rows = cur.fetchall()
+    write_header = not path.exists()
+    with path.open("a", encoding="utf-8") as f:
+        if write_header:
+            f.write("player_name,event_name,year,score_to_par,position\n")
         for r in rows:
             f.write(",".join(str(x) for x in r) + "\n")
     return len(rows)
@@ -234,26 +283,42 @@ def main():
         conn.execute("DELETE FROM events")
         conn.commit()
         print("  Done. Proceeding with scrape.")
+    else:
+        if CSV_PATH.exists():
+            shutil.copy2(CSV_PATH, BACKUP_PATH)
+            print(f"Backed up CSV to {BACKUP_PATH.name}")
 
-    # Step 1: discover events
+    # Step 1: discover events (merge with existing so we can add older years without losing current data)
+    events = []
+    years_to_discover = list(YEARS)
     if EVENT_IDS_JSON.exists():
         print("Loading event IDs from", EVENT_IDS_JSON)
         with open(EVENT_IDS_JSON, encoding="utf-8") as f:
             events = json.load(f)
-    else:
-        years_str = ", ".join(str(y) for y in YEARS)
-        # ~52 Mondays per year × 1.5s sleep
-        est_discovery_mins = (len(YEARS) * 52 * SLEEP_SEC) // 60 + 1
-        print(f"Discovering event IDs for {years_str} (~{len(YEARS) * 52} calls, ~{est_discovery_mins} min)...")
-        events = discover_event_ids(session, YEARS)
+        years_present = {e.get("date", "")[:4] for e in events if (e.get("date") or "")[:4].isdigit()}
+        years_to_discover = [y for y in YEARS if str(y) not in years_present]
+        if years_to_discover:
+            print(f"Discovering events for years not in file: {min(years_to_discover)}–{max(years_to_discover)} ({len(years_to_discover)} years)")
+        else:
+            print(f"All years {min(YEARS)}–{max(YEARS)} already in event list ({len(events)} events).")
+    if years_to_discover:
+        est_discovery_mins = (len(years_to_discover) * 52 * SLEEP_SEC) // 60 + 1
+        print(f"  ~{len(years_to_discover) * 52} scoreboard calls, est. ~{est_discovery_mins} min...")
+        new_events = discover_event_ids(session, years_to_discover)
+        existing_by_id = {e["id"]: e for e in events}
+        for e in new_events:
+            existing_by_id[e["id"]] = e
+        events = sorted(existing_by_id.values(), key=lambda x: (x.get("date") or "", x.get("id") or ""))
         with open(EVENT_IDS_JSON, "w", encoding="utf-8") as f:
             json.dump(events, f, indent=2)
-        print(f"  Found {len(events)} unique events")
+        print(f"  Total unique events: {len(events)}")
 
     scraped = get_scraped_event_ids(conn)
     to_scrape = [e for e in events if e["id"] not in scraped]
     scrape_est = int(len(to_scrape) * SLEEP_SEC / 60) + 1
     print(f"Events to scrape: {len(to_scrape)} (already done: {len(scraped)}) — est. ~{scrape_est} min")
+
+    scraped_this_run = set()
 
     # Step 2: scrape each event
     for i, ev in enumerate(to_scrape):
@@ -261,14 +326,21 @@ def main():
             rows = scrape_leaderboard(session, ev)
             if rows:
                 save_to_db(conn, rows, ev["id"])
+                scraped_this_run.add(ev["id"])
             print(f"  [{i+1}/{len(to_scrape)}] {ev.get('name', ev['id'])} — {len(rows)} players")
         except Exception as e:
             print(f"  Skip {ev.get('name', ev['id'])}: {e}")
         time.sleep(SLEEP_SEC)
 
-    # Export
-    n = export_csv(conn, CSV_PATH)
-    print(f"Exported {n} rows to {CSV_PATH}")
+    # Export: full overwrite on --clear, else append only new results
+    if clear_db:
+        n = export_csv(conn, CSV_PATH)
+        print(f"Exported {n} rows to {CSV_PATH} (full)")
+    elif scraped_this_run:
+        n = append_results_to_csv(conn, CSV_PATH, scraped_this_run)
+        print(f"Appended {n} rows to {CSV_PATH}")
+    else:
+        print("No new events scraped; CSV unchanged.")
 
     conn.close()
     print("Done.")

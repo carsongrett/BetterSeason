@@ -10,10 +10,13 @@ const CARDS_PER_GOLFER = 3;
 const DATA_URL = 'data/golf_results.csv';
 const GOLF_PLAYER_IDS_URL = 'data/golf-player-ids.json';
 const RANKINGS_CSV_URL = 'data/downloaded_rankings.csv';
-// Weight by rank: top 20 = 5, 21–50 = 4, 51–100 = 3, 101+ or not on list = 1
-const RANK_WEIGHT_TOP_20 = 5;
-const RANK_WEIGHT_TOP_50 = 4;
-const RANK_WEIGHT_TOP_100 = 3;
+const TOP_PLAYERS_ALLTIME_URL = 'data/top_players_alltime.csv';
+// All-time list: minimum weight for players on the list (rank weight still applies, we take max)
+const ALLTIME_WEIGHT_FLOOR = 3;
+// Weight by rank: top 10 = 7, 11–50 = 6, 51–100 = 5, 101+ or not on list = 1
+const RANK_WEIGHT_TOP_10 = 7;
+const RANK_WEIGHT_TOP_50 = 6;
+const RANK_WEIGHT_TOP_100 = 5;
 const RANK_WEIGHT_DEFAULT = 1;
 const GOLF_HEADSHOT_URL = 'https://a.espncdn.com/i/headshots/golf/players/full';
 const GOLF_SHARE_URL = 'https://betterseason.live/golf';
@@ -27,19 +30,29 @@ const GOLF_HEADSHOT_FALLBACK_SVG = 'data:image/svg+xml,' + encodeURIComponent(
 // Delay before showing results modal after the last card is picked (so user can see the final grid)
 const RESULTS_MODAL_DELAY_MS = 2000;
 
-// Year range for this mode (CSV is unchanged; filter in memory so other modes can use full data)
-const MIN_YEAR = 2020;
-const MAX_YEAR = 2025;
+// Year range: 2001–2026 (both normal and hard mode use full data range)
+const MIN_YEAR = 2001;
+const MAX_YEAR = 2026;
+
+// Player pool: require 4+ distinct years of events, unless they have an event in 2022–2026 (new/relevant)
+const MIN_DISTINCT_YEARS = 4;
+const RECENT_YEAR_START = 2022; // 2022–MAX_YEAR = "recent"; players with an event here skip the distinct-years rule
+// Card selection: when a player has any event from this year onward, require at least 1 of their 3 cards to be from this set
+const RECENT_CARD_YEAR = 2015;
 
 // Only use results where the player made the cut (exclude CUT, WD, DQ, MDF)
 const EXCLUDED_POSITIONS = new Set(['cut', 'wd', 'dq', 'mdf']);
 
-// Easy mode: only these four majors (exact event_name match in CSV)
+// Normal mode: only these four majors (exact event_name match in CSV; include all variants in data)
 const MAJOR_EVENT_NAMES = new Set([
+  'The Masters',
   'Masters Tournament',
   'PGA Championship',
   'U.S. Open',
+  'U.S. Open Championship',
+  'U.S. Open Golf Championship',
   'The Open',
+  'British Open Championship',
 ]);
 
 // Seeded RNG for repeatable puzzles (use date string later for daily)
@@ -132,33 +145,62 @@ function loadData(easyMode) {
     });
 }
 
-function buildPuzzle(rows, seed, rankMap) {
+function buildPuzzle(rows, seed, rankMap, alltimeSet) {
   const rng = mulberry32(seed);
   const byPlayer = new Map();
   for (const r of rows) {
     if (!byPlayer.has(r.player_name)) byPlayer.set(r.player_name, []);
     byPlayer.get(r.player_name).push(r);
   }
-  const playersWithEnough = [...byPlayer.entries()].filter(
-    ([, events]) => events.length >= CARDS_PER_GOLFER
-  );
+  const playersWithEnough = [...byPlayer.entries()].filter(([, events]) => {
+    if (events.length < CARDS_PER_GOLFER) return false;
+    const distinctYears = new Set(events.map((e) => e.year)).size;
+    const hasRecentEvent = events.some((e) => e.year >= RECENT_YEAR_START && e.year <= MAX_YEAR);
+    return distinctYears >= MIN_DISTINCT_YEARS || hasRecentEvent;
+  });
   if (playersWithEnough.length < GOLFERS_PER_GAME) {
     throw new Error(
       `Need at least ${GOLFERS_PER_GAME} golfers with ${CARDS_PER_GOLFER}+ events. Found ${playersWithEnough.length}.`
     );
   }
   const getWeight = (playerName) => {
-    if (!rankMap || !rankMap.size) return RANK_WEIGHT_DEFAULT;
-    const rank = rankMap.get(normalizeForMatch(playerName));
-    if (rank == null) return RANK_WEIGHT_DEFAULT;
-    if (rank <= 20) return RANK_WEIGHT_TOP_20;
-    if (rank <= 50) return RANK_WEIGHT_TOP_50;
-    if (rank <= 100) return RANK_WEIGHT_TOP_100;
-    return RANK_WEIGHT_DEFAULT;
+    let w = RANK_WEIGHT_DEFAULT;
+    if (rankMap && rankMap.size) {
+      const rank = rankMap.get(normalizeForMatch(playerName));
+      if (rank != null) {
+        if (rank <= 10) w = RANK_WEIGHT_TOP_10;
+        else if (rank <= 50) w = RANK_WEIGHT_TOP_50;
+        else if (rank <= 100) w = RANK_WEIGHT_TOP_100;
+      }
+    }
+    if (alltimeSet && alltimeSet.size && alltimeSet.has(normalizeForMatch(playerName))) {
+      w = Math.max(w, ALLTIME_WEIGHT_FLOOR);
+    }
+    return w;
   };
+  const TOP_15_RANK = 15;
   const selected = [];
   let pool = playersWithEnough.map((entry) => ({ entry, weight: getWeight(entry[0]) }));
-  for (let k = 0; k < GOLFERS_PER_GAME && pool.length > 0; k++) {
+  const top15Pool = rankMap && rankMap.size
+    ? pool.filter((p) => {
+        const rank = rankMap.get(normalizeForMatch(p.entry[0]));
+        return rank != null && rank <= TOP_15_RANK;
+      })
+    : [];
+  if (top15Pool.length > 0) {
+    const totalWeight = top15Pool.reduce((sum, p) => sum + p.weight, 0);
+    let r = rng() * totalWeight;
+    for (let i = 0; i < top15Pool.length; i++) {
+      r -= top15Pool[i].weight;
+      if (r <= 0) {
+        selected.push(top15Pool[i].entry);
+        const chosenEntry = top15Pool[i].entry;
+        pool = pool.filter((p) => p.entry[0] !== chosenEntry[0]);
+        break;
+      }
+    }
+  }
+  for (let k = selected.length; k < GOLFERS_PER_GAME && pool.length > 0; k++) {
     const totalWeight = pool.reduce((sum, p) => sum + p.weight, 0);
     let r = rng() * totalWeight;
     for (let i = 0; i < pool.length; i++) {
@@ -170,11 +212,20 @@ function buildPuzzle(rows, seed, rankMap) {
       }
     }
   }
+  const pickedKey = (e) => `${e.event_name}|${e.year}`;
   const puzzle = selected.map(([player, events]) => {
-    let picked = shuffleWithRng([...events], rng).slice(0, CARDS_PER_GOLFER);
+    let picked;
+    const recentEvents = events.filter((e) => e.year >= RECENT_CARD_YEAR);
+    if (recentEvents.length >= 1) {
+      const oneRecent = shuffleWithRng([...recentEvents], rng)[0];
+      const rest = events.filter((e) => pickedKey(e) !== pickedKey(oneRecent));
+      const twoOthers = shuffleWithRng([...rest], rng).slice(0, CARDS_PER_GOLFER - 1);
+      picked = shuffleWithRng([oneRecent, ...twoOthers], rng);
+    } else {
+      picked = shuffleWithRng([...events], rng).slice(0, CARDS_PER_GOLFER);
+    }
     const allGreen = picked.every((e) => e.score_to_par < 0);
     const yellowOrRed = events.filter((e) => e.score_to_par >= 0);
-    const pickedKey = (e) => `${e.event_name}|${e.year}`;
     const pickedSet = new Set(picked.map(pickedKey));
     const available = yellowOrRed.filter((e) => !pickedSet.has(pickedKey(e)));
     if (allGreen && available.length > 0 && rng() < 0.25) {
@@ -527,6 +578,30 @@ function loadGolfPlayerIds() {
     });
 }
 
+/** Load top_players_alltime.csv (Golfer Name column); return Set(normalizedName). */
+function loadTopPlayersAlltime() {
+  return fetch(TOP_PLAYERS_ALLTIME_URL)
+    .then((r) => (r.ok ? r.text() : ''))
+    .then((text) => {
+      const lines = text.trim().split(/\r?\n/).filter((l) => l.trim());
+      if (lines.length < 2) return new Set();
+      const header = lines[0].split(',').map((h) => h.trim());
+      const nameCol = header.findIndex((h) => /golfer\s*name/i.test(h));
+      const col = nameCol >= 0 ? nameCol : 0;
+      const set = new Set();
+      for (let i = 1; i < lines.length; i++) {
+        const parts = lines[i].split(',').map((p) => p.trim());
+        const name = (parts[col] || '').trim();
+        if (!name) continue;
+        set.add(normalizeForMatch(name));
+        const comma = name.indexOf(', ');
+        if (comma > 0) set.add(normalizeForMatch(name.slice(comma + 2) + ' ' + name.slice(0, comma)));
+      }
+      return set;
+    })
+    .catch(() => new Set());
+}
+
 /** Load rankings CSV (RANKING + NAME columns); return Map(normalizedName -> rank number). */
 function loadRankings() {
   return fetch(RANKINGS_CSV_URL)
@@ -576,9 +651,9 @@ function initGame() {
     easyMode: state.easyMode,
   };
   updatePageTitleAndHeader();
-  Promise.all([loadGolfPlayerIds(), loadData(state.easyMode), loadRankings()])
-    .then(([, rows, rankMap]) => {
-      state.puzzle = buildPuzzle(rows, seed, rankMap);
+  Promise.all([loadGolfPlayerIds(), loadData(state.easyMode), loadRankings(), loadTopPlayersAlltime()])
+    .then(([, rows, rankMap, alltimeSet]) => {
+      state.puzzle = buildPuzzle(rows, seed, rankMap, alltimeSet);
       updateScorebug();
       renderGrid();
       if (!hasShownHowToThisSession) {

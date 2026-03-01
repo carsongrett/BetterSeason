@@ -1,5 +1,5890 @@
 [
   {
+    "id": "1",
+    "name": "WGC-Accenture Match Play Championship",
+    "date": "2001-01-04"
+  },
+  {
+    "id": "2",
+    "name": "Mercedes Championships",
+    "date": "2001-01-11"
+  },
+  {
+    "id": "3",
+    "name": "Touchstone Energy Tucson Open",
+    "date": "2001-01-11"
+  },
+  {
+    "id": "4",
+    "name": "Sony Open in Hawaii",
+    "date": "2001-01-18"
+  },
+  {
+    "id": "5",
+    "name": "Phoenix Open",
+    "date": "2001-01-25"
+  },
+  {
+    "id": "6",
+    "name": "AT&T Pebble Beach National Pro-Am",
+    "date": "2001-02-01"
+  },
+  {
+    "id": "7",
+    "name": "Buick Invitational",
+    "date": "2001-02-08"
+  },
+  {
+    "id": "8",
+    "name": "Bob Hope Chrysler Classic",
+    "date": "2001-02-14"
+  },
+  {
+    "id": "9",
+    "name": "Nissan Open",
+    "date": "2001-02-22"
+  },
+  {
+    "id": "10",
+    "name": "Genuity Championship",
+    "date": "2001-03-01"
+  },
+  {
+    "id": "11",
+    "name": "Honda Classic",
+    "date": "2001-03-08"
+  },
+  {
+    "id": "12",
+    "name": "Bay Hill Invitational",
+    "date": "2001-03-15"
+  },
+  {
+    "id": "13",
+    "name": "THE PLAYERS Championship",
+    "date": "2001-03-22"
+  },
+  {
+    "id": "14",
+    "name": "BellSouth Classic",
+    "date": "2001-03-29"
+  },
+  {
+    "id": "15",
+    "name": "Masters Tournament",
+    "date": "2001-04-05"
+  },
+  {
+    "id": "16",
+    "name": "WORLDCOM CLASSIC - The Heritage of Golf",
+    "date": "2001-04-12"
+  },
+  {
+    "id": "17",
+    "name": "Shell Houston Open",
+    "date": "2001-04-19"
+  },
+  {
+    "id": "18",
+    "name": "Greater Greensboro Chrysler Classic",
+    "date": "2001-04-26"
+  },
+  {
+    "id": "19",
+    "name": "Compaq Classic of New Orleans",
+    "date": "2001-05-03"
+  },
+  {
+    "id": "20",
+    "name": "Verizon Byron Nelson Classic",
+    "date": "2001-05-10"
+  },
+  {
+    "id": "21",
+    "name": "MasterCard Colonial",
+    "date": "2001-05-17"
+  },
+  {
+    "id": "22",
+    "name": "Kemper Insurance Open",
+    "date": "2001-05-24"
+  },
+  {
+    "id": "23",
+    "name": "Memorial Tournament",
+    "date": "2001-05-31"
+  },
+  {
+    "id": "24",
+    "name": "FedEx St. Jude Classic",
+    "date": "2001-06-07"
+  },
+  {
+    "id": "25",
+    "name": "U.S. Open Championship",
+    "date": "2001-06-14"
+  },
+  {
+    "id": "26",
+    "name": "Buick Classic",
+    "date": "2001-06-21"
+  },
+  {
+    "id": "27",
+    "name": "Canon Greater Hartford Open",
+    "date": "2001-06-28"
+  },
+  {
+    "id": "28",
+    "name": "Advil Western Open",
+    "date": "2001-07-05"
+  },
+  {
+    "id": "29",
+    "name": "Greater Milwaukee Open",
+    "date": "2001-07-12"
+  },
+  {
+    "id": "30",
+    "name": "British Open Championship",
+    "date": "2001-07-19"
+  },
+  {
+    "id": "31",
+    "name": "B.C. Open",
+    "date": "2001-07-19"
+  },
+  {
+    "id": "32",
+    "name": "John Deere Classic",
+    "date": "2001-07-26"
+  },
+  {
+    "id": "33",
+    "name": "The INTERNATIONAL Presented by Qwest",
+    "date": "2001-08-02"
+  },
+  {
+    "id": "34",
+    "name": "Buick Open",
+    "date": "2001-08-09"
+  },
+  {
+    "id": "35",
+    "name": "PGA Championship",
+    "date": "2001-08-16"
+  },
+  {
+    "id": "36",
+    "name": "WGC-NEC Invitational",
+    "date": "2001-08-23"
+  },
+  {
+    "id": "37",
+    "name": "Reno-Tahoe Open",
+    "date": "2001-08-23"
+  },
+  {
+    "id": "38",
+    "name": "Air Canada Championship",
+    "date": "2001-08-30"
+  },
+  {
+    "id": "39",
+    "name": "Bell Canadian Open",
+    "date": "2001-09-06"
+  },
+  {
+    "id": "40",
+    "name": "WGC-American Express Championship",
+    "date": "2001-09-13"
+  },
+  {
+    "id": "41",
+    "name": "Tampa Bay Classic presented by Buick",
+    "date": "2001-09-13"
+  },
+  {
+    "id": "42",
+    "name": "Marconi Pennsylvania Classic",
+    "date": "2001-09-20"
+  },
+  {
+    "id": "43",
+    "name": "Texas Open at LaCantera",
+    "date": "2001-09-27"
+  },
+  {
+    "id": "630",
+    "name": "Ryder Cup",
+    "date": "2001-09-27"
+  },
+  {
+    "id": "44",
+    "name": "Michelob Championship at Kingsmill",
+    "date": "2001-10-04"
+  },
+  {
+    "id": "45",
+    "name": "Invensys Classic at Las Vegas",
+    "date": "2001-10-10"
+  },
+  {
+    "id": "46",
+    "name": "National Car Rental Golf Classic Disney",
+    "date": "2001-10-18"
+  },
+  {
+    "id": "47",
+    "name": "Buick Challenge",
+    "date": "2001-10-25"
+  },
+  {
+    "id": "48",
+    "name": "THE TOUR Championship",
+    "date": "2001-11-01"
+  },
+  {
+    "id": "49",
+    "name": "Southern Farm Bureau Classic",
+    "date": "2001-11-01"
+  },
+  {
+    "id": "65",
+    "name": "Mercedes Championships",
+    "date": "2002-01-03"
+  },
+  {
+    "id": "66",
+    "name": "Sony Open in Hawaii",
+    "date": "2002-01-10"
+  },
+  {
+    "id": "67",
+    "name": "Bob Hope Chrysler Classic",
+    "date": "2002-01-16"
+  },
+  {
+    "id": "68",
+    "name": "Phoenix Open",
+    "date": "2002-01-24"
+  },
+  {
+    "id": "69",
+    "name": "AT&T Pebble Beach National Pro-Am",
+    "date": "2002-01-31"
+  },
+  {
+    "id": "70",
+    "name": "Buick Invitational",
+    "date": "2002-02-07"
+  },
+  {
+    "id": "71",
+    "name": "Nissan Open",
+    "date": "2002-02-14"
+  },
+  {
+    "id": "73",
+    "name": "Touchstone Energy Tucson Open",
+    "date": "2002-02-21"
+  },
+  {
+    "id": "72",
+    "name": "WGC-Accenture Match Play Championship",
+    "date": "2002-02-24"
+  },
+  {
+    "id": "74",
+    "name": "Genuity Championship",
+    "date": "2002-02-28"
+  },
+  {
+    "id": "75",
+    "name": "The Honda Classic",
+    "date": "2002-03-07"
+  },
+  {
+    "id": "76",
+    "name": "Bay Hill Invitational presented by Cooper Tires",
+    "date": "2002-03-14"
+  },
+  {
+    "id": "77",
+    "name": "THE PLAYERS Championship",
+    "date": "2002-03-21"
+  },
+  {
+    "id": "78",
+    "name": "Shell Houston Open",
+    "date": "2002-03-28"
+  },
+  {
+    "id": "79",
+    "name": "BellSouth Classic",
+    "date": "2002-04-04"
+  },
+  {
+    "id": "80",
+    "name": "Masters Tournament",
+    "date": "2002-04-11"
+  },
+  {
+    "id": "81",
+    "name": "WORLDCOM CLASSIC - The Heritage of Golf",
+    "date": "2002-04-18"
+  },
+  {
+    "id": "82",
+    "name": "Greater Greensboro Chrysler Classic",
+    "date": "2002-04-25"
+  },
+  {
+    "id": "83",
+    "name": "Compaq Classic of New Orleans",
+    "date": "2002-05-02"
+  },
+  {
+    "id": "84",
+    "name": "Verizon Byron Nelson Classic",
+    "date": "2002-05-09"
+  },
+  {
+    "id": "85",
+    "name": "MasterCard Colonial",
+    "date": "2002-05-16"
+  },
+  {
+    "id": "86",
+    "name": "Memorial Tournament",
+    "date": "2002-05-23"
+  },
+  {
+    "id": "87",
+    "name": "Kemper Insurance Open",
+    "date": "2002-05-30"
+  },
+  {
+    "id": "88",
+    "name": "Buick Classic",
+    "date": "2002-06-06"
+  },
+  {
+    "id": "89",
+    "name": "U.S. Open Championship",
+    "date": "2002-06-13"
+  },
+  {
+    "id": "90",
+    "name": "Canon Greater Hartford Open",
+    "date": "2002-06-20"
+  },
+  {
+    "id": "91",
+    "name": "FedEx St. Jude Classic",
+    "date": "2002-06-27"
+  },
+  {
+    "id": "92",
+    "name": "Advil Western Open",
+    "date": "2002-07-04"
+  },
+  {
+    "id": "93",
+    "name": "Greater Milwaukee Open",
+    "date": "2002-07-11"
+  },
+  {
+    "id": "94",
+    "name": "British Open Championship",
+    "date": "2002-07-18"
+  },
+  {
+    "id": "95",
+    "name": "B.C. Open",
+    "date": "2002-07-18"
+  },
+  {
+    "id": "96",
+    "name": "John Deere Classic",
+    "date": "2002-07-25"
+  },
+  {
+    "id": "97",
+    "name": "The INTERNATIONAL Presented by Qwest",
+    "date": "2002-08-01"
+  },
+  {
+    "id": "98",
+    "name": "Buick Open",
+    "date": "2002-08-08"
+  },
+  {
+    "id": "50",
+    "name": "PGA Championship",
+    "date": "2002-08-15"
+  },
+  {
+    "id": "51",
+    "name": "WGC-NEC Invitational",
+    "date": "2002-08-22"
+  },
+  {
+    "id": "52",
+    "name": "Reno-Tahoe Open",
+    "date": "2002-08-22"
+  },
+  {
+    "id": "53",
+    "name": "Air Canada Championship",
+    "date": "2002-08-29"
+  },
+  {
+    "id": "54",
+    "name": "Bell Canadian Open",
+    "date": "2002-09-05"
+  },
+  {
+    "id": "55",
+    "name": "SEI Pennsylvania Classic",
+    "date": "2002-09-12"
+  },
+  {
+    "id": "56",
+    "name": "WGC-American Express Championship",
+    "date": "2002-09-19"
+  },
+  {
+    "id": "57",
+    "name": "Tampa Bay Classic presented by Buick",
+    "date": "2002-09-19"
+  },
+  {
+    "id": "58",
+    "name": "Valero Texas Open",
+    "date": "2002-09-26"
+  },
+  {
+    "id": "632",
+    "name": "Ryder Cup",
+    "date": "2002-09-26"
+  },
+  {
+    "id": "59",
+    "name": "Michelob Championship at Kingsmill",
+    "date": "2002-10-03"
+  },
+  {
+    "id": "60",
+    "name": "Invensys Classic at Las Vegas",
+    "date": "2002-10-09"
+  },
+  {
+    "id": "61",
+    "name": "Disney Golf Classic",
+    "date": "2002-10-17"
+  },
+  {
+    "id": "62",
+    "name": "Buick Challenge",
+    "date": "2002-10-24"
+  },
+  {
+    "id": "63",
+    "name": "THE TOUR Championship presented by Coca-Cola",
+    "date": "2002-10-31"
+  },
+  {
+    "id": "64",
+    "name": "Southern Farm Bureau Classic",
+    "date": "2002-10-31"
+  },
+  {
+    "id": "114",
+    "name": "Mercedes Championships",
+    "date": "2003-01-09"
+  },
+  {
+    "id": "115",
+    "name": "Sony Open in Hawaii",
+    "date": "2003-01-16"
+  },
+  {
+    "id": "116",
+    "name": "Phoenix Open",
+    "date": "2003-01-23"
+  },
+  {
+    "id": "117",
+    "name": "Bob Hope Chrysler Classic",
+    "date": "2003-01-29"
+  },
+  {
+    "id": "118",
+    "name": "AT&T Pebble Beach National Pro-Am",
+    "date": "2003-02-06"
+  },
+  {
+    "id": "119",
+    "name": "Buick Invitational",
+    "date": "2003-02-13"
+  },
+  {
+    "id": "120",
+    "name": "Nissan Open",
+    "date": "2003-02-20"
+  },
+  {
+    "id": "113",
+    "name": "WGC-Accenture Match Play Championship",
+    "date": "2003-02-27"
+  },
+  {
+    "id": "121",
+    "name": "Chrysler Classic of Tucson",
+    "date": "2003-02-27"
+  },
+  {
+    "id": "122",
+    "name": "Ford Championship at Doral",
+    "date": "2003-03-06"
+  },
+  {
+    "id": "123",
+    "name": "The Honda Classic",
+    "date": "2003-03-13"
+  },
+  {
+    "id": "124",
+    "name": "Bay Hill Invitational presented by Cooper Tires",
+    "date": "2003-03-20"
+  },
+  {
+    "id": "125",
+    "name": "THE PLAYERS Championship",
+    "date": "2003-03-27"
+  },
+  {
+    "id": "126",
+    "name": "BellSouth Classic",
+    "date": "2003-04-03"
+  },
+  {
+    "id": "127",
+    "name": "Masters Tournament",
+    "date": "2003-04-10"
+  },
+  {
+    "id": "128",
+    "name": "MCI Heritage",
+    "date": "2003-04-17"
+  },
+  {
+    "id": "129",
+    "name": "Shell Houston Open",
+    "date": "2003-04-24"
+  },
+  {
+    "id": "130",
+    "name": "HP Classic of New Orleans",
+    "date": "2003-05-01"
+  },
+  {
+    "id": "132",
+    "name": "EDS Byron Nelson Championship",
+    "date": "2003-05-15"
+  },
+  {
+    "id": "133",
+    "name": "Bank of America Colonial",
+    "date": "2003-05-22"
+  },
+  {
+    "id": "134",
+    "name": "the Memorial Tournament",
+    "date": "2003-05-29"
+  },
+  {
+    "id": "135",
+    "name": "FBR Capital Open",
+    "date": "2003-06-05"
+  },
+  {
+    "id": "136",
+    "name": "U.S. Open Championship",
+    "date": "2003-06-12"
+  },
+  {
+    "id": "137",
+    "name": "Buick Classic",
+    "date": "2003-06-19"
+  },
+  {
+    "id": "138",
+    "name": "FedEx St. Jude Classic",
+    "date": "2003-06-26"
+  },
+  {
+    "id": "139",
+    "name": "100th Western Open presented by Golf Digest",
+    "date": "2003-07-03"
+  },
+  {
+    "id": "140",
+    "name": "Greater Milwaukee Open",
+    "date": "2003-07-10"
+  },
+  {
+    "id": "142",
+    "name": "British Open Championship",
+    "date": "2003-07-17"
+  },
+  {
+    "id": "143",
+    "name": "B.C. Open",
+    "date": "2003-07-17"
+  },
+  {
+    "id": "144",
+    "name": "Greater Hartford Open",
+    "date": "2003-07-24"
+  },
+  {
+    "id": "145",
+    "name": "Buick Open",
+    "date": "2003-07-31"
+  },
+  {
+    "id": "146",
+    "name": "The INTERNATIONAL",
+    "date": "2003-08-07"
+  },
+  {
+    "id": "99",
+    "name": "PGA Championship",
+    "date": "2003-08-14"
+  },
+  {
+    "id": "100",
+    "name": "WGC-NEC Invitational",
+    "date": "2003-08-21"
+  },
+  {
+    "id": "101",
+    "name": "Reno Tahoe Open",
+    "date": "2003-08-21"
+  },
+  {
+    "id": "141",
+    "name": "Deutsche Bank Championship",
+    "date": "2003-08-29"
+  },
+  {
+    "id": "102",
+    "name": "Bell Canadian Open",
+    "date": "2003-09-04"
+  },
+  {
+    "id": "103",
+    "name": "John Deere Classic",
+    "date": "2003-09-11"
+  },
+  {
+    "id": "104",
+    "name": "84 Lumber Classic of Pennsylvania",
+    "date": "2003-09-18"
+  },
+  {
+    "id": "105",
+    "name": "Valero Texas Open",
+    "date": "2003-09-25"
+  },
+  {
+    "id": "106",
+    "name": "WGC-American Express Championship",
+    "date": "2003-10-02"
+  },
+  {
+    "id": "107",
+    "name": "Southern Farm Bureau Classic",
+    "date": "2003-10-02"
+  },
+  {
+    "id": "108",
+    "name": "Las Vegas Invitational",
+    "date": "2003-10-08"
+  },
+  {
+    "id": "109",
+    "name": "Chrysler Classic of Greensboro",
+    "date": "2003-10-16"
+  },
+  {
+    "id": "110",
+    "name": "FUNAI Classic at the WALT DISNEY WORLD Resort",
+    "date": "2003-10-23"
+  },
+  {
+    "id": "111",
+    "name": "Chrysler Championship",
+    "date": "2003-10-30"
+  },
+  {
+    "id": "112",
+    "name": "THE TOUR Championship presented by Coca-Cola",
+    "date": "2003-11-06"
+  },
+  {
+    "id": "634",
+    "name": "The Presidents Cup",
+    "date": "2003-11-20"
+  },
+  {
+    "id": "147",
+    "name": "Mercedes Championships",
+    "date": "2004-01-08"
+  },
+  {
+    "id": "153",
+    "name": "Sony Open in Hawaii",
+    "date": "2004-01-15"
+  },
+  {
+    "id": "149",
+    "name": "Bob Hope Chrysler Classic",
+    "date": "2004-01-21"
+  },
+  {
+    "id": "150",
+    "name": "FBR Open",
+    "date": "2004-01-29"
+  },
+  {
+    "id": "151",
+    "name": "AT&T Pebble Beach National Pro-Am",
+    "date": "2004-02-05"
+  },
+  {
+    "id": "152",
+    "name": "Buick Invitational",
+    "date": "2004-02-12"
+  },
+  {
+    "id": "154",
+    "name": "Nissan Open",
+    "date": "2004-02-19"
+  },
+  {
+    "id": "189",
+    "name": "WGC-Accenture Match Play Championship",
+    "date": "2004-02-25"
+  },
+  {
+    "id": "148",
+    "name": "Chrysler Classic of Tucson",
+    "date": "2004-02-26"
+  },
+  {
+    "id": "155",
+    "name": "Ford Championship at Doral",
+    "date": "2004-03-04"
+  },
+  {
+    "id": "156",
+    "name": "The Honda Classic",
+    "date": "2004-03-11"
+  },
+  {
+    "id": "157",
+    "name": "Bay Hill Invitational Presented by MasterCard",
+    "date": "2004-03-18"
+  },
+  {
+    "id": "159",
+    "name": "THE PLAYERS Championship",
+    "date": "2004-03-25"
+  },
+  {
+    "id": "160",
+    "name": "BellSouth Classic",
+    "date": "2004-04-01"
+  },
+  {
+    "id": "161",
+    "name": "Masters Tournament",
+    "date": "2004-04-08"
+  },
+  {
+    "id": "162",
+    "name": "MCI Heritage",
+    "date": "2004-04-15"
+  },
+  {
+    "id": "164",
+    "name": "Shell Houston Open",
+    "date": "2004-04-22"
+  },
+  {
+    "id": "158",
+    "name": "HP Classic of New Orleans",
+    "date": "2004-04-29"
+  },
+  {
+    "id": "192",
+    "name": "Wachovia Championship",
+    "date": "2004-05-06"
+  },
+  {
+    "id": "165",
+    "name": "EDS Byron Nelson Championship",
+    "date": "2004-05-13"
+  },
+  {
+    "id": "166",
+    "name": "Bank of America Colonial",
+    "date": "2004-05-20"
+  },
+  {
+    "id": "171",
+    "name": "FedEx St. Jude Classic",
+    "date": "2004-05-27"
+  },
+  {
+    "id": "168",
+    "name": "the Memorial Tournament",
+    "date": "2004-06-03"
+  },
+  {
+    "id": "169",
+    "name": "Buick Classic",
+    "date": "2004-06-10"
+  },
+  {
+    "id": "170",
+    "name": "U.S. Open Championship",
+    "date": "2004-06-17"
+  },
+  {
+    "id": "167",
+    "name": "Booz Allen Classic",
+    "date": "2004-06-24"
+  },
+  {
+    "id": "173",
+    "name": "Cialis Western Open",
+    "date": "2004-07-01"
+  },
+  {
+    "id": "182",
+    "name": "John Deere Classic",
+    "date": "2004-07-08"
+  },
+  {
+    "id": "174",
+    "name": "British Open Championship",
+    "date": "2004-07-15"
+  },
+  {
+    "id": "183",
+    "name": "B.C. Open",
+    "date": "2004-07-15"
+  },
+  {
+    "id": "180",
+    "name": "U.S. Bank Championship in Milwaukee",
+    "date": "2004-07-22"
+  },
+  {
+    "id": "176",
+    "name": "Buick Open",
+    "date": "2004-07-29"
+  },
+  {
+    "id": "178",
+    "name": "The INTERNATIONAL",
+    "date": "2004-08-05"
+  },
+  {
+    "id": "177",
+    "name": "PGA Championship",
+    "date": "2004-08-12"
+  },
+  {
+    "id": "179",
+    "name": "WGC-NEC Invitational",
+    "date": "2004-08-19"
+  },
+  {
+    "id": "190",
+    "name": "Reno-Tahoe Open",
+    "date": "2004-08-19"
+  },
+  {
+    "id": "172",
+    "name": "Buick Championship",
+    "date": "2004-08-26"
+  },
+  {
+    "id": "193",
+    "name": "Deutsche Bank Championship",
+    "date": "2004-09-03"
+  },
+  {
+    "id": "181",
+    "name": "Bell Canadian Open",
+    "date": "2004-09-09"
+  },
+  {
+    "id": "184",
+    "name": "Valero Texas Open",
+    "date": "2004-09-16"
+  },
+  {
+    "id": "195",
+    "name": "Ryder Cup",
+    "date": "2004-09-17"
+  },
+  {
+    "id": "187",
+    "name": "84 LUMBER Classic",
+    "date": "2004-09-23"
+  },
+  {
+    "id": "175",
+    "name": "Southern Farm Bureau Classic",
+    "date": "2004-09-30"
+  },
+  {
+    "id": "191",
+    "name": "WGC-American Express Championship",
+    "date": "2004-09-30"
+  },
+  {
+    "id": "194",
+    "name": "Michelin Championship at Las Vegas",
+    "date": "2004-10-07"
+  },
+  {
+    "id": "163",
+    "name": "Chrysler Classic of Greensboro",
+    "date": "2004-10-14"
+  },
+  {
+    "id": "185",
+    "name": "FUNAI Classic at the WALT DISNEY WORLD Resort",
+    "date": "2004-10-21"
+  },
+  {
+    "id": "188",
+    "name": "Chrysler Championship",
+    "date": "2004-10-28"
+  },
+  {
+    "id": "186",
+    "name": "THE TOUR Championship presented by Coca-Cola",
+    "date": "2004-11-04"
+  },
+  {
+    "id": "245",
+    "name": "WGC-World Cup",
+    "date": "2004-11-18"
+  },
+  {
+    "id": "196",
+    "name": "Mercedes Championships",
+    "date": "2005-01-06"
+  },
+  {
+    "id": "202",
+    "name": "Sony Open in Hawaii",
+    "date": "2005-01-13"
+  },
+  {
+    "id": "201",
+    "name": "Buick Invitational",
+    "date": "2005-01-20"
+  },
+  {
+    "id": "198",
+    "name": "Bob Hope Chrysler Classic",
+    "date": "2005-01-26"
+  },
+  {
+    "id": "199",
+    "name": "FBR Open",
+    "date": "2005-02-03"
+  },
+  {
+    "id": "200",
+    "name": "AT&T Pebble Beach National Pro-Am",
+    "date": "2005-02-10"
+  },
+  {
+    "id": "203",
+    "name": "Nissan Open",
+    "date": "2005-02-17"
+  },
+  {
+    "id": "240",
+    "name": "WGC-Accenture Match Play Championship",
+    "date": "2005-02-23"
+  },
+  {
+    "id": "197",
+    "name": "Chrysler Classic of Tucson",
+    "date": "2005-02-24"
+  },
+  {
+    "id": "204",
+    "name": "Ford Championship at Doral",
+    "date": "2005-03-03"
+  },
+  {
+    "id": "205",
+    "name": "The Honda Classic",
+    "date": "2005-03-10"
+  },
+  {
+    "id": "206",
+    "name": "Bay Hill Invitational Presented by MasterCard",
+    "date": "2005-03-17"
+  },
+  {
+    "id": "208",
+    "name": "THE PLAYERS Championship",
+    "date": "2005-03-24"
+  },
+  {
+    "id": "209",
+    "name": "BellSouth Classic",
+    "date": "2005-03-31"
+  },
+  {
+    "id": "210",
+    "name": "Masters Tournament",
+    "date": "2005-04-07"
+  },
+  {
+    "id": "211",
+    "name": "MCI Heritage",
+    "date": "2005-04-14"
+  },
+  {
+    "id": "213",
+    "name": "Shell Houston Open",
+    "date": "2005-04-21"
+  },
+  {
+    "id": "207",
+    "name": "Zurich Classic of New Orleans",
+    "date": "2005-04-28"
+  },
+  {
+    "id": "243",
+    "name": "Wachovia Championship",
+    "date": "2005-05-05"
+  },
+  {
+    "id": "214",
+    "name": "EDS Byron Nelson Championship",
+    "date": "2005-05-12"
+  },
+  {
+    "id": "215",
+    "name": "Bank of America Colonial",
+    "date": "2005-05-19"
+  },
+  {
+    "id": "220",
+    "name": "FedEx St. Jude Classic",
+    "date": "2005-05-26"
+  },
+  {
+    "id": "217",
+    "name": "the Memorial Tournament",
+    "date": "2005-06-02"
+  },
+  {
+    "id": "216",
+    "name": "Booz Allen Classic",
+    "date": "2005-06-09"
+  },
+  {
+    "id": "219",
+    "name": "U.S. Open Championship",
+    "date": "2005-06-16"
+  },
+  {
+    "id": "218",
+    "name": "Barclays Classic",
+    "date": "2005-06-23"
+  },
+  {
+    "id": "222",
+    "name": "Cialis Western Open",
+    "date": "2005-06-30"
+  },
+  {
+    "id": "231",
+    "name": "John Deere Classic",
+    "date": "2005-07-07"
+  },
+  {
+    "id": "223",
+    "name": "British Open Championship",
+    "date": "2005-07-14"
+  },
+  {
+    "id": "233",
+    "name": "B.C. Open",
+    "date": "2005-07-14"
+  },
+  {
+    "id": "229",
+    "name": "U.S. Bank Championship in Milwaukee",
+    "date": "2005-07-21"
+  },
+  {
+    "id": "225",
+    "name": "Buick Open",
+    "date": "2005-07-28"
+  },
+  {
+    "id": "227",
+    "name": "The INTERNATIONAL",
+    "date": "2005-08-04"
+  },
+  {
+    "id": "226",
+    "name": "PGA Championship",
+    "date": "2005-08-11"
+  },
+  {
+    "id": "228",
+    "name": "WGC-NEC Invitational",
+    "date": "2005-08-18"
+  },
+  {
+    "id": "241",
+    "name": "Reno-Tahoe Open",
+    "date": "2005-08-18"
+  },
+  {
+    "id": "221",
+    "name": "Buick Championship",
+    "date": "2005-08-25"
+  },
+  {
+    "id": "244",
+    "name": "Deutsche Bank Championship",
+    "date": "2005-09-02"
+  },
+  {
+    "id": "230",
+    "name": "Bell Canadian Open",
+    "date": "2005-09-08"
+  },
+  {
+    "id": "238",
+    "name": "84 LUMBER Classic",
+    "date": "2005-09-15"
+  },
+  {
+    "id": "232",
+    "name": "The Presidents Cup",
+    "date": "2005-09-22"
+  },
+  {
+    "id": "235",
+    "name": "Valero Texas Open",
+    "date": "2005-09-22"
+  },
+  {
+    "id": "212",
+    "name": "Chrysler Classic of Greensboro",
+    "date": "2005-09-29"
+  },
+  {
+    "id": "242",
+    "name": "WGC-American Express Championship",
+    "date": "2005-10-06"
+  },
+  {
+    "id": "234",
+    "name": "Michelin Championship at Las Vegas",
+    "date": "2005-10-13"
+  },
+  {
+    "id": "236",
+    "name": "FUNAI Classic at the WALT DISNEY WORLD Resort",
+    "date": "2005-10-20"
+  },
+  {
+    "id": "239",
+    "name": "Chrysler Championship",
+    "date": "2005-10-27"
+  },
+  {
+    "id": "224",
+    "name": "Southern Farm Bureau Classic",
+    "date": "2005-11-03"
+  },
+  {
+    "id": "237",
+    "name": "THE TOUR Championship presented by Coca-Cola",
+    "date": "2005-11-03"
+  },
+  {
+    "id": "248",
+    "name": "Mercedes Championships",
+    "date": "2006-01-05"
+  },
+  {
+    "id": "254",
+    "name": "Sony Open in Hawaii",
+    "date": "2006-01-12"
+  },
+  {
+    "id": "250",
+    "name": "Bob Hope Chrysler Classic",
+    "date": "2006-01-18"
+  },
+  {
+    "id": "253",
+    "name": "Buick Invitational",
+    "date": "2006-01-26"
+  },
+  {
+    "id": "251",
+    "name": "FBR Open",
+    "date": "2006-02-02"
+  },
+  {
+    "id": "252",
+    "name": "AT&T Pebble Beach National Pro-Am",
+    "date": "2006-02-09"
+  },
+  {
+    "id": "255",
+    "name": "Nissan Open",
+    "date": "2006-02-16"
+  },
+  {
+    "id": "280",
+    "name": "World Golf Championships-Accenture Match Play Cham",
+    "date": "2006-02-22"
+  },
+  {
+    "id": "249",
+    "name": "Chrysler Classic of Tucson",
+    "date": "2006-02-23"
+  },
+  {
+    "id": "256",
+    "name": "Ford Championship at Doral",
+    "date": "2006-03-02"
+  },
+  {
+    "id": "257",
+    "name": "The Honda Classic",
+    "date": "2006-03-09"
+  },
+  {
+    "id": "258",
+    "name": "Bay Hill Invitational Presented by MasterCard",
+    "date": "2006-03-16"
+  },
+  {
+    "id": "259",
+    "name": "THE PLAYERS Championship",
+    "date": "2006-03-23"
+  },
+  {
+    "id": "260",
+    "name": "BellSouth Classic",
+    "date": "2006-03-30"
+  },
+  {
+    "id": "261",
+    "name": "Masters Tournament",
+    "date": "2006-04-06"
+  },
+  {
+    "id": "262",
+    "name": "Verizon Heritage",
+    "date": "2006-04-13"
+  },
+  {
+    "id": "263",
+    "name": "Shell Houston Open",
+    "date": "2006-04-20"
+  },
+  {
+    "id": "294",
+    "name": "Zurich Classic of New Orleans",
+    "date": "2006-04-27"
+  },
+  {
+    "id": "282",
+    "name": "Wachovia Championship",
+    "date": "2006-05-04"
+  },
+  {
+    "id": "264",
+    "name": "EDS Byron Nelson Championship",
+    "date": "2006-05-11"
+  },
+  {
+    "id": "265",
+    "name": "Bank of America Colonial",
+    "date": "2006-05-18"
+  },
+  {
+    "id": "270",
+    "name": "FedEx St. Jude Classic",
+    "date": "2006-05-25"
+  },
+  {
+    "id": "267",
+    "name": "the Memorial Tournament",
+    "date": "2006-06-01"
+  },
+  {
+    "id": "268",
+    "name": "Barclays Classic",
+    "date": "2006-06-08"
+  },
+  {
+    "id": "269",
+    "name": "U.S. Open Championship",
+    "date": "2006-06-15"
+  },
+  {
+    "id": "266",
+    "name": "Booz Allen Classic",
+    "date": "2006-06-22"
+  },
+  {
+    "id": "271",
+    "name": "Buick Championship",
+    "date": "2006-06-29"
+  },
+  {
+    "id": "272",
+    "name": "Cialis Western Open",
+    "date": "2006-07-06"
+  },
+  {
+    "id": "278",
+    "name": "John Deere Classic",
+    "date": "2006-07-13"
+  },
+  {
+    "id": "279",
+    "name": "B.C. Open presented by Turning Stone Resort",
+    "date": "2006-07-20"
+  },
+  {
+    "id": "295",
+    "name": "British Open Championship",
+    "date": "2006-07-20"
+  },
+  {
+    "id": "276",
+    "name": "U.S. Bank Championship in Milwaukee",
+    "date": "2006-07-27"
+  },
+  {
+    "id": "273",
+    "name": "Buick Open",
+    "date": "2006-08-03"
+  },
+  {
+    "id": "275",
+    "name": "The INTERNATIONAL",
+    "date": "2006-08-10"
+  },
+  {
+    "id": "274",
+    "name": "PGA Championship",
+    "date": "2006-08-17"
+  },
+  {
+    "id": "281",
+    "name": "Reno-Tahoe Open",
+    "date": "2006-08-24"
+  },
+  {
+    "id": "296",
+    "name": "World Golf Championships-Bridgestone Invitational",
+    "date": "2006-08-24"
+  },
+  {
+    "id": "283",
+    "name": "Deutsche Bank Championship",
+    "date": "2006-09-01"
+  },
+  {
+    "id": "277",
+    "name": "Canadian Open",
+    "date": "2006-09-07"
+  },
+  {
+    "id": "290",
+    "name": "84 LUMBER Classic",
+    "date": "2006-09-14"
+  },
+  {
+    "id": "287",
+    "name": "Valero Texas Open",
+    "date": "2006-09-21"
+  },
+  {
+    "id": "292",
+    "name": "Ryder Cup",
+    "date": "2006-09-22"
+  },
+  {
+    "id": "285",
+    "name": "Southern Farm Bureau Classic",
+    "date": "2006-09-28"
+  },
+  {
+    "id": "293",
+    "name": "World Golf Championships-American Express Champion",
+    "date": "2006-09-28"
+  },
+  {
+    "id": "284",
+    "name": "Chrysler Classic of Greensboro",
+    "date": "2006-10-05"
+  },
+  {
+    "id": "286",
+    "name": "Frys.com Open",
+    "date": "2006-10-12"
+  },
+  {
+    "id": "288",
+    "name": "FUNAI Classic at the WALT DISNEY WORLD Resort",
+    "date": "2006-10-19"
+  },
+  {
+    "id": "291",
+    "name": "Chrysler Championship",
+    "date": "2006-10-26"
+  },
+  {
+    "id": "289",
+    "name": "THE TOUR Championship presented by Coca-Cola",
+    "date": "2006-11-02"
+  },
+  {
+    "id": "345",
+    "name": "WGC-World Cup",
+    "date": "2006-12-07"
+  },
+  {
+    "id": "297",
+    "name": "Mercedes-Benz Championship",
+    "date": "2007-01-04"
+  },
+  {
+    "id": "302",
+    "name": "Sony Open in Hawaii",
+    "date": "2007-01-11"
+  },
+  {
+    "id": "298",
+    "name": "Bob Hope Chrysler Classic",
+    "date": "2007-01-17"
+  },
+  {
+    "id": "301",
+    "name": "Buick Invitational",
+    "date": "2007-01-25"
+  },
+  {
+    "id": "299",
+    "name": "FBR Open",
+    "date": "2007-02-01"
+  },
+  {
+    "id": "300",
+    "name": "AT&T Pebble Beach National Pro-Am",
+    "date": "2007-02-08"
+  },
+  {
+    "id": "303",
+    "name": "Nissan Open",
+    "date": "2007-02-15"
+  },
+  {
+    "id": "331",
+    "name": "World Golf Championships-Accenture Match Play Cham",
+    "date": "2007-02-21"
+  },
+  {
+    "id": "335",
+    "name": "Mayakoba Golf Classic at Riviera Maya-Cancun",
+    "date": "2007-02-22"
+  },
+  {
+    "id": "304",
+    "name": "The Honda Classic",
+    "date": "2007-03-01"
+  },
+  {
+    "id": "343",
+    "name": "PODS Championship",
+    "date": "2007-03-08"
+  },
+  {
+    "id": "305",
+    "name": "Arnold Palmer Invitational presented by MasterCard",
+    "date": "2007-03-15"
+  },
+  {
+    "id": "344",
+    "name": "World Golf Championships-CA Championship",
+    "date": "2007-03-22"
+  },
+  {
+    "id": "311",
+    "name": "Shell Houston Open",
+    "date": "2007-03-29"
+  },
+  {
+    "id": "309",
+    "name": "Masters Tournament",
+    "date": "2007-04-05"
+  },
+  {
+    "id": "310",
+    "name": "Verizon Heritage",
+    "date": "2007-04-12"
+  },
+  {
+    "id": "306",
+    "name": "Zurich Classic of New Orleans",
+    "date": "2007-04-19"
+  },
+  {
+    "id": "312",
+    "name": "EDS Byron Nelson Championship",
+    "date": "2007-04-26"
+  },
+  {
+    "id": "333",
+    "name": "Wachovia Championship",
+    "date": "2007-05-03"
+  },
+  {
+    "id": "307",
+    "name": "THE PLAYERS Championship",
+    "date": "2007-05-10"
+  },
+  {
+    "id": "308",
+    "name": "AT&T Classic",
+    "date": "2007-05-17"
+  },
+  {
+    "id": "313",
+    "name": "Crowne Plaza Invitational at Colonial",
+    "date": "2007-05-24"
+  },
+  {
+    "id": "314",
+    "name": "the Memorial Tournament presented by Morgan Stanle",
+    "date": "2007-05-31"
+  },
+  {
+    "id": "317",
+    "name": "Stanford St. Jude Championship",
+    "date": "2007-06-07"
+  },
+  {
+    "id": "316",
+    "name": "U.S. Open Championship",
+    "date": "2007-06-14"
+  },
+  {
+    "id": "318",
+    "name": "Travelers Championship",
+    "date": "2007-06-21"
+  },
+  {
+    "id": "321",
+    "name": "Buick Open",
+    "date": "2007-06-28"
+  },
+  {
+    "id": "346",
+    "name": "AT&T National",
+    "date": "2007-07-05"
+  },
+  {
+    "id": "327",
+    "name": "John Deere Classic",
+    "date": "2007-07-12"
+  },
+  {
+    "id": "320",
+    "name": "British Open Championship",
+    "date": "2007-07-19"
+  },
+  {
+    "id": "325",
+    "name": "U.S. Bank Championship in Milwaukee",
+    "date": "2007-07-19"
+  },
+  {
+    "id": "326",
+    "name": "Canadian Open presented by Franklin Templeton Inve",
+    "date": "2007-07-26"
+  },
+  {
+    "id": "324",
+    "name": "World Golf Championships-Bridgestone Invitational",
+    "date": "2007-08-02"
+  },
+  {
+    "id": "332",
+    "name": "Reno-Tahoe Open",
+    "date": "2007-08-02"
+  },
+  {
+    "id": "322",
+    "name": "PGA Championship",
+    "date": "2007-08-09"
+  },
+  {
+    "id": "339",
+    "name": "Wyndham Championship",
+    "date": "2007-08-16"
+  },
+  {
+    "id": "315",
+    "name": "The Barclays",
+    "date": "2007-08-23"
+  },
+  {
+    "id": "334",
+    "name": "Deutsche Bank Championship",
+    "date": "2007-08-31"
+  },
+  {
+    "id": "319",
+    "name": "BMW Championship",
+    "date": "2007-09-06"
+  },
+  {
+    "id": "330",
+    "name": "THE TOUR Championship presented by Coca-Cola",
+    "date": "2007-09-13"
+  },
+  {
+    "id": "336",
+    "name": "Turning Stone Resort Championship",
+    "date": "2007-09-20"
+  },
+  {
+    "id": "340",
+    "name": "Viking Classic",
+    "date": "2007-09-27"
+  },
+  {
+    "id": "341",
+    "name": "The Presidents Cup",
+    "date": "2007-09-27"
+  },
+  {
+    "id": "329",
+    "name": "Valero Texas Open",
+    "date": "2007-10-04"
+  },
+  {
+    "id": "328",
+    "name": "Frys.com Open benefiting Shriners Hospitals for Ch",
+    "date": "2007-10-11"
+  },
+  {
+    "id": "337",
+    "name": "Fry's Electronics Open",
+    "date": "2007-10-18"
+  },
+  {
+    "id": "409",
+    "name": "Ginn sur Mer Classic at Tesoro",
+    "date": "2007-10-25"
+  },
+  {
+    "id": "342",
+    "name": "Children's Miracle Network Classic presented by Wa",
+    "date": "2007-11-01"
+  },
+  {
+    "id": "460",
+    "name": "PGA TOUR Qualifying Tournament",
+    "date": "2007-11-28"
+  },
+  {
+    "id": "413",
+    "name": "Mercedes-Benz Championship",
+    "date": "2008-01-03"
+  },
+  {
+    "id": "418",
+    "name": "Sony Open in Hawaii",
+    "date": "2008-01-10"
+  },
+  {
+    "id": "414",
+    "name": "Bob Hope Chrysler Classic",
+    "date": "2008-01-16"
+  },
+  {
+    "id": "417",
+    "name": "Buick Invitational",
+    "date": "2008-01-24"
+  },
+  {
+    "id": "415",
+    "name": "FBR Open",
+    "date": "2008-01-31"
+  },
+  {
+    "id": "416",
+    "name": "AT&T Pebble Beach National Pro-Am",
+    "date": "2008-02-07"
+  },
+  {
+    "id": "419",
+    "name": "Northern Trust Open",
+    "date": "2008-02-14"
+  },
+  {
+    "id": "412",
+    "name": "World Golf Championships-Accenture Match Play Cham",
+    "date": "2008-02-20"
+  },
+  {
+    "id": "454",
+    "name": "Mayakoba Golf Classic at Riviera Maya-Cancun",
+    "date": "2008-02-21"
+  },
+  {
+    "id": "420",
+    "name": "The Honda Classic",
+    "date": "2008-02-28"
+  },
+  {
+    "id": "448",
+    "name": "PODS Championship",
+    "date": "2008-03-06"
+  },
+  {
+    "id": "421",
+    "name": "Arnold Palmer Invitational presented by MasterCard",
+    "date": "2008-03-13"
+  },
+  {
+    "id": "451",
+    "name": "World Golf Championships-CA Championship",
+    "date": "2008-03-20"
+  },
+  {
+    "id": "459",
+    "name": "Puerto Rico Open presented by Banco Popular",
+    "date": "2008-03-20"
+  },
+  {
+    "id": "422",
+    "name": "Zurich Classic of New Orleans",
+    "date": "2008-03-27"
+  },
+  {
+    "id": "428",
+    "name": "Shell Houston Open",
+    "date": "2008-04-03"
+  },
+  {
+    "id": "425",
+    "name": "Masters Tournament",
+    "date": "2008-04-10"
+  },
+  {
+    "id": "426",
+    "name": "Verizon Heritage",
+    "date": "2008-04-17"
+  },
+  {
+    "id": "429",
+    "name": "EDS Byron Nelson Championship",
+    "date": "2008-04-24"
+  },
+  {
+    "id": "452",
+    "name": "Wachovia Championship",
+    "date": "2008-05-01"
+  },
+  {
+    "id": "423",
+    "name": "THE PLAYERS Championship",
+    "date": "2008-05-08"
+  },
+  {
+    "id": "424",
+    "name": "AT&T Classic",
+    "date": "2008-05-15"
+  },
+  {
+    "id": "430",
+    "name": "Crowne Plaza Invitational at Colonial",
+    "date": "2008-05-22"
+  },
+  {
+    "id": "431",
+    "name": "the Memorial Tournament presented by Morgan Stanle",
+    "date": "2008-05-29"
+  },
+  {
+    "id": "434",
+    "name": "Stanford St. Jude Championship",
+    "date": "2008-06-05"
+  },
+  {
+    "id": "433",
+    "name": "U.S. Open Championship",
+    "date": "2008-06-12"
+  },
+  {
+    "id": "435",
+    "name": "Travelers Championship",
+    "date": "2008-06-19"
+  },
+  {
+    "id": "438",
+    "name": "Buick Open",
+    "date": "2008-06-26"
+  },
+  {
+    "id": "457",
+    "name": "AT&T National",
+    "date": "2008-07-03"
+  },
+  {
+    "id": "443",
+    "name": "John Deere Classic",
+    "date": "2008-07-10"
+  },
+  {
+    "id": "411",
+    "name": "British Open Championship",
+    "date": "2008-07-17"
+  },
+  {
+    "id": "441",
+    "name": "U.S. Bank Championship in Milwaukee",
+    "date": "2008-07-17"
+  },
+  {
+    "id": "442",
+    "name": "RBC Canadian Open",
+    "date": "2008-07-24"
+  },
+  {
+    "id": "440",
+    "name": "World Golf Championships-Bridgestone Invitational",
+    "date": "2008-07-31"
+  },
+  {
+    "id": "450",
+    "name": "Legends Reno-Tahoe Open",
+    "date": "2008-07-31"
+  },
+  {
+    "id": "439",
+    "name": "PGA Championship",
+    "date": "2008-08-07"
+  },
+  {
+    "id": "427",
+    "name": "Wyndham Championship",
+    "date": "2008-08-14"
+  },
+  {
+    "id": "432",
+    "name": "The Barclays",
+    "date": "2008-08-21"
+  },
+  {
+    "id": "453",
+    "name": "Deutsche Bank Championship",
+    "date": "2008-08-29"
+  },
+  {
+    "id": "436",
+    "name": "BMW Championship",
+    "date": "2008-09-04"
+  },
+  {
+    "id": "437",
+    "name": "Viking Classic",
+    "date": "2008-09-18"
+  },
+  {
+    "id": "449",
+    "name": "Ryder Cup",
+    "date": "2008-09-18"
+  },
+  {
+    "id": "447",
+    "name": "THE TOUR Championship presented by Coca-Cola",
+    "date": "2008-09-25"
+  },
+  {
+    "id": "455",
+    "name": "Turning Stone Resort Championship",
+    "date": "2008-10-02"
+  },
+  {
+    "id": "445",
+    "name": "Valero Texas Open",
+    "date": "2008-10-09"
+  },
+  {
+    "id": "444",
+    "name": "Justin Timberlake Shriners Hospitals for Children ",
+    "date": "2008-10-16"
+  },
+  {
+    "id": "456",
+    "name": "Frys.com Open",
+    "date": "2008-10-23"
+  },
+  {
+    "id": "458",
+    "name": "Ginn sur Mer Classic",
+    "date": "2008-10-30"
+  },
+  {
+    "id": "446",
+    "name": "Children's Miracle Network Classic presented by Wa",
+    "date": "2008-11-06"
+  },
+  {
+    "id": "594",
+    "name": "PGA Tour Qualifying Tournament",
+    "date": "2008-12-03"
+  },
+  {
+    "id": "639",
+    "name": "Chevron World Challenge presented by Bank of Ameri",
+    "date": "2008-12-18"
+  },
+  {
+    "id": "526",
+    "name": "Mercedes-Benz Championship",
+    "date": "2009-01-08"
+  },
+  {
+    "id": "531",
+    "name": "Sony Open in Hawaii",
+    "date": "2009-01-15"
+  },
+  {
+    "id": "527",
+    "name": "The 50th Bob Hope Classic hosted by Arnold Palmer",
+    "date": "2009-01-21"
+  },
+  {
+    "id": "528",
+    "name": "FBR Open",
+    "date": "2009-01-29"
+  },
+  {
+    "id": "530",
+    "name": "Buick Invitational",
+    "date": "2009-02-05"
+  },
+  {
+    "id": "529",
+    "name": "AT&T Pebble Beach National Pro-Am",
+    "date": "2009-02-12"
+  },
+  {
+    "id": "532",
+    "name": "Northern Trust Open",
+    "date": "2009-02-19"
+  },
+  {
+    "id": "560",
+    "name": "World Golf Championships-Accenture Match Play Championship",
+    "date": "2009-02-25"
+  },
+  {
+    "id": "565",
+    "name": "Mayakoba Golf Classic at Riviera Maya-Cancun",
+    "date": "2009-02-26"
+  },
+  {
+    "id": "533",
+    "name": "The Honda Classic",
+    "date": "2009-03-05"
+  },
+  {
+    "id": "562",
+    "name": "World Golf Championships-CA Championship",
+    "date": "2009-03-12"
+  },
+  {
+    "id": "567",
+    "name": "Puerto Rico Open presented by Banco Popular",
+    "date": "2009-03-12"
+  },
+  {
+    "id": "559",
+    "name": "Transitions Championship",
+    "date": "2009-03-19"
+  },
+  {
+    "id": "534",
+    "name": "Arnold Palmer Invitational presented by MasterCard",
+    "date": "2009-03-26"
+  },
+  {
+    "id": "540",
+    "name": "Shell Houston Open",
+    "date": "2009-04-02"
+  },
+  {
+    "id": "537",
+    "name": "The Masters",
+    "date": "2009-04-09"
+  },
+  {
+    "id": "538",
+    "name": "Verizon Heritage",
+    "date": "2009-04-16"
+  },
+  {
+    "id": "535",
+    "name": "Zurich Classic of New Orleans",
+    "date": "2009-04-23"
+  },
+  {
+    "id": "563",
+    "name": "Quail Hollow Championship",
+    "date": "2009-04-30"
+  },
+  {
+    "id": "536",
+    "name": "THE PLAYERS Championship",
+    "date": "2009-05-07"
+  },
+  {
+    "id": "557",
+    "name": "Valero Texas Open",
+    "date": "2009-05-14"
+  },
+  {
+    "id": "541",
+    "name": "HP Byron Nelson Championship",
+    "date": "2009-05-21"
+  },
+  {
+    "id": "542",
+    "name": "Crowne Plaza Invitational at Colonial",
+    "date": "2009-05-28"
+  },
+  {
+    "id": "543",
+    "name": "the Memorial Tournament",
+    "date": "2009-06-04"
+  },
+  {
+    "id": "546",
+    "name": "St. Jude Classic presented by FedEx",
+    "date": "2009-06-11"
+  },
+  {
+    "id": "545",
+    "name": "U.S. Open Championship",
+    "date": "2009-06-18"
+  },
+  {
+    "id": "547",
+    "name": "Travelers Championship",
+    "date": "2009-06-25"
+  },
+  {
+    "id": "566",
+    "name": "AT&T National",
+    "date": "2009-07-02"
+  },
+  {
+    "id": "555",
+    "name": "John Deere Classic",
+    "date": "2009-07-09"
+  },
+  {
+    "id": "549",
+    "name": "British Open Championship",
+    "date": "2009-07-16"
+  },
+  {
+    "id": "553",
+    "name": "U.S. Bank Championship in Milwaukee",
+    "date": "2009-07-16"
+  },
+  {
+    "id": "554",
+    "name": "RBC Canadian Open",
+    "date": "2009-07-23"
+  },
+  {
+    "id": "550",
+    "name": "Buick Open",
+    "date": "2009-07-30"
+  },
+  {
+    "id": "552",
+    "name": "World Golf Championships-Bridgestone Invitational",
+    "date": "2009-08-06"
+  },
+  {
+    "id": "561",
+    "name": "Legends Reno-Tahoe Open",
+    "date": "2009-08-06"
+  },
+  {
+    "id": "551",
+    "name": "PGA Championship",
+    "date": "2009-08-13"
+  },
+  {
+    "id": "539",
+    "name": "Wyndham Championship",
+    "date": "2009-08-20"
+  },
+  {
+    "id": "544",
+    "name": "The Barclays",
+    "date": "2009-08-27"
+  },
+  {
+    "id": "564",
+    "name": "Deutsche Bank Championship",
+    "date": "2009-09-04"
+  },
+  {
+    "id": "548",
+    "name": "BMW Championship",
+    "date": "2009-09-10"
+  },
+  {
+    "id": "558",
+    "name": "THE TOUR Championship presented by Coca-Cola",
+    "date": "2009-09-24"
+  },
+  {
+    "id": "627",
+    "name": "Turning Stone Resort Championship",
+    "date": "2009-10-01"
+  },
+  {
+    "id": "556",
+    "name": "The Presidents Cup",
+    "date": "2009-10-08"
+  },
+  {
+    "id": "625",
+    "name": "Justin Timberlake Shriners Hospitals for Children Open",
+    "date": "2009-10-15"
+  },
+  {
+    "id": "628",
+    "name": "Frys.com Open",
+    "date": "2009-10-22"
+  },
+  {
+    "id": "624",
+    "name": "Viking Classic",
+    "date": "2009-10-29"
+  },
+  {
+    "id": "626",
+    "name": "Children's Miracle Network Classic",
+    "date": "2009-11-12"
+  },
+  {
+    "id": "699",
+    "name": "PGA Tour Qualifying Tournament",
+    "date": "2009-12-02"
+  },
+  {
+    "id": "764",
+    "name": "Hyundai Tournament of Champions",
+    "date": "2010-01-07"
+  },
+  {
+    "id": "769",
+    "name": "Sony Open in Hawaii",
+    "date": "2010-01-14"
+  },
+  {
+    "id": "765",
+    "name": "Bob Hope Classic",
+    "date": "2010-01-20"
+  },
+  {
+    "id": "768",
+    "name": "Farmers Insurance Open",
+    "date": "2010-01-28"
+  },
+  {
+    "id": "770",
+    "name": "Northern Trust Open",
+    "date": "2010-02-04"
+  },
+  {
+    "id": "767",
+    "name": "AT&T Pebble Beach National Pro-Am",
+    "date": "2010-02-11"
+  },
+  {
+    "id": "802",
+    "name": "World Golf Championships-Accenture Match Play Championship",
+    "date": "2010-02-17"
+  },
+  {
+    "id": "793",
+    "name": "Mayakoba Golf Classic at Riviera Maya-Cancun",
+    "date": "2010-02-18"
+  },
+  {
+    "id": "766",
+    "name": "Waste Management Phoenix Open",
+    "date": "2010-02-25"
+  },
+  {
+    "id": "771",
+    "name": "The Honda Classic",
+    "date": "2010-03-04"
+  },
+  {
+    "id": "790",
+    "name": "World Golf Championships-CA Championship",
+    "date": "2010-03-11"
+  },
+  {
+    "id": "795",
+    "name": "Puerto Rico Open presented by Banco Popular",
+    "date": "2010-03-11"
+  },
+  {
+    "id": "788",
+    "name": "Transitions Championship",
+    "date": "2010-03-18"
+  },
+  {
+    "id": "772",
+    "name": "Arnold Palmer Invitational presented by MasterCard",
+    "date": "2010-03-25"
+  },
+  {
+    "id": "777",
+    "name": "Shell Houston Open",
+    "date": "2010-04-01"
+  },
+  {
+    "id": "774",
+    "name": "The Masters",
+    "date": "2010-04-08"
+  },
+  {
+    "id": "775",
+    "name": "Verizon Heritage",
+    "date": "2010-04-15"
+  },
+  {
+    "id": "796",
+    "name": "Zurich Classic of New Orleans",
+    "date": "2010-04-22"
+  },
+  {
+    "id": "791",
+    "name": "Wells Fargo Championship",
+    "date": "2010-04-29"
+  },
+  {
+    "id": "773",
+    "name": "THE PLAYERS Championship",
+    "date": "2010-05-06"
+  },
+  {
+    "id": "801",
+    "name": "Valero Texas Open",
+    "date": "2010-05-13"
+  },
+  {
+    "id": "778",
+    "name": "HP Byron Nelson Championship",
+    "date": "2010-05-20"
+  },
+  {
+    "id": "779",
+    "name": "Crowne Plaza Invitational at Colonial",
+    "date": "2010-05-27"
+  },
+  {
+    "id": "780",
+    "name": "the Memorial Tournament presented by Nationwide Insurance",
+    "date": "2010-06-03"
+  },
+  {
+    "id": "782",
+    "name": "St. Jude Classic presented by Smith & Nephew",
+    "date": "2010-06-10"
+  },
+  {
+    "id": "797",
+    "name": "U.S. Open Championship",
+    "date": "2010-06-17"
+  },
+  {
+    "id": "783",
+    "name": "Travelers Championship",
+    "date": "2010-06-24"
+  },
+  {
+    "id": "803",
+    "name": "AT&T National",
+    "date": "2010-07-01"
+  },
+  {
+    "id": "786",
+    "name": "John Deere Classic",
+    "date": "2010-07-08"
+  },
+  {
+    "id": "789",
+    "name": "Reno-Tahoe Open",
+    "date": "2010-07-15"
+  },
+  {
+    "id": "798",
+    "name": "The Open Championship",
+    "date": "2010-07-15"
+  },
+  {
+    "id": "800",
+    "name": "RBC Canadian Open",
+    "date": "2010-07-22"
+  },
+  {
+    "id": "804",
+    "name": "The Greenbrier Classic",
+    "date": "2010-07-29"
+  },
+  {
+    "id": "785",
+    "name": "World Golf Championships-Bridgestone Invitational",
+    "date": "2010-08-05"
+  },
+  {
+    "id": "794",
+    "name": "Turning Stone Resort Championship",
+    "date": "2010-08-05"
+  },
+  {
+    "id": "799",
+    "name": "PGA Championship",
+    "date": "2010-08-12"
+  },
+  {
+    "id": "776",
+    "name": "Wyndham Championship",
+    "date": "2010-08-19"
+  },
+  {
+    "id": "781",
+    "name": "The Barclays",
+    "date": "2010-08-26"
+  },
+  {
+    "id": "792",
+    "name": "Deutsche Bank Championship",
+    "date": "2010-09-03"
+  },
+  {
+    "id": "784",
+    "name": "BMW Championship",
+    "date": "2010-09-09"
+  },
+  {
+    "id": "787",
+    "name": "THE TOUR Championship presented by Coca-Cola",
+    "date": "2010-09-23"
+  },
+  {
+    "id": "834",
+    "name": "Viking Classic",
+    "date": "2010-09-30"
+  },
+  {
+    "id": "838",
+    "name": "Ryder Cup",
+    "date": "2010-10-01"
+  },
+  {
+    "id": "841",
+    "name": "The McGladrey Classic",
+    "date": "2010-10-07"
+  },
+  {
+    "id": "837",
+    "name": "Frys.com Open",
+    "date": "2010-10-14"
+  },
+  {
+    "id": "835",
+    "name": "Justin Timberlake Shriners Hospitals for Children Open",
+    "date": "2010-10-21"
+  },
+  {
+    "id": "845",
+    "name": "CIMB Asia Pacific Classic Malaysia",
+    "date": "2010-10-28"
+  },
+  {
+    "id": "846",
+    "name": "WGC-HSBC Champions",
+    "date": "2010-11-03"
+  },
+  {
+    "id": "836",
+    "name": "Children's Miracle Network Classic",
+    "date": "2010-11-11"
+  },
+  {
+    "id": "847",
+    "name": "PGA TOUR Qualifying Tournament",
+    "date": "2010-12-01"
+  },
+  {
+    "id": "857",
+    "name": "Chevron World Challenge",
+    "date": "2010-12-02"
+  },
+  {
+    "id": "892",
+    "name": "Hyundai Tournament of Champions",
+    "date": "2011-01-06"
+  },
+  {
+    "id": "897",
+    "name": "Sony Open in Hawaii",
+    "date": "2011-01-13"
+  },
+  {
+    "id": "893",
+    "name": "Bob Hope Classic",
+    "date": "2011-01-19"
+  },
+  {
+    "id": "896",
+    "name": "Farmers Insurance Open",
+    "date": "2011-01-27"
+  },
+  {
+    "id": "894",
+    "name": "Waste Management Phoenix Open",
+    "date": "2011-02-03"
+  },
+  {
+    "id": "895",
+    "name": "AT&T Pebble Beach National Pro-Am",
+    "date": "2011-02-10"
+  },
+  {
+    "id": "898",
+    "name": "Northern Trust Open",
+    "date": "2011-02-17"
+  },
+  {
+    "id": "919",
+    "name": "World Golf Championships-Accenture Match Play Championship",
+    "date": "2011-02-23"
+  },
+  {
+    "id": "923",
+    "name": "Mayakoba Golf Classic at Riviera Maya-Cancun",
+    "date": "2011-02-24"
+  },
+  {
+    "id": "899",
+    "name": "The Honda Classic",
+    "date": "2011-03-03"
+  },
+  {
+    "id": "926",
+    "name": "Puerto Rico Open presented by seepuertorico.com",
+    "date": "2011-03-10"
+  },
+  {
+    "id": "985",
+    "name": "World Golf Championships-Cadillac Championship",
+    "date": "2011-03-10"
+  },
+  {
+    "id": "918",
+    "name": "Transitions Championship",
+    "date": "2011-03-17"
+  },
+  {
+    "id": "900",
+    "name": "Arnold Palmer Invitational presented by MasterCard",
+    "date": "2011-03-24"
+  },
+  {
+    "id": "905",
+    "name": "Shell Houston Open",
+    "date": "2011-03-31"
+  },
+  {
+    "id": "980",
+    "name": "The Masters",
+    "date": "2011-04-07"
+  },
+  {
+    "id": "915",
+    "name": "Valero Texas Open",
+    "date": "2011-04-14"
+  },
+  {
+    "id": "903",
+    "name": "The Heritage",
+    "date": "2011-04-21"
+  },
+  {
+    "id": "901",
+    "name": "Zurich Classic of New Orleans",
+    "date": "2011-04-28"
+  },
+  {
+    "id": "921",
+    "name": "Wells Fargo Championship",
+    "date": "2011-05-05"
+  },
+  {
+    "id": "902",
+    "name": "THE PLAYERS Championship",
+    "date": "2011-05-12"
+  },
+  {
+    "id": "907",
+    "name": "Crowne Plaza Invitational at Colonial",
+    "date": "2011-05-19"
+  },
+  {
+    "id": "906",
+    "name": "HP Byron Nelson Championship",
+    "date": "2011-05-26"
+  },
+  {
+    "id": "908",
+    "name": "the Memorial Tournament presented by Nationwide Insurance",
+    "date": "2011-06-02"
+  },
+  {
+    "id": "909",
+    "name": "FedEx St. Jude Classic",
+    "date": "2011-06-09"
+  },
+  {
+    "id": "981",
+    "name": "U.S. Open",
+    "date": "2011-06-16"
+  },
+  {
+    "id": "910",
+    "name": "Travelers Championship",
+    "date": "2011-06-23"
+  },
+  {
+    "id": "925",
+    "name": "AT&T National",
+    "date": "2011-06-30"
+  },
+  {
+    "id": "913",
+    "name": "John Deere Classic",
+    "date": "2011-07-07"
+  },
+  {
+    "id": "912",
+    "name": "Viking Classic",
+    "date": "2011-07-14"
+  },
+  {
+    "id": "982",
+    "name": "The Open Championship",
+    "date": "2011-07-14"
+  },
+  {
+    "id": "986",
+    "name": "RBC Canadian Open",
+    "date": "2011-07-21"
+  },
+  {
+    "id": "927",
+    "name": "The Greenbrier Classic",
+    "date": "2011-07-28"
+  },
+  {
+    "id": "920",
+    "name": "Reno-Tahoe Open",
+    "date": "2011-08-04"
+  },
+  {
+    "id": "987",
+    "name": "World Golf Championships-Bridgestone Invitational",
+    "date": "2011-08-04"
+  },
+  {
+    "id": "983",
+    "name": "PGA Championship",
+    "date": "2011-08-11"
+  },
+  {
+    "id": "904",
+    "name": "Wyndham Championship",
+    "date": "2011-08-18"
+  },
+  {
+    "id": "984",
+    "name": "The Barclays",
+    "date": "2011-08-25"
+  },
+  {
+    "id": "922",
+    "name": "Deutsche Bank Championship",
+    "date": "2011-09-02"
+  },
+  {
+    "id": "911",
+    "name": "BMW Championship",
+    "date": "2011-09-15"
+  },
+  {
+    "id": "917",
+    "name": "TOUR Championship by Coca-Cola",
+    "date": "2011-09-22"
+  },
+  {
+    "id": "914",
+    "name": "Justin Timberlake Shriners Hospitals for Children Open",
+    "date": "2011-09-29"
+  },
+  {
+    "id": "924",
+    "name": "Frys.com Open",
+    "date": "2011-10-06"
+  },
+  {
+    "id": "928",
+    "name": "The McGladrey Classic",
+    "date": "2011-10-13"
+  },
+  {
+    "id": "916",
+    "name": "Children's Miracle Network Hospitals Classic",
+    "date": "2011-10-20"
+  },
+  {
+    "id": "929",
+    "name": "CIMB Asia Pacific Classic Malaysia",
+    "date": "2011-10-27"
+  },
+  {
+    "id": "988",
+    "name": "World Golf Championships-HSBC Champions",
+    "date": "2011-11-03"
+  },
+  {
+    "id": "993",
+    "name": "The Presidents Cup",
+    "date": "2011-11-17"
+  },
+  {
+    "id": "995",
+    "name": "PGA TOUR Qualifying Tournament",
+    "date": "2011-11-30"
+  },
+  {
+    "id": "994",
+    "name": "Chevron World Challenge",
+    "date": "2011-12-01"
+  },
+  {
+    "id": "1057",
+    "name": "Hyundai Tournament of Champions",
+    "date": "2012-01-06"
+  },
+  {
+    "id": "999",
+    "name": "Sony Open in Hawaii",
+    "date": "2012-01-12"
+  },
+  {
+    "id": "1058",
+    "name": "Humana Challenge in partnership with the Clinton Foundation",
+    "date": "2012-01-19"
+  },
+  {
+    "id": "998",
+    "name": "Farmers Insurance Open",
+    "date": "2012-01-26"
+  },
+  {
+    "id": "996",
+    "name": "Waste Management Phoenix Open",
+    "date": "2012-02-02"
+  },
+  {
+    "id": "997",
+    "name": "AT&T Pebble Beach National Pro-Am",
+    "date": "2012-02-09"
+  },
+  {
+    "id": "1000",
+    "name": "Northern Trust Open",
+    "date": "2012-02-16"
+  },
+  {
+    "id": "1025",
+    "name": "World Golf Championships-Accenture Match Play Championship",
+    "date": "2012-02-22"
+  },
+  {
+    "id": "1030",
+    "name": "Mayakoba Golf Classic",
+    "date": "2012-02-23"
+  },
+  {
+    "id": "1001",
+    "name": "The Honda Classic",
+    "date": "2012-03-01"
+  },
+  {
+    "id": "1027",
+    "name": "World Golf Championships-Cadillac Championship",
+    "date": "2012-03-08"
+  },
+  {
+    "id": "1033",
+    "name": "Puerto Rico Open presented by seepuertorico.com",
+    "date": "2012-03-08"
+  },
+  {
+    "id": "1061",
+    "name": "Transitions Championship",
+    "date": "2012-03-15"
+  },
+  {
+    "id": "1002",
+    "name": "Arnold Palmer Invitational presented by MasterCard",
+    "date": "2012-03-22"
+  },
+  {
+    "id": "1008",
+    "name": "Shell Houston Open",
+    "date": "2012-03-29"
+  },
+  {
+    "id": "1005",
+    "name": "The Masters Tournament",
+    "date": "2012-04-05"
+  },
+  {
+    "id": "1006",
+    "name": "RBC Heritage",
+    "date": "2012-04-12"
+  },
+  {
+    "id": "1023",
+    "name": "Valero Texas Open",
+    "date": "2012-04-19"
+  },
+  {
+    "id": "1003",
+    "name": "Zurich Classic of New Orleans",
+    "date": "2012-04-26"
+  },
+  {
+    "id": "1028",
+    "name": "Wells Fargo Championship",
+    "date": "2012-05-03"
+  },
+  {
+    "id": "1004",
+    "name": "THE PLAYERS Championship",
+    "date": "2012-05-10"
+  },
+  {
+    "id": "1009",
+    "name": "HP Byron Nelson Championship",
+    "date": "2012-05-17"
+  },
+  {
+    "id": "1010",
+    "name": "Crowne Plaza Invitational at Colonial",
+    "date": "2012-05-24"
+  },
+  {
+    "id": "1011",
+    "name": "the Memorial Tournament presented by Nationwide Insurance",
+    "date": "2012-05-31"
+  },
+  {
+    "id": "1014",
+    "name": "FedEx St. Jude Classic",
+    "date": "2012-06-07"
+  },
+  {
+    "id": "1013",
+    "name": "U.S. Open Golf Championship",
+    "date": "2012-06-14"
+  },
+  {
+    "id": "1015",
+    "name": "Travelers Championship",
+    "date": "2012-06-21"
+  },
+  {
+    "id": "1032",
+    "name": "AT&T National",
+    "date": "2012-06-28"
+  },
+  {
+    "id": "1034",
+    "name": "The Greenbrier Classic",
+    "date": "2012-07-05"
+  },
+  {
+    "id": "1021",
+    "name": "John Deere Classic",
+    "date": "2012-07-12"
+  },
+  {
+    "id": "1017",
+    "name": "The Open Championship",
+    "date": "2012-07-19"
+  },
+  {
+    "id": "1059",
+    "name": "True South Classic",
+    "date": "2012-07-19"
+  },
+  {
+    "id": "1020",
+    "name": "RBC Canadian Open",
+    "date": "2012-07-26"
+  },
+  {
+    "id": "1019",
+    "name": "World Golf Championships-Bridgestone Invitational",
+    "date": "2012-08-02"
+  },
+  {
+    "id": "1026",
+    "name": "Reno-Tahoe Open",
+    "date": "2012-08-02"
+  },
+  {
+    "id": "1018",
+    "name": "PGA Championship",
+    "date": "2012-08-09"
+  },
+  {
+    "id": "1007",
+    "name": "Wyndham Championship",
+    "date": "2012-08-16"
+  },
+  {
+    "id": "1012",
+    "name": "The Barclays",
+    "date": "2012-08-23"
+  },
+  {
+    "id": "1029",
+    "name": "Deutsche Bank Championship",
+    "date": "2012-08-31"
+  },
+  {
+    "id": "1016",
+    "name": "BMW Championship",
+    "date": "2012-09-06"
+  },
+  {
+    "id": "1060",
+    "name": "TOUR Championship by Coca-Cola",
+    "date": "2012-09-20"
+  },
+  {
+    "id": "1062",
+    "name": "Ryder Cup",
+    "date": "2012-09-28"
+  },
+  {
+    "id": "1022",
+    "name": "Justin Timberlake Shriners Hospitals for Children Open",
+    "date": "2012-10-04"
+  },
+  {
+    "id": "1031",
+    "name": "Frys.com Open",
+    "date": "2012-10-11"
+  },
+  {
+    "id": "1035",
+    "name": "The McGladrey Classic",
+    "date": "2012-10-18"
+  },
+  {
+    "id": "1036",
+    "name": "CIMB Classic",
+    "date": "2012-10-25"
+  },
+  {
+    "id": "1132",
+    "name": "World Golf Championships-HSBC Champions",
+    "date": "2012-11-01"
+  },
+  {
+    "id": "1024",
+    "name": "Children's Miracle Network Hospitals Classic",
+    "date": "2012-11-08"
+  },
+  {
+    "id": "1155",
+    "name": "PGA TOUR Qualifying Tournament",
+    "date": "2012-11-28"
+  },
+  {
+    "id": "1154",
+    "name": "World Challenge presented by Northwestern Mutual",
+    "date": "2012-11-29"
+  },
+  {
+    "id": "1181",
+    "name": "Hyundai Tournament of Champions",
+    "date": "2013-01-04"
+  },
+  {
+    "id": "1186",
+    "name": "Sony Open in Hawaii",
+    "date": "2013-01-10"
+  },
+  {
+    "id": "1182",
+    "name": "Humana Challenge in partnership with the Clinton Foundation",
+    "date": "2013-01-17"
+  },
+  {
+    "id": "1183",
+    "name": "Waste Management Phoenix Open",
+    "date": "2013-01-31"
+  },
+  {
+    "id": "1184",
+    "name": "AT&T Pebble Beach National Pro-Am",
+    "date": "2013-02-07"
+  },
+  {
+    "id": "1187",
+    "name": "Northern Trust Open",
+    "date": "2013-02-14"
+  },
+  {
+    "id": "1213",
+    "name": "World Golf Championships-Accenture Match Play Championship",
+    "date": "2013-02-20"
+  },
+  {
+    "id": "1188",
+    "name": "The Honda Classic",
+    "date": "2013-02-28"
+  },
+  {
+    "id": "1215",
+    "name": "World Golf Championships-Cadillac Championship",
+    "date": "2013-03-07"
+  },
+  {
+    "id": "1219",
+    "name": "Puerto Rico Open presented by seepuertorico.com",
+    "date": "2013-03-07"
+  },
+  {
+    "id": "1212",
+    "name": "Tampa Bay Championship presented by EverBank",
+    "date": "2013-03-14"
+  },
+  {
+    "id": "1189",
+    "name": "Arnold Palmer Invitational presented by MasterCard",
+    "date": "2013-03-21"
+  },
+  {
+    "id": "1195",
+    "name": "Shell Houston Open",
+    "date": "2013-03-28"
+  },
+  {
+    "id": "1210",
+    "name": "Valero Texas Open",
+    "date": "2013-04-04"
+  },
+  {
+    "id": "1192",
+    "name": "Masters Tournament",
+    "date": "2013-04-11"
+  },
+  {
+    "id": "1193",
+    "name": "RBC Heritage",
+    "date": "2013-04-18"
+  },
+  {
+    "id": "1190",
+    "name": "Zurich Classic of New Orleans",
+    "date": "2013-04-25"
+  },
+  {
+    "id": "1216",
+    "name": "Wells Fargo Championship",
+    "date": "2013-05-02"
+  },
+  {
+    "id": "1191",
+    "name": "THE PLAYERS Championship",
+    "date": "2013-05-09"
+  },
+  {
+    "id": "1196",
+    "name": "HP Byron Nelson Championship",
+    "date": "2013-05-16"
+  },
+  {
+    "id": "1197",
+    "name": "Crowne Plaza Invitational at Colonial",
+    "date": "2013-05-23"
+  },
+  {
+    "id": "1198",
+    "name": "the Memorial Tournament presented by Nationwide Insurance",
+    "date": "2013-05-30"
+  },
+  {
+    "id": "1201",
+    "name": "FedEx St. Jude Classic",
+    "date": "2013-06-06"
+  },
+  {
+    "id": "1200",
+    "name": "U.S. Open Golf Championship",
+    "date": "2013-06-13"
+  },
+  {
+    "id": "1202",
+    "name": "Travelers Championship",
+    "date": "2013-06-20"
+  },
+  {
+    "id": "1218",
+    "name": "AT&T National",
+    "date": "2013-06-27"
+  },
+  {
+    "id": "1220",
+    "name": "The Greenbrier Classic",
+    "date": "2013-07-04"
+  },
+  {
+    "id": "1209",
+    "name": "John Deere Classic",
+    "date": "2013-07-11"
+  },
+  {
+    "id": "1204",
+    "name": "The Open Championship",
+    "date": "2013-07-18"
+  },
+  {
+    "id": "1205",
+    "name": "Sanderson Farms Championship",
+    "date": "2013-07-18"
+  },
+  {
+    "id": "1208",
+    "name": "RBC Canadian Open",
+    "date": "2013-07-25"
+  },
+  {
+    "id": "1207",
+    "name": "World Golf Championships-Bridgestone Invitational",
+    "date": "2013-08-01"
+  },
+  {
+    "id": "1214",
+    "name": "Reno-Tahoe Open",
+    "date": "2013-08-01"
+  },
+  {
+    "id": "1206",
+    "name": "PGA Championship",
+    "date": "2013-08-08"
+  },
+  {
+    "id": "1194",
+    "name": "Wyndham Championship",
+    "date": "2013-08-15"
+  },
+  {
+    "id": "1199",
+    "name": "The Barclays",
+    "date": "2013-08-22"
+  },
+  {
+    "id": "1217",
+    "name": "Deutsche Bank Championship",
+    "date": "2013-08-30"
+  },
+  {
+    "id": "1203",
+    "name": "BMW Championship",
+    "date": "2013-09-12"
+  },
+  {
+    "id": "1211",
+    "name": "TOUR Championship by Coca-Cola",
+    "date": "2013-09-19"
+  },
+  {
+    "id": "1272",
+    "name": "The Presidents Cup",
+    "date": "2013-10-03"
+  },
+  {
+    "id": "1345",
+    "name": "Frys.com Open",
+    "date": "2013-10-10"
+  },
+  {
+    "id": "1334",
+    "name": "Shriners Hospitals for Children Open",
+    "date": "2013-10-17"
+  },
+  {
+    "id": "1350",
+    "name": "CIMB Classic",
+    "date": "2013-10-24"
+  },
+  {
+    "id": "1341",
+    "name": "World Golf Championships-HSBC Champions",
+    "date": "2013-10-31"
+  },
+  {
+    "id": "1351",
+    "name": "The McGladrey Classic",
+    "date": "2013-11-07"
+  },
+  {
+    "id": "1344",
+    "name": "OHL Classic at Mayakoba",
+    "date": "2013-11-14"
+  },
+  {
+    "id": "1349",
+    "name": "Northwestern Mutual World Challenge",
+    "date": "2013-12-05"
+  },
+  {
+    "id": "1306",
+    "name": "Hyundai Tournament of Champions",
+    "date": "2014-01-03"
+  },
+  {
+    "id": "1307",
+    "name": "Humana Challenge in partnership with the Clinton Foundation",
+    "date": "2014-01-16"
+  },
+  {
+    "id": "1310",
+    "name": "Farmers Insurance Open",
+    "date": "2014-01-23"
+  },
+  {
+    "id": "1308",
+    "name": "Waste Management Phoenix Open",
+    "date": "2014-01-30"
+  },
+  {
+    "id": "1309",
+    "name": "AT&T Pebble Beach National Pro-Am",
+    "date": "2014-02-06"
+  },
+  {
+    "id": "1312",
+    "name": "Northern Trust Open",
+    "date": "2014-02-13"
+  },
+  {
+    "id": "1338",
+    "name": "World Golf Championships-Accenture Match Play Championship",
+    "date": "2014-02-19"
+  },
+  {
+    "id": "1313",
+    "name": "The Honda Classic",
+    "date": "2014-02-27"
+  },
+  {
+    "id": "1340",
+    "name": "World Golf Championships-Cadillac Championship",
+    "date": "2014-03-06"
+  },
+  {
+    "id": "1347",
+    "name": "Puerto Rico Open presented by seepuertorico.com",
+    "date": "2014-03-06"
+  },
+  {
+    "id": "1337",
+    "name": "Valspar Championship",
+    "date": "2014-03-13"
+  },
+  {
+    "id": "1314",
+    "name": "Arnold Palmer Invitational presented by MasterCard",
+    "date": "2014-03-20"
+  },
+  {
+    "id": "1335",
+    "name": "Valero Texas Open",
+    "date": "2014-03-27"
+  },
+  {
+    "id": "1320",
+    "name": "Shell Houston Open",
+    "date": "2014-04-03"
+  },
+  {
+    "id": "1317",
+    "name": "Masters Tournament",
+    "date": "2014-04-10"
+  },
+  {
+    "id": "1318",
+    "name": "RBC Heritage",
+    "date": "2014-04-17"
+  },
+  {
+    "id": "1315",
+    "name": "Zurich Classic of New Orleans",
+    "date": "2014-04-24"
+  },
+  {
+    "id": "1342",
+    "name": "Wells Fargo Championship",
+    "date": "2014-05-01"
+  },
+  {
+    "id": "1316",
+    "name": "THE PLAYERS Championship",
+    "date": "2014-05-08"
+  },
+  {
+    "id": "1321",
+    "name": "HP Byron Nelson Championship",
+    "date": "2014-05-15"
+  },
+  {
+    "id": "1322",
+    "name": "Crowne Plaza Invitational at Colonial",
+    "date": "2014-05-22"
+  },
+  {
+    "id": "1323",
+    "name": "the Memorial Tournament presented by Nationwide Insurance",
+    "date": "2014-05-29"
+  },
+  {
+    "id": "1326",
+    "name": "FedEx St. Jude Classic",
+    "date": "2014-06-05"
+  },
+  {
+    "id": "1325",
+    "name": "U.S. Open Golf Championship",
+    "date": "2014-06-12"
+  },
+  {
+    "id": "1327",
+    "name": "Travelers Championship",
+    "date": "2014-06-19"
+  },
+  {
+    "id": "1346",
+    "name": "Quicken Loans National",
+    "date": "2014-06-26"
+  },
+  {
+    "id": "1348",
+    "name": "The Greenbrier Classic",
+    "date": "2014-07-03"
+  },
+  {
+    "id": "1333",
+    "name": "John Deere Classic",
+    "date": "2014-07-10"
+  },
+  {
+    "id": "1329",
+    "name": "The Open Championship",
+    "date": "2014-07-17"
+  },
+  {
+    "id": "1332",
+    "name": "RBC Canadian Open",
+    "date": "2014-07-24"
+  },
+  {
+    "id": "1331",
+    "name": "World Golf Championships-Bridgestone Invitational",
+    "date": "2014-07-31"
+  },
+  {
+    "id": "1339",
+    "name": "Barracuda Championship",
+    "date": "2014-07-31"
+  },
+  {
+    "id": "1330",
+    "name": "PGA Championship",
+    "date": "2014-08-07"
+  },
+  {
+    "id": "1319",
+    "name": "Wyndham Championship",
+    "date": "2014-08-14"
+  },
+  {
+    "id": "1324",
+    "name": "The Barclays",
+    "date": "2014-08-21"
+  },
+  {
+    "id": "1343",
+    "name": "Deutsche Bank Championship",
+    "date": "2014-08-29"
+  },
+  {
+    "id": "1328",
+    "name": "BMW Championship",
+    "date": "2014-09-04"
+  },
+  {
+    "id": "1336",
+    "name": "TOUR Championship by Coca-Cola",
+    "date": "2014-09-11"
+  },
+  {
+    "id": "2226",
+    "name": "Ryder Cup",
+    "date": "2014-09-26"
+  },
+  {
+    "id": "2271",
+    "name": "Frys.com Open",
+    "date": "2014-10-09"
+  },
+  {
+    "id": "2260",
+    "name": "Shriners Hospitals for Children Open",
+    "date": "2014-10-16"
+  },
+  {
+    "id": "2276",
+    "name": "The McGladrey Classic",
+    "date": "2014-10-23"
+  },
+  {
+    "id": "2275",
+    "name": "CIMB Classic",
+    "date": "2014-10-30"
+  },
+  {
+    "id": "2254",
+    "name": "Sanderson Farms Championship",
+    "date": "2014-11-06"
+  },
+  {
+    "id": "2267",
+    "name": "World Golf Championships-HSBC Champions",
+    "date": "2014-11-06"
+  },
+  {
+    "id": "2270",
+    "name": "OHL Classic at Mayakoba",
+    "date": "2014-11-13"
+  },
+  {
+    "id": "2291",
+    "name": "Hero World Challenge",
+    "date": "2014-12-04"
+  },
+  {
+    "id": "2230",
+    "name": "Hyundai Tournament of Champions",
+    "date": "2015-01-09"
+  },
+  {
+    "id": "2235",
+    "name": "Sony Open in Hawaii",
+    "date": "2015-01-15"
+  },
+  {
+    "id": "2231",
+    "name": "Humana Challenge in partnership with the Clinton Foundation",
+    "date": "2015-01-22"
+  },
+  {
+    "id": "2232",
+    "name": "Waste Management Phoenix Open",
+    "date": "2015-01-29"
+  },
+  {
+    "id": "2234",
+    "name": "Farmers Insurance Open",
+    "date": "2015-02-05"
+  },
+  {
+    "id": "2233",
+    "name": "AT&T Pebble Beach National Pro-Am",
+    "date": "2015-02-12"
+  },
+  {
+    "id": "2236",
+    "name": "Northern Trust Open",
+    "date": "2015-02-19"
+  },
+  {
+    "id": "2237",
+    "name": "The Honda Classic",
+    "date": "2015-02-26"
+  },
+  {
+    "id": "2266",
+    "name": "World Golf Championships-Cadillac Championship",
+    "date": "2015-03-05"
+  },
+  {
+    "id": "2273",
+    "name": "Puerto Rico Open",
+    "date": "2015-03-05"
+  },
+  {
+    "id": "2263",
+    "name": "Valspar Championship",
+    "date": "2015-03-12"
+  },
+  {
+    "id": "2238",
+    "name": "Arnold Palmer Invitational presented by MasterCard",
+    "date": "2015-03-19"
+  },
+  {
+    "id": "2261",
+    "name": "Valero Texas Open",
+    "date": "2015-03-26"
+  },
+  {
+    "id": "2244",
+    "name": "Shell Houston Open",
+    "date": "2015-04-02"
+  },
+  {
+    "id": "2241",
+    "name": "Masters Tournament",
+    "date": "2015-04-09"
+  },
+  {
+    "id": "2242",
+    "name": "RBC Heritage",
+    "date": "2015-04-16"
+  },
+  {
+    "id": "2239",
+    "name": "Zurich Classic of New Orleans",
+    "date": "2015-04-23"
+  },
+  {
+    "id": "2264",
+    "name": "World Golf Championships-Cadillac Match Play",
+    "date": "2015-04-29"
+  },
+  {
+    "id": "2240",
+    "name": "THE PLAYERS Championship",
+    "date": "2015-05-07"
+  },
+  {
+    "id": "2268",
+    "name": "Wells Fargo Championship",
+    "date": "2015-05-14"
+  },
+  {
+    "id": "2246",
+    "name": "Crowne Plaza Invitational at  Colonial",
+    "date": "2015-05-21"
+  },
+  {
+    "id": "2245",
+    "name": "AT&T Byron Nelson",
+    "date": "2015-05-28"
+  },
+  {
+    "id": "2247",
+    "name": "the Memorial Tournament presented by Nationwide",
+    "date": "2015-06-04"
+  },
+  {
+    "id": "2250",
+    "name": "FedEx St. Jude Classic",
+    "date": "2015-06-11"
+  },
+  {
+    "id": "2249",
+    "name": "U.S. Open",
+    "date": "2015-06-18"
+  },
+  {
+    "id": "2251",
+    "name": "Travelers Championship",
+    "date": "2015-06-25"
+  },
+  {
+    "id": "2274",
+    "name": "The Greenbrier Classic",
+    "date": "2015-07-02"
+  },
+  {
+    "id": "2258",
+    "name": "John Deere Classic",
+    "date": "2015-07-09"
+  },
+  {
+    "id": "2253",
+    "name": "The Open",
+    "date": "2015-07-16"
+  },
+  {
+    "id": "2277",
+    "name": "Barbasol Championship",
+    "date": "2015-07-16"
+  },
+  {
+    "id": "2257",
+    "name": "RBC Canadian Open",
+    "date": "2015-07-23"
+  },
+  {
+    "id": "2272",
+    "name": "Quicken Loans National",
+    "date": "2015-07-30"
+  },
+  {
+    "id": "2256",
+    "name": "World Golf Championships-Bridgestone Invitational",
+    "date": "2015-08-06"
+  },
+  {
+    "id": "2265",
+    "name": "Barracuda Championship",
+    "date": "2015-08-06"
+  },
+  {
+    "id": "2255",
+    "name": "PGA Championship",
+    "date": "2015-08-13"
+  },
+  {
+    "id": "2243",
+    "name": "Wyndham Championship",
+    "date": "2015-08-20"
+  },
+  {
+    "id": "2248",
+    "name": "The Barclays",
+    "date": "2015-08-27"
+  },
+  {
+    "id": "2269",
+    "name": "Deutsche Bank Championship",
+    "date": "2015-09-04"
+  },
+  {
+    "id": "2252",
+    "name": "BMW Championship",
+    "date": "2015-09-17"
+  },
+  {
+    "id": "2262",
+    "name": "TOUR Championship by Coca-Cola",
+    "date": "2015-09-24"
+  },
+  {
+    "id": "2259",
+    "name": "The Presidents Cup",
+    "date": "2015-10-08"
+  },
+  {
+    "id": "2523",
+    "name": "Frys.com Open",
+    "date": "2015-10-15"
+  },
+  {
+    "id": "2511",
+    "name": "Shriners Hospitals for Children Open",
+    "date": "2015-10-22"
+  },
+  {
+    "id": "2527",
+    "name": "CIMB Classic",
+    "date": "2015-10-29"
+  },
+  {
+    "id": "2506",
+    "name": "Sanderson Farms Championship",
+    "date": "2015-11-05"
+  },
+  {
+    "id": "2519",
+    "name": "World Golf Championships-HSBC Champions",
+    "date": "2015-11-05"
+  },
+  {
+    "id": "2522",
+    "name": "OHL Classic at Mayakoba",
+    "date": "2015-11-12"
+  },
+  {
+    "id": "2528",
+    "name": "The RSM Classic",
+    "date": "2015-11-19"
+  },
+  {
+    "id": "2605",
+    "name": "Hero World Challenge",
+    "date": "2015-12-03"
+  },
+  {
+    "id": "2482",
+    "name": "Hyundai Tournament of Champions",
+    "date": "2016-01-07"
+  },
+  {
+    "id": "2487",
+    "name": "Sony Open in Hawaii",
+    "date": "2016-01-14"
+  },
+  {
+    "id": "2483",
+    "name": "CareerBuilder Challenge in partnership with the Clinton Foundation",
+    "date": "2016-01-21"
+  },
+  {
+    "id": "2486",
+    "name": "Farmers Insurance Open",
+    "date": "2016-01-28"
+  },
+  {
+    "id": "2484",
+    "name": "Waste Management Phoenix Open",
+    "date": "2016-02-04"
+  },
+  {
+    "id": "2485",
+    "name": "AT&T Pebble Beach Pro-Am",
+    "date": "2016-02-11"
+  },
+  {
+    "id": "2488",
+    "name": "Northern Trust Open",
+    "date": "2016-02-18"
+  },
+  {
+    "id": "2489",
+    "name": "The Honda Classic",
+    "date": "2016-02-25"
+  },
+  {
+    "id": "2518",
+    "name": "World Golf Championships-Cadillac Championship",
+    "date": "2016-03-03"
+  },
+  {
+    "id": "2514",
+    "name": "Valspar Championship",
+    "date": "2016-03-10"
+  },
+  {
+    "id": "2490",
+    "name": "Arnold Palmer Invitational presented by MasterCard",
+    "date": "2016-03-17"
+  },
+  {
+    "id": "2516",
+    "name": "World Golf Championships-Dell Match Play",
+    "date": "2016-03-23"
+  },
+  {
+    "id": "2525",
+    "name": "Puerto Rico Open at Coco Beach",
+    "date": "2016-03-24"
+  },
+  {
+    "id": "2496",
+    "name": "Shell Houston Open",
+    "date": "2016-03-31"
+  },
+  {
+    "id": "2493",
+    "name": "Masters Tournament",
+    "date": "2016-04-07"
+  },
+  {
+    "id": "2494",
+    "name": "RBC Heritage",
+    "date": "2016-04-14"
+  },
+  {
+    "id": "2512",
+    "name": "Valero Texas Open",
+    "date": "2016-04-21"
+  },
+  {
+    "id": "2491",
+    "name": "Zurich Classic of New Orleans",
+    "date": "2016-04-28"
+  },
+  {
+    "id": "2520",
+    "name": "Wells Fargo Championship",
+    "date": "2016-05-05"
+  },
+  {
+    "id": "2492",
+    "name": "THE PLAYERS Championship",
+    "date": "2016-05-12"
+  },
+  {
+    "id": "2497",
+    "name": "AT&T Byron Nelson",
+    "date": "2016-05-19"
+  },
+  {
+    "id": "2498",
+    "name": "DEAN & DELUCA Invitational",
+    "date": "2016-05-26"
+  },
+  {
+    "id": "2499",
+    "name": "the Memorial Tournament presented by Nationwide",
+    "date": "2016-06-02"
+  },
+  {
+    "id": "2502",
+    "name": "FedEx St. Jude Classic",
+    "date": "2016-06-09"
+  },
+  {
+    "id": "2501",
+    "name": "U.S. Open",
+    "date": "2016-06-16"
+  },
+  {
+    "id": "2524",
+    "name": "Quicken Loans National",
+    "date": "2016-06-23"
+  },
+  {
+    "id": "2508",
+    "name": "World Golf Championships-Bridgestone Invitational",
+    "date": "2016-06-30"
+  },
+  {
+    "id": "2517",
+    "name": "Barracuda Championship",
+    "date": "2016-06-30"
+  },
+  {
+    "id": "2526",
+    "name": "The Greenbrier Classic",
+    "date": "2016-07-07"
+  },
+  {
+    "id": "2505",
+    "name": "The Open",
+    "date": "2016-07-14"
+  },
+  {
+    "id": "2529",
+    "name": "Barbasol Championship",
+    "date": "2016-07-14"
+  },
+  {
+    "id": "2509",
+    "name": "RBC Canadian Open",
+    "date": "2016-07-21"
+  },
+  {
+    "id": "2507",
+    "name": "PGA Championship",
+    "date": "2016-07-28"
+  },
+  {
+    "id": "2503",
+    "name": "Travelers Championship",
+    "date": "2016-08-04"
+  },
+  {
+    "id": "2510",
+    "name": "John Deere Classic",
+    "date": "2016-08-11"
+  },
+  {
+    "id": "2495",
+    "name": "Wyndham Championship",
+    "date": "2016-08-18"
+  },
+  {
+    "id": "2500",
+    "name": "The Barclays",
+    "date": "2016-08-25"
+  },
+  {
+    "id": "2521",
+    "name": "Deutsche Bank Championship",
+    "date": "2016-09-02"
+  },
+  {
+    "id": "2504",
+    "name": "BMW Championship",
+    "date": "2016-09-08"
+  },
+  {
+    "id": "2513",
+    "name": "TOUR Championship",
+    "date": "2016-09-22"
+  },
+  {
+    "id": "2515",
+    "name": "Ryder Cup",
+    "date": "2016-09-30"
+  },
+  {
+    "id": "2725",
+    "name": "Safeway Open",
+    "date": "2016-10-13"
+  },
+  {
+    "id": "2728",
+    "name": "CIMB Classic",
+    "date": "2016-10-20"
+  },
+  {
+    "id": "2722",
+    "name": "World Golf Championships-HSBC Champions",
+    "date": "2016-10-26"
+  },
+  {
+    "id": "2711",
+    "name": "Sanderson Farms Championship",
+    "date": "2016-10-27"
+  },
+  {
+    "id": "2716",
+    "name": "Shriners Hospitals for Children Open",
+    "date": "2016-11-03"
+  },
+  {
+    "id": "2724",
+    "name": "OHL Classic at Mayakoba",
+    "date": "2016-11-10"
+  },
+  {
+    "id": "2729",
+    "name": "The RSM Classic",
+    "date": "2016-11-17"
+  },
+  {
+    "id": "3069",
+    "name": "Hero World Challenge",
+    "date": "2016-12-01"
+  },
+  {
+    "id": "2689",
+    "name": "SBS Tournament of Champions",
+    "date": "2017-01-05"
+  },
+  {
+    "id": "2694",
+    "name": "Sony Open in Hawaii",
+    "date": "2017-01-12"
+  },
+  {
+    "id": "2690",
+    "name": "CareerBuilder Challenge",
+    "date": "2017-01-19"
+  },
+  {
+    "id": "2693",
+    "name": "Farmers Insurance Open",
+    "date": "2017-01-26"
+  },
+  {
+    "id": "2691",
+    "name": "Waste Management Phoenix Open",
+    "date": "2017-02-02"
+  },
+  {
+    "id": "2692",
+    "name": "AT&T Pebble Beach Pro-Am",
+    "date": "2017-02-09"
+  },
+  {
+    "id": "2695",
+    "name": "Genesis Open",
+    "date": "2017-02-16"
+  },
+  {
+    "id": "2696",
+    "name": "The Honda Classic",
+    "date": "2017-02-23"
+  },
+  {
+    "id": "3735",
+    "name": "World Golf Championships-Mexico Championship",
+    "date": "2017-03-02"
+  },
+  {
+    "id": "2719",
+    "name": "Valspar Championship",
+    "date": "2017-03-09"
+  },
+  {
+    "id": "2697",
+    "name": "Arnold Palmer Invitational presented by Mastercard",
+    "date": "2017-03-16"
+  },
+  {
+    "id": "2720",
+    "name": "World Golf Championships-Dell Technologies Match Play",
+    "date": "2017-03-22"
+  },
+  {
+    "id": "2726",
+    "name": "Puerto Rico Open",
+    "date": "2017-03-23"
+  },
+  {
+    "id": "2703",
+    "name": "Shell Houston Open",
+    "date": "2017-03-30"
+  },
+  {
+    "id": "2700",
+    "name": "2017 Masters Tournament",
+    "date": "2017-04-06"
+  },
+  {
+    "id": "2701",
+    "name": "RBC Heritage",
+    "date": "2017-04-13"
+  },
+  {
+    "id": "2717",
+    "name": "Valero Texas Open",
+    "date": "2017-04-20"
+  },
+  {
+    "id": "2698",
+    "name": "Zurich Classic of New Orleans",
+    "date": "2017-04-27"
+  },
+  {
+    "id": "3067",
+    "name": "Wells Fargo Championship",
+    "date": "2017-05-04"
+  },
+  {
+    "id": "2699",
+    "name": "THE PLAYERS Championship",
+    "date": "2017-05-11"
+  },
+  {
+    "id": "2704",
+    "name": "AT&T Byron Nelson",
+    "date": "2017-05-18"
+  },
+  {
+    "id": "2705",
+    "name": "DEAN & DELUCA Invitational",
+    "date": "2017-05-25"
+  },
+  {
+    "id": "2706",
+    "name": "the Memorial Tournament presented by Nationwide",
+    "date": "2017-06-01"
+  },
+  {
+    "id": "2707",
+    "name": "FedEx St. Jude Classic",
+    "date": "2017-06-08"
+  },
+  {
+    "id": "3066",
+    "name": "U.S. Open",
+    "date": "2017-06-15"
+  },
+  {
+    "id": "2708",
+    "name": "Travelers Championship",
+    "date": "2017-06-22"
+  },
+  {
+    "id": "3068",
+    "name": "Quicken Loans National",
+    "date": "2017-06-29"
+  },
+  {
+    "id": "2727",
+    "name": "The Greenbrier Classic",
+    "date": "2017-07-06"
+  },
+  {
+    "id": "2715",
+    "name": "John Deere Classic",
+    "date": "2017-07-13"
+  },
+  {
+    "id": "2710",
+    "name": "The Open",
+    "date": "2017-07-20"
+  },
+  {
+    "id": "2730",
+    "name": "Barbasol Championship",
+    "date": "2017-07-20"
+  },
+  {
+    "id": "2714",
+    "name": "RBC Canadian Open",
+    "date": "2017-07-27"
+  },
+  {
+    "id": "2713",
+    "name": "World Golf Championships-Bridgestone Invitational",
+    "date": "2017-08-03"
+  },
+  {
+    "id": "2721",
+    "name": "Barracuda Championship",
+    "date": "2017-08-03"
+  },
+  {
+    "id": "2712",
+    "name": "PGA Championship",
+    "date": "2017-08-10"
+  },
+  {
+    "id": "2702",
+    "name": "Wyndham Championship",
+    "date": "2017-08-17"
+  },
+  {
+    "id": "3065",
+    "name": "THE NORTHERN TRUST",
+    "date": "2017-08-24"
+  },
+  {
+    "id": "2723",
+    "name": "Dell Technologies Championship",
+    "date": "2017-09-01"
+  },
+  {
+    "id": "2709",
+    "name": "BMW Championship",
+    "date": "2017-09-14"
+  },
+  {
+    "id": "2718",
+    "name": "TOUR Championship",
+    "date": "2017-09-21"
+  },
+  {
+    "id": "3070",
+    "name": "Presidents Cup",
+    "date": "2017-09-28"
+  },
+  {
+    "id": "3777",
+    "name": "Safeway Open",
+    "date": "2017-10-05"
+  },
+  {
+    "id": "3780",
+    "name": "CIMB Classic",
+    "date": "2017-10-12"
+  },
+  {
+    "id": "3802",
+    "name": "THE CJ CUP @ NINE BRIDGES",
+    "date": "2017-10-19"
+  },
+  {
+    "id": "3763",
+    "name": "Sanderson Farms Championship",
+    "date": "2017-10-26"
+  },
+  {
+    "id": "3774",
+    "name": "World Golf Championships-HSBC Champions",
+    "date": "2017-10-26"
+  },
+  {
+    "id": "3768",
+    "name": "Shriners Hospitals for Children Open",
+    "date": "2017-11-02"
+  },
+  {
+    "id": "3776",
+    "name": "OHL Classic at Mayakoba",
+    "date": "2017-11-09"
+  },
+  {
+    "id": "3781",
+    "name": "The RSM Classic",
+    "date": "2017-11-16"
+  },
+  {
+    "id": "3791",
+    "name": "Hero World Challenge",
+    "date": "2017-11-30"
+  },
+  {
+    "id": "3742",
+    "name": "Sentry Tournament of Champions",
+    "date": "2018-01-04"
+  },
+  {
+    "id": "3747",
+    "name": "Sony Open in Hawaii",
+    "date": "2018-01-11"
+  },
+  {
+    "id": "3743",
+    "name": "CareerBuilder Challenge",
+    "date": "2018-01-18"
+  },
+  {
+    "id": "3746",
+    "name": "Farmers Insurance Open",
+    "date": "2018-01-25"
+  },
+  {
+    "id": "3744",
+    "name": "Waste Management Phoenix Open",
+    "date": "2018-02-01"
+  },
+  {
+    "id": "3745",
+    "name": "AT&T Pebble Beach Pro-Am",
+    "date": "2018-02-08"
+  },
+  {
+    "id": "3748",
+    "name": "Genesis Open",
+    "date": "2018-02-15"
+  },
+  {
+    "id": "3749",
+    "name": "The Honda Classic",
+    "date": "2018-02-22"
+  },
+  {
+    "id": "3789",
+    "name": "World Golf Championships-Mexico Championship",
+    "date": "2018-03-01"
+  },
+  {
+    "id": "3771",
+    "name": "Valspar Championship",
+    "date": "2018-03-08"
+  },
+  {
+    "id": "3750",
+    "name": "Arnold Palmer Invitational presented by Mastercard",
+    "date": "2018-03-15"
+  },
+  {
+    "id": "3803",
+    "name": "Corales Puntacana Resort & Club Championship",
+    "date": "2018-03-22"
+  },
+  {
+    "id": "3756",
+    "name": "Houston Open",
+    "date": "2018-03-29"
+  },
+  {
+    "id": "401025221",
+    "name": "2018 Masters Tournament",
+    "date": "2018-04-05"
+  },
+  {
+    "id": "401025246",
+    "name": "RBC Heritage",
+    "date": "2018-04-12"
+  },
+  {
+    "id": "401025247",
+    "name": "Valero Texas Open",
+    "date": "2018-04-19"
+  },
+  {
+    "id": "401025248",
+    "name": "Zurich Classic of New Orleans",
+    "date": "2018-04-26"
+  },
+  {
+    "id": "401025249",
+    "name": "Wells Fargo Championship",
+    "date": "2018-05-03"
+  },
+  {
+    "id": "401025250",
+    "name": "The Players Championship",
+    "date": "2018-05-10"
+  },
+  {
+    "id": "401025251",
+    "name": "AT&T Byron Nelson",
+    "date": "2018-05-17"
+  },
+  {
+    "id": "401025252",
+    "name": "Fort Worth Invitational",
+    "date": "2018-05-24"
+  },
+  {
+    "id": "401025253",
+    "name": "the Memorial Tournament pres. by Nationwide",
+    "date": "2018-05-31"
+  },
+  {
+    "id": "401025254",
+    "name": "FedEx St. Jude Classic",
+    "date": "2018-06-07"
+  },
+  {
+    "id": "401025255",
+    "name": "U.S. Open",
+    "date": "2018-06-14"
+  },
+  {
+    "id": "401025256",
+    "name": "Travelers Championship",
+    "date": "2018-06-21"
+  },
+  {
+    "id": "401025270",
+    "name": "Quicken Loans National",
+    "date": "2018-06-28"
+  },
+  {
+    "id": "401025257",
+    "name": "A Military Tribute at The Greenbrier",
+    "date": "2018-07-05"
+  },
+  {
+    "id": "401025258",
+    "name": "John Deere Classic",
+    "date": "2018-07-12"
+  },
+  {
+    "id": "401025259",
+    "name": "The Open",
+    "date": "2018-07-19"
+  },
+  {
+    "id": "401025271",
+    "name": "Barbasol Championship",
+    "date": "2018-07-19"
+  },
+  {
+    "id": "401025260",
+    "name": "RBC Canadian Open",
+    "date": "2018-07-26"
+  },
+  {
+    "id": "401025261",
+    "name": "WGC-Bridgestone Invitational",
+    "date": "2018-08-02"
+  },
+  {
+    "id": "401025262",
+    "name": "Barracuda Championship",
+    "date": "2018-08-02"
+  },
+  {
+    "id": "401025263",
+    "name": "PGA Championship",
+    "date": "2018-08-09"
+  },
+  {
+    "id": "401025264",
+    "name": "Wyndham Championship",
+    "date": "2018-08-16"
+  },
+  {
+    "id": "401025265",
+    "name": "THE NORTHERN TRUST",
+    "date": "2018-08-23"
+  },
+  {
+    "id": "401025266",
+    "name": "Dell Technologies Championship",
+    "date": "2018-08-31"
+  },
+  {
+    "id": "401025267",
+    "name": "BMW Championship",
+    "date": "2018-09-06"
+  },
+  {
+    "id": "401025268",
+    "name": "Tour Championship",
+    "date": "2018-09-20"
+  },
+  {
+    "id": "401025269",
+    "name": "Ryder Cup",
+    "date": "2018-09-28"
+  },
+  {
+    "id": "401056252",
+    "name": "Safeway Open",
+    "date": "2018-10-04"
+  },
+  {
+    "id": "401056500",
+    "name": "CIMB Classic",
+    "date": "2018-10-10"
+  },
+  {
+    "id": "401056501",
+    "name": "THE CJ CUP @ NINE BRIDGES",
+    "date": "2018-10-17"
+  },
+  {
+    "id": "401056502",
+    "name": "WGC-HSBC CHAMPIONS",
+    "date": "2018-10-24"
+  },
+  {
+    "id": "401056503",
+    "name": "Sanderson Farms Championship",
+    "date": "2018-10-25"
+  },
+  {
+    "id": "401056504",
+    "name": "Shriners Hospital for Children Open",
+    "date": "2018-11-01"
+  },
+  {
+    "id": "401056505",
+    "name": "Mayakoba Golf Classic",
+    "date": "2018-11-08"
+  },
+  {
+    "id": "401056506",
+    "name": "The RSM Classic",
+    "date": "2018-11-15"
+  },
+  {
+    "id": "401077167",
+    "name": "Hero World Challenge",
+    "date": "2018-11-29"
+  },
+  {
+    "id": "401056507",
+    "name": "Sentry Tournament of Champions",
+    "date": "2019-01-03"
+  },
+  {
+    "id": "401056510",
+    "name": "Sony Open in Hawaii",
+    "date": "2019-01-10"
+  },
+  {
+    "id": "401056511",
+    "name": "Desert Classic",
+    "date": "2019-01-17"
+  },
+  {
+    "id": "401056512",
+    "name": "Farmers Insurance Open",
+    "date": "2019-01-24"
+  },
+  {
+    "id": "401056513",
+    "name": "Waste Management Phoenix Open",
+    "date": "2019-01-31"
+  },
+  {
+    "id": "401056514",
+    "name": "AT&T Pebble Beach Pro-Am",
+    "date": "2019-02-07"
+  },
+  {
+    "id": "401056515",
+    "name": "Genesis Open",
+    "date": "2019-02-14"
+  },
+  {
+    "id": "401056516",
+    "name": "WGC-Mexico Championship",
+    "date": "2019-02-21"
+  },
+  {
+    "id": "401056517",
+    "name": "Puerto Rico Open",
+    "date": "2019-02-21"
+  },
+  {
+    "id": "401056520",
+    "name": "The Honda Classic",
+    "date": "2019-02-28"
+  },
+  {
+    "id": "401056521",
+    "name": "Arnold Palmer Invitational Pres. By Mastercard",
+    "date": "2019-03-07"
+  },
+  {
+    "id": "401056522",
+    "name": "THE PLAYERS Championship",
+    "date": "2019-03-14"
+  },
+  {
+    "id": "401056523",
+    "name": "Valspar Championship",
+    "date": "2019-03-21"
+  },
+  {
+    "id": "401056525",
+    "name": "Corales Puntacana Resort & Club Championship",
+    "date": "2019-03-28"
+  },
+  {
+    "id": "401056526",
+    "name": "Valero Texas Open",
+    "date": "2019-04-04"
+  },
+  {
+    "id": "401056527",
+    "name": "2019 Masters Tournament",
+    "date": "2019-04-11"
+  },
+  {
+    "id": "401056528",
+    "name": "RBC Heritage",
+    "date": "2019-04-18"
+  },
+  {
+    "id": "401056529",
+    "name": "Zurich Classic Of New Orleans",
+    "date": "2019-04-25"
+  },
+  {
+    "id": "401056550",
+    "name": "Wells Fargo Championship",
+    "date": "2019-05-02"
+  },
+  {
+    "id": "401056551",
+    "name": "AT&T Byron Nelson",
+    "date": "2019-05-09"
+  },
+  {
+    "id": "401056552",
+    "name": "PGA Championship",
+    "date": "2019-05-16"
+  },
+  {
+    "id": "401056553",
+    "name": "Charles Schwab Challenge",
+    "date": "2019-05-23"
+  },
+  {
+    "id": "401056554",
+    "name": "the Memorial Tournament pres. by Nationwide",
+    "date": "2019-05-30"
+  },
+  {
+    "id": "401056555",
+    "name": "RBC Canadian Open",
+    "date": "2019-06-06"
+  },
+  {
+    "id": "401056556",
+    "name": "U.S. Open",
+    "date": "2019-06-13"
+  },
+  {
+    "id": "401056549",
+    "name": "Travelers Championship",
+    "date": "2019-06-20"
+  },
+  {
+    "id": "401056557",
+    "name": "Rocket Mortgage Classic",
+    "date": "2019-06-27"
+  },
+  {
+    "id": "401056558",
+    "name": "3M Open",
+    "date": "2019-07-04"
+  },
+  {
+    "id": "401056548",
+    "name": "John Deere Classic",
+    "date": "2019-07-11"
+  },
+  {
+    "id": "401056546",
+    "name": "Barbasol Championship",
+    "date": "2019-07-18"
+  },
+  {
+    "id": "401056547",
+    "name": "The Open Championship",
+    "date": "2019-07-18"
+  },
+  {
+    "id": "401056559",
+    "name": "WGC-FedEx St. Jude Invitational",
+    "date": "2019-07-25"
+  },
+  {
+    "id": "401056560",
+    "name": "Barracuda Championship",
+    "date": "2019-07-25"
+  },
+  {
+    "id": "401056545",
+    "name": "Wyndham Championship",
+    "date": "2019-08-01"
+  },
+  {
+    "id": "401056544",
+    "name": "THE NORTHERN TRUST",
+    "date": "2019-08-08"
+  },
+  {
+    "id": "401056543",
+    "name": "BMW Championship",
+    "date": "2019-08-15"
+  },
+  {
+    "id": "401056542",
+    "name": "Tour Championship",
+    "date": "2019-08-22"
+  },
+  {
+    "id": "401148233",
+    "name": "A Military Tribute at The Greenbrier",
+    "date": "2019-09-12"
+  },
+  {
+    "id": "401148234",
+    "name": "Sanderson Farms Championship",
+    "date": "2019-09-19"
+  },
+  {
+    "id": "401148235",
+    "name": "Safeway Open",
+    "date": "2019-09-26"
+  },
+  {
+    "id": "401148236",
+    "name": "Shriners Hospitals for Children Open",
+    "date": "2019-10-03"
+  },
+  {
+    "id": "401148237",
+    "name": "Houston Open",
+    "date": "2019-10-10"
+  },
+  {
+    "id": "401148238",
+    "name": "THE CJ CUP @ NINE BRIDGES",
+    "date": "2019-10-16"
+  },
+  {
+    "id": "401148239",
+    "name": "The ZOZO CHAMPIONSHIP",
+    "date": "2019-10-24"
+  },
+  {
+    "id": "401148240",
+    "name": "Bermuda Championship",
+    "date": "2019-10-31"
+  },
+  {
+    "id": "401148241",
+    "name": "WGC-HSBC CHAMPIONS",
+    "date": "2019-10-31"
+  },
+  {
+    "id": "401148242",
+    "name": "Mayakoba Golf Classic",
+    "date": "2019-11-14"
+  },
+  {
+    "id": "401148243",
+    "name": "The RSM Classic",
+    "date": "2019-11-21"
+  },
+  {
+    "id": "401148245",
+    "name": "Presidents Cup",
+    "date": "2019-12-11"
+  },
+  {
+    "id": "401155413",
+    "name": "Sentry Tournament of Champions",
+    "date": "2020-01-02"
+  },
+  {
+    "id": "401155418",
+    "name": "Sony Open in Hawaii",
+    "date": "2020-01-09"
+  },
+  {
+    "id": "401155419",
+    "name": "The American Express",
+    "date": "2020-01-16"
+  },
+  {
+    "id": "401155420",
+    "name": "Farmers Insurance Open",
+    "date": "2020-01-23"
+  },
+  {
+    "id": "401155421",
+    "name": "Waste Management Phoenix Open",
+    "date": "2020-01-30"
+  },
+  {
+    "id": "401155422",
+    "name": "AT&T Pebble Beach Pro-Am",
+    "date": "2020-02-06"
+  },
+  {
+    "id": "401155423",
+    "name": "The Genesis Invitational",
+    "date": "2020-02-13"
+  },
+  {
+    "id": "401155424",
+    "name": "WGC-Mexico Championship",
+    "date": "2020-02-20"
+  },
+  {
+    "id": "401155425",
+    "name": "Puerto Rico Open",
+    "date": "2020-02-20"
+  },
+  {
+    "id": "401155426",
+    "name": "The Honda Classic",
+    "date": "2020-02-27"
+  },
+  {
+    "id": "401155427",
+    "name": "Arnold Palmer Invitational Pres. By Mastercard",
+    "date": "2020-03-05"
+  },
+  {
+    "id": "401155428",
+    "name": "THE PLAYERS Championship",
+    "date": "2020-03-12"
+  },
+  {
+    "id": "401219495",
+    "name": "Valspar Championship",
+    "date": "2020-03-19"
+  },
+  {
+    "id": "401219496",
+    "name": "WGC-Dell Technologies Match Play",
+    "date": "2020-03-25"
+  },
+  {
+    "id": "401219497",
+    "name": "Valero Texas Open",
+    "date": "2020-04-02"
+  },
+  {
+    "id": "401219499",
+    "name": "Zurich Classic of New Orleans",
+    "date": "2020-04-23"
+  },
+  {
+    "id": "401219500",
+    "name": "Wells Fargo Championship",
+    "date": "2020-04-30"
+  },
+  {
+    "id": "401219501",
+    "name": "AT&T Byron Nelson",
+    "date": "2020-05-07"
+  },
+  {
+    "id": "401220113",
+    "name": "The Match: Champions for Charity",
+    "date": "2020-05-24"
+  },
+  {
+    "id": "401155459",
+    "name": "Charles Schwab Challenge",
+    "date": "2020-06-11"
+  },
+  {
+    "id": "401223553",
+    "name": "RBC Canadian Open",
+    "date": "2020-06-11"
+  },
+  {
+    "id": "401219498",
+    "name": "RBC Heritage",
+    "date": "2020-06-18"
+  },
+  {
+    "id": "401155466",
+    "name": "Travelers Championship",
+    "date": "2020-06-25"
+  },
+  {
+    "id": "401155460",
+    "name": "Rocket Mortgage Classic",
+    "date": "2020-07-02"
+  },
+  {
+    "id": "401223849",
+    "name": "Workday Charity Open",
+    "date": "2020-07-09"
+  },
+  {
+    "id": "401230732",
+    "name": "John Deere Classic",
+    "date": "2020-07-09"
+  },
+  {
+    "id": "401155461",
+    "name": "the Memorial Tournament pres. by Nationwide",
+    "date": "2020-07-16"
+  },
+  {
+    "id": "401231117",
+    "name": "The Open Championship",
+    "date": "2020-07-16"
+  },
+  {
+    "id": "401231118",
+    "name": "Barbasol Championship",
+    "date": "2020-07-16"
+  },
+  {
+    "id": "401155472",
+    "name": "3M Open",
+    "date": "2020-07-23"
+  },
+  {
+    "id": "401155467",
+    "name": "WGC-FedEx St. Jude Invitational",
+    "date": "2020-07-30"
+  },
+  {
+    "id": "401155468",
+    "name": "Barracuda Championship",
+    "date": "2020-07-30"
+  },
+  {
+    "id": "401219481",
+    "name": "PGA Championship",
+    "date": "2020-08-06"
+  },
+  {
+    "id": "401155473",
+    "name": "Wyndham Championship",
+    "date": "2020-08-13"
+  },
+  {
+    "id": "401155474",
+    "name": "THE NORTHERN TRUST",
+    "date": "2020-08-20"
+  },
+  {
+    "id": "401155475",
+    "name": "BMW Championship",
+    "date": "2020-08-27"
+  },
+  {
+    "id": "401155476",
+    "name": "Tour Championship",
+    "date": "2020-09-04"
+  },
+  {
+    "id": "401219793",
+    "name": "Safeway Open",
+    "date": "2020-09-10"
+  },
+  {
+    "id": "401219333",
+    "name": "U.S. Open",
+    "date": "2020-09-17"
+  },
+  {
+    "id": "401219480",
+    "name": "Corales Puntacana Resort & Club Championship",
+    "date": "2020-09-24"
+  },
+  {
+    "id": "401219794",
+    "name": "Sanderson Farms Championship",
+    "date": "2020-10-01"
+  },
+  {
+    "id": "401219795",
+    "name": "Shriners Hospitals for Children Open",
+    "date": "2020-10-08"
+  },
+  {
+    "id": "401219796",
+    "name": "THE CJ CUP @ SHADOW CREEK",
+    "date": "2020-10-15"
+  },
+  {
+    "id": "401219797",
+    "name": "The ZOZO CHAMPIONSHIP",
+    "date": "2020-10-22"
+  },
+  {
+    "id": "401219799",
+    "name": "Bermuda Championship",
+    "date": "2020-10-29"
+  },
+  {
+    "id": "401256493",
+    "name": "WGC-HSBC CHAMPIONS",
+    "date": "2020-10-29"
+  },
+  {
+    "id": "401219800",
+    "name": "Vivint Houston Open",
+    "date": "2020-11-05"
+  },
+  {
+    "id": "401219478",
+    "name": "2020 Masters Tournament",
+    "date": "2020-11-12"
+  },
+  {
+    "id": "401219801",
+    "name": "The RSM Classic",
+    "date": "2020-11-19"
+  },
+  {
+    "id": "401219802",
+    "name": "Mayakoba Golf Classic presented by UNIFIN",
+    "date": "2020-12-03"
+  },
+  {
+    "id": "401268081",
+    "name": "Hero World Challenge",
+    "date": "2020-12-03"
+  },
+  {
+    "id": "401242996",
+    "name": "Sentry Tournament of Champions",
+    "date": "2021-01-07"
+  },
+  {
+    "id": "401242997",
+    "name": "Sony Open in Hawaii",
+    "date": "2021-01-14"
+  },
+  {
+    "id": "401243401",
+    "name": "The American Express",
+    "date": "2021-01-21"
+  },
+  {
+    "id": "401242998",
+    "name": "Farmers Insurance Open",
+    "date": "2021-01-28"
+  },
+  {
+    "id": "401242999",
+    "name": "Waste Management Phoenix Open",
+    "date": "2021-02-04"
+  },
+  {
+    "id": "401243000",
+    "name": "AT&T Pebble Beach Pro-Am",
+    "date": "2021-02-11"
+  },
+  {
+    "id": "401243001",
+    "name": "The Genesis Invitational",
+    "date": "2021-02-18"
+  },
+  {
+    "id": "401243002",
+    "name": "WGC-Workday Championship at The Concession",
+    "date": "2021-02-25"
+  },
+  {
+    "id": "401243003",
+    "name": "Puerto Rico Open",
+    "date": "2021-02-25"
+  },
+  {
+    "id": "401243004",
+    "name": "Arnold Palmer Invitational Pres. By Mastercard",
+    "date": "2021-03-04"
+  },
+  {
+    "id": "401243005",
+    "name": "THE PLAYERS Championship",
+    "date": "2021-03-11"
+  },
+  {
+    "id": "401243006",
+    "name": "The Honda Classic",
+    "date": "2021-03-18"
+  },
+  {
+    "id": "401243008",
+    "name": "Corales Puntacana Resort & Club Championship",
+    "date": "2021-03-25"
+  },
+  {
+    "id": "401243009",
+    "name": "Valero Texas Open",
+    "date": "2021-04-01"
+  },
+  {
+    "id": "401243010",
+    "name": "2021 Masters Tournament",
+    "date": "2021-04-08"
+  },
+  {
+    "id": "401243011",
+    "name": "RBC Heritage",
+    "date": "2021-04-15"
+  },
+  {
+    "id": "401243012",
+    "name": "Zurich Classic of New Orleans",
+    "date": "2021-04-22"
+  },
+  {
+    "id": "401243433",
+    "name": "Valspar Championship",
+    "date": "2021-04-29"
+  },
+  {
+    "id": "401243420",
+    "name": "Wells Fargo Championship",
+    "date": "2021-05-06"
+  },
+  {
+    "id": "401243419",
+    "name": "AT&T Byron Nelson",
+    "date": "2021-05-13"
+  },
+  {
+    "id": "401243418",
+    "name": "PGA Championship",
+    "date": "2021-05-20"
+  },
+  {
+    "id": "401243417",
+    "name": "Charles Schwab Challenge",
+    "date": "2021-05-27"
+  },
+  {
+    "id": "401243416",
+    "name": "the Memorial Tournament pres. by Nationwide",
+    "date": "2021-06-03"
+  },
+  {
+    "id": "401317529",
+    "name": "Palmetto Championship at Congaree",
+    "date": "2021-06-10"
+  },
+  {
+    "id": "401335227",
+    "name": "RBC Canadian Open",
+    "date": "2021-06-10"
+  },
+  {
+    "id": "401243414",
+    "name": "U.S. Open",
+    "date": "2021-06-17"
+  },
+  {
+    "id": "401243413",
+    "name": "Travelers Championship",
+    "date": "2021-06-24"
+  },
+  {
+    "id": "401243412",
+    "name": "Rocket Mortgage Classic",
+    "date": "2021-07-01"
+  },
+  {
+    "id": "401243411",
+    "name": "John Deere Classic",
+    "date": "2021-07-08"
+  },
+  {
+    "id": "401243409",
+    "name": "Barbasol Championship",
+    "date": "2021-07-15"
+  },
+  {
+    "id": "401243410",
+    "name": "The Open Championship",
+    "date": "2021-07-15"
+  },
+  {
+    "id": "401243408",
+    "name": "3M Open",
+    "date": "2021-07-22"
+  },
+  {
+    "id": "401243406",
+    "name": "Barracuda Championship",
+    "date": "2021-08-05"
+  },
+  {
+    "id": "401243407",
+    "name": "WGC-FedEx St. Jude Invitational",
+    "date": "2021-08-05"
+  },
+  {
+    "id": "401243405",
+    "name": "Wyndham Championship",
+    "date": "2021-08-12"
+  },
+  {
+    "id": "401243404",
+    "name": "THE NORTHERN TRUST",
+    "date": "2021-08-19"
+  },
+  {
+    "id": "401243403",
+    "name": "BMW Championship",
+    "date": "2021-08-26"
+  },
+  {
+    "id": "401243402",
+    "name": "TOUR Championship",
+    "date": "2021-09-02"
+  },
+  {
+    "id": "401353193",
+    "name": "Fortinet Championship",
+    "date": "2021-09-16"
+  },
+  {
+    "id": "401219595",
+    "name": "Ryder Cup",
+    "date": "2021-09-24"
+  },
+  {
+    "id": "401353194",
+    "name": "Sanderson Farms Championship",
+    "date": "2021-09-30"
+  },
+  {
+    "id": "401353195",
+    "name": "Shriners Children's Open",
+    "date": "2021-10-07"
+  },
+  {
+    "id": "401353196",
+    "name": "THE CJ CUP @ SUMMIT",
+    "date": "2021-10-14"
+  },
+  {
+    "id": "401353197",
+    "name": "ZOZO CHAMPIONSHIP",
+    "date": "2021-10-21"
+  },
+  {
+    "id": "401353199",
+    "name": "Butterfield Bermuda Championship",
+    "date": "2021-10-28"
+  },
+  {
+    "id": "401353200",
+    "name": "World Wide Technology Championship at Mayakoba",
+    "date": "2021-11-04"
+  },
+  {
+    "id": "401353201",
+    "name": "Houston Open",
+    "date": "2021-11-11"
+  },
+  {
+    "id": "401353202",
+    "name": "The RSM Classic",
+    "date": "2021-11-18"
+  },
+  {
+    "id": "401366873",
+    "name": "Hero World Challenge",
+    "date": "2021-12-02"
+  },
+  {
+    "id": "401353203",
+    "name": "Sentry Tournament of Champions",
+    "date": "2022-01-06"
+  },
+  {
+    "id": "401353204",
+    "name": "Sony Open in Hawaii",
+    "date": "2022-01-13"
+  },
+  {
+    "id": "401353233",
+    "name": "The American Express",
+    "date": "2022-01-20"
+  },
+  {
+    "id": "401353235",
+    "name": "AT&T Pebble Beach Pro-Am",
+    "date": "2022-02-03"
+  },
+  {
+    "id": "401353236",
+    "name": "WM Phoenix Open",
+    "date": "2022-02-10"
+  },
+  {
+    "id": "401353237",
+    "name": "The Genesis Invitational",
+    "date": "2022-02-17"
+  },
+  {
+    "id": "401353238",
+    "name": "The Honda Classic",
+    "date": "2022-02-24"
+  },
+  {
+    "id": "401353239",
+    "name": "Arnold Palmer Invitational pres. by Mastercard",
+    "date": "2022-03-03"
+  },
+  {
+    "id": "401353253",
+    "name": "Puerto Rico Open",
+    "date": "2022-03-03"
+  },
+  {
+    "id": "401353254",
+    "name": "THE PLAYERS Championship",
+    "date": "2022-03-10"
+  },
+  {
+    "id": "401353255",
+    "name": "Valspar Championship",
+    "date": "2022-03-17"
+  },
+  {
+    "id": "401353294",
+    "name": "Corales Puntacana Championship",
+    "date": "2022-03-24"
+  },
+  {
+    "id": "401353273",
+    "name": "Valero Texas Open",
+    "date": "2022-03-31"
+  },
+  {
+    "id": "401353232",
+    "name": "Masters Tournament",
+    "date": "2022-04-07"
+  },
+  {
+    "id": "401353231",
+    "name": "RBC Heritage",
+    "date": "2022-04-14"
+  },
+  {
+    "id": "401353230",
+    "name": "Zurich Classic of New Orleans",
+    "date": "2022-04-21"
+  },
+  {
+    "id": "401353229",
+    "name": "Mexico Open",
+    "date": "2022-04-28"
+  },
+  {
+    "id": "401353228",
+    "name": "Wells Fargo Championship",
+    "date": "2022-05-05"
+  },
+  {
+    "id": "401353227",
+    "name": "AT&T Byron Nelson",
+    "date": "2022-05-12"
+  },
+  {
+    "id": "401353226",
+    "name": "PGA Championship",
+    "date": "2022-05-19"
+  },
+  {
+    "id": "401353225",
+    "name": "Charles Schwab Challenge",
+    "date": "2022-05-26"
+  },
+  {
+    "id": "401353224",
+    "name": "the Memorial Tournament pres. by Workday",
+    "date": "2022-06-02"
+  },
+  {
+    "id": "401353223",
+    "name": "RBC Canadian Open",
+    "date": "2022-06-09"
+  },
+  {
+    "id": "401353222",
+    "name": "U.S. Open",
+    "date": "2022-06-16"
+  },
+  {
+    "id": "401353221",
+    "name": "Travelers Championship",
+    "date": "2022-06-23"
+  },
+  {
+    "id": "401353220",
+    "name": "John Deere Classic",
+    "date": "2022-06-30"
+  },
+  {
+    "id": "401353218",
+    "name": "Barbasol Championship",
+    "date": "2022-07-07"
+  },
+  {
+    "id": "401353219",
+    "name": "Genesis Scottish Open",
+    "date": "2022-07-07"
+  },
+  {
+    "id": "401353216",
+    "name": "Barracuda Championship",
+    "date": "2022-07-14"
+  },
+  {
+    "id": "401353217",
+    "name": "The Open",
+    "date": "2022-07-14"
+  },
+  {
+    "id": "401353215",
+    "name": "3M Open",
+    "date": "2022-07-21"
+  },
+  {
+    "id": "401353214",
+    "name": "Rocket Mortgage Classic",
+    "date": "2022-07-28"
+  },
+  {
+    "id": "401353213",
+    "name": "Wyndham Championship",
+    "date": "2022-08-04"
+  },
+  {
+    "id": "401353274",
+    "name": "FedEx St. Jude Championship",
+    "date": "2022-08-11"
+  },
+  {
+    "id": "401353275",
+    "name": "BMW Championship",
+    "date": "2022-08-18"
+  },
+  {
+    "id": "401353276",
+    "name": "TOUR Championship",
+    "date": "2022-08-25"
+  },
+  {
+    "id": "401465496",
+    "name": "Fortinet Championship",
+    "date": "2022-09-15"
+  },
+  {
+    "id": "401465497",
+    "name": "Presidents Cup",
+    "date": "2022-09-22"
+  },
+  {
+    "id": "401465498",
+    "name": "Sanderson Farms Championship",
+    "date": "2022-09-29"
+  },
+  {
+    "id": "401465499",
+    "name": "Shriners Children's Open",
+    "date": "2022-10-06"
+  },
+  {
+    "id": "401465500",
+    "name": "ZOZO CHAMPIONSHIP",
+    "date": "2022-10-13"
+  },
+  {
+    "id": "401465501",
+    "name": "THE CJ CUP in South Carolina",
+    "date": "2022-10-20"
+  },
+  {
+    "id": "401465503",
+    "name": "Butterfield Bermuda Championship",
+    "date": "2022-10-27"
+  },
+  {
+    "id": "401465504",
+    "name": "World Wide Technology Championship at Mayakoba",
+    "date": "2022-11-03"
+  },
+  {
+    "id": "401465505",
+    "name": "Cadence Bank Houston Open",
+    "date": "2022-11-10"
+  },
+  {
+    "id": "401465506",
+    "name": "The RSM Classic",
+    "date": "2022-11-17"
+  },
+  {
+    "id": "401465507",
+    "name": "Hero World Challenge",
+    "date": "2022-12-01"
+  },
+  {
+    "id": "401465512",
+    "name": "Sentry Tournament of Champions",
+    "date": "2023-01-05"
+  },
+  {
+    "id": "401465513",
+    "name": "Sony Open in Hawaii",
+    "date": "2023-01-12"
+  },
+  {
+    "id": "401465514",
+    "name": "The American Express",
+    "date": "2023-01-19"
+  },
+  {
+    "id": "401465517",
+    "name": "AT&T Pebble Beach Pro-Am",
+    "date": "2023-02-02"
+  },
+  {
+    "id": "401465518",
+    "name": "WM Phoenix Open",
+    "date": "2023-02-09"
+  },
+  {
+    "id": "401465521",
+    "name": "The Genesis Invitational",
+    "date": "2023-02-16"
+  },
+  {
+    "id": "401465522",
+    "name": "The Honda Classic",
+    "date": "2023-02-23"
+  },
+  {
+    "id": "401465524",
+    "name": "Arnold Palmer Invitational pres. by Mastercard",
+    "date": "2023-03-02"
+  },
+  {
+    "id": "401465525",
+    "name": "Puerto Rico Open",
+    "date": "2023-03-02"
+  },
+  {
+    "id": "401465526",
+    "name": "THE PLAYERS Championship",
+    "date": "2023-03-09"
+  },
+  {
+    "id": "401465527",
+    "name": "Valspar Championship",
+    "date": "2023-03-16"
+  },
+  {
+    "id": "401465529",
+    "name": "Corales Puntacana Championship",
+    "date": "2023-03-23"
+  },
+  {
+    "id": "401465502",
+    "name": "Valero Texas Open",
+    "date": "2023-03-30"
+  },
+  {
+    "id": "401465508",
+    "name": "Masters Tournament",
+    "date": "2023-04-06"
+  },
+  {
+    "id": "401465509",
+    "name": "RBC Heritage",
+    "date": "2023-04-13"
+  },
+  {
+    "id": "401465511",
+    "name": "Zurich Classic of New Orleans",
+    "date": "2023-04-20"
+  },
+  {
+    "id": "401465515",
+    "name": "Mexico Open",
+    "date": "2023-04-27"
+  },
+  {
+    "id": "401465519",
+    "name": "Wells Fargo Championship",
+    "date": "2023-05-04"
+  },
+  {
+    "id": "401465520",
+    "name": "AT&T Byron Nelson",
+    "date": "2023-05-11"
+  },
+  {
+    "id": "401465523",
+    "name": "PGA Championship",
+    "date": "2023-05-18"
+  },
+  {
+    "id": "401465530",
+    "name": "Charles Schwab Challenge",
+    "date": "2023-05-25"
+  },
+  {
+    "id": "401465531",
+    "name": "The Memorial Tournament pres. by Workday",
+    "date": "2023-06-01"
+  },
+  {
+    "id": "401465532",
+    "name": "RBC Canadian Open",
+    "date": "2023-06-08"
+  },
+  {
+    "id": "401465533",
+    "name": "U.S. Open",
+    "date": "2023-06-15"
+  },
+  {
+    "id": "401465534",
+    "name": "Travelers Championship",
+    "date": "2023-06-22"
+  },
+  {
+    "id": "401465535",
+    "name": "Rocket Mortgage Classic",
+    "date": "2023-06-29"
+  },
+  {
+    "id": "401465536",
+    "name": "John Deere Classic",
+    "date": "2023-07-06"
+  },
+  {
+    "id": "401465537",
+    "name": "Genesis Scottish Open",
+    "date": "2023-07-13"
+  },
+  {
+    "id": "401465538",
+    "name": "Barbasol Championship",
+    "date": "2023-07-13"
+  },
+  {
+    "id": "401465539",
+    "name": "The Open",
+    "date": "2023-07-20"
+  },
+  {
+    "id": "401465540",
+    "name": "Barracuda Championship",
+    "date": "2023-07-20"
+  },
+  {
+    "id": "401465541",
+    "name": "3M Open",
+    "date": "2023-07-27"
+  },
+  {
+    "id": "401465542",
+    "name": "Wyndham Championship",
+    "date": "2023-08-03"
+  },
+  {
+    "id": "401465543",
+    "name": "FedEx St. Jude Championship",
+    "date": "2023-08-10"
+  },
+  {
+    "id": "401465544",
+    "name": "BMW Championship",
+    "date": "2023-08-17"
+  },
+  {
+    "id": "401465545",
+    "name": "TOUR Championship",
+    "date": "2023-08-24"
+  },
+  {
+    "id": "401552854",
+    "name": "Fortinet Championship",
+    "date": "2023-09-14"
+  },
+  {
+    "id": "401552863",
+    "name": "Ryder Cup",
+    "date": "2023-09-29"
+  },
+  {
+    "id": "401552855",
+    "name": "Sanderson Farms Championship",
+    "date": "2023-10-05"
+  },
+  {
+    "id": "401552856",
+    "name": "Shriners Children's Open",
+    "date": "2023-10-12"
+  },
+  {
+    "id": "401552857",
+    "name": "ZOZO CHAMPIONSHIP",
+    "date": "2023-10-19"
+  },
+  {
+    "id": "401552858",
+    "name": "World Wide Technology Championship",
+    "date": "2023-11-02"
+  },
+  {
+    "id": "401552859",
+    "name": "Butterfield Bermuda Championship",
+    "date": "2023-11-09"
+  },
+  {
+    "id": "401552860",
+    "name": "The RSM Classic",
+    "date": "2023-11-16"
+  },
+  {
+    "id": "401552861",
+    "name": "Hero World Challenge",
+    "date": "2023-11-30"
+  },
+  {
+    "id": "401558309",
+    "name": "PGA TOUR Q-School presented by Korn Ferry",
+    "date": "2023-12-14"
+  },
+  {
+    "id": "401580329",
+    "name": "The Sentry",
+    "date": "2024-01-04"
+  },
+  {
+    "id": "401580330",
+    "name": "Sony Open in Hawaii",
+    "date": "2024-01-11"
+  },
+  {
+    "id": "401580331",
+    "name": "The American Express",
+    "date": "2024-01-18"
+  },
+  {
+    "id": "401580334",
+    "name": "WM Phoenix Open",
+    "date": "2024-02-08"
+  },
+  {
+    "id": "401580335",
+    "name": "The Genesis Invitational",
+    "date": "2024-02-15"
+  },
+  {
+    "id": "401580336",
+    "name": "Mexico Open at Vidanta",
+    "date": "2024-02-22"
+  },
+  {
+    "id": "401580337",
+    "name": "Cognizant Classic",
+    "date": "2024-02-29"
+  },
+  {
+    "id": "401580338",
+    "name": "Arnold Palmer Invitational pres. by Mastercard",
+    "date": "2024-03-07"
+  },
+  {
+    "id": "401580339",
+    "name": "Puerto Rico Open",
+    "date": "2024-03-07"
+  },
+  {
+    "id": "401580340",
+    "name": "THE PLAYERS Championship",
+    "date": "2024-03-14"
+  },
+  {
+    "id": "401580341",
+    "name": "Valspar Championship",
+    "date": "2024-03-21"
+  },
+  {
+    "id": "401580342",
+    "name": "Texas Children's Houston Open",
+    "date": "2024-03-28"
+  },
+  {
+    "id": "401580343",
+    "name": "Valero Texas Open",
+    "date": "2024-04-04"
+  },
+  {
+    "id": "401580344",
+    "name": "Masters Tournament",
+    "date": "2024-04-11"
+  },
+  {
+    "id": "401580345",
+    "name": "RBC Heritage",
+    "date": "2024-04-18"
+  },
+  {
+    "id": "401580346",
+    "name": "Corales Puntacana Championship",
+    "date": "2024-04-18"
+  },
+  {
+    "id": "401580347",
+    "name": "Zurich Classic of New Orleans",
+    "date": "2024-04-25"
+  },
+  {
+    "id": "401580348",
+    "name": "THE CJ CUP Byron Nelson",
+    "date": "2024-05-02"
+  },
+  {
+    "id": "401580349",
+    "name": "Wells Fargo Championship",
+    "date": "2024-05-09"
+  },
+  {
+    "id": "401580350",
+    "name": "Myrtle Beach Classic",
+    "date": "2024-05-09"
+  },
+  {
+    "id": "401580351",
+    "name": "PGA Championship",
+    "date": "2024-05-16"
+  },
+  {
+    "id": "401580352",
+    "name": "Charles Schwab Challenge",
+    "date": "2024-05-23"
+  },
+  {
+    "id": "401580353",
+    "name": "RBC Canadian Open",
+    "date": "2024-05-30"
+  },
+  {
+    "id": "401580354",
+    "name": "the Memorial Tournament pres. by Workday",
+    "date": "2024-06-06"
+  },
+  {
+    "id": "401580355",
+    "name": "U.S. Open",
+    "date": "2024-06-13"
+  },
+  {
+    "id": "401580356",
+    "name": "Travelers Championship",
+    "date": "2024-06-20"
+  },
+  {
+    "id": "401580357",
+    "name": "Rocket Mortgage Classic",
+    "date": "2024-06-27"
+  },
+  {
+    "id": "401580358",
+    "name": "John Deere Classic",
+    "date": "2024-07-04"
+  },
+  {
+    "id": "401580359",
+    "name": "Genesis Scottish Open",
+    "date": "2024-07-11"
+  },
+  {
+    "id": "401634279",
+    "name": "ISCO Championship",
+    "date": "2024-07-11"
+  },
+  {
+    "id": "401580360",
+    "name": "The Open",
+    "date": "2024-07-18"
+  },
+  {
+    "id": "401580361",
+    "name": "Barracuda Championship",
+    "date": "2024-07-18"
+  },
+  {
+    "id": "401580362",
+    "name": "3M Open",
+    "date": "2024-07-25"
+  },
+  {
+    "id": "401580363",
+    "name": "Wyndham Championship",
+    "date": "2024-08-08"
+  },
+  {
+    "id": "401580364",
+    "name": "FedEx St. Jude Championship",
+    "date": "2024-08-15"
+  },
+  {
+    "id": "401580365",
+    "name": "BMW Championship",
+    "date": "2024-08-22"
+  },
+  {
+    "id": "401580366",
+    "name": "TOUR Championship",
+    "date": "2024-08-29"
+  },
+  {
+    "id": "401693936",
+    "name": "Procore Championship",
+    "date": "2024-09-12"
+  },
+  {
+    "id": "401656722",
+    "name": "Presidents Cup",
+    "date": "2024-09-26"
+  },
+  {
+    "id": "401693937",
+    "name": "Sanderson Farms Championship",
+    "date": "2024-10-03"
+  },
+  {
+    "id": "401693938",
+    "name": "Black Desert Championship",
+    "date": "2024-10-10"
+  },
+  {
+    "id": "401693939",
+    "name": "Shriners Children's Open",
+    "date": "2024-10-17"
+  },
+  {
+    "id": "401693940",
+    "name": "ZOZO CHAMPIONSHIP",
+    "date": "2024-10-24"
+  },
+  {
+    "id": "401693941",
+    "name": "World Wide Technology Championship",
+    "date": "2024-11-07"
+  },
+  {
+    "id": "401693942",
+    "name": "Butterfield Bermuda Championship",
+    "date": "2024-11-14"
+  },
+  {
+    "id": "401693943",
+    "name": "The RSM Classic",
+    "date": "2024-11-21"
+  },
+  {
+    "id": "401693956",
+    "name": "Hero World Challenge",
+    "date": "2024-12-05"
+  },
+  {
+    "id": "401693957",
+    "name": "PGA TOUR Q-School presented by Korn Ferry",
+    "date": "2024-12-12"
+  },
+  {
     "id": "401703489",
     "name": "The Sentry",
     "date": "2025-01-02"
@@ -238,5 +6123,245 @@
     "id": "401833647",
     "name": "PGA TOUR Q-School presented by Korn Ferry",
     "date": "2025-12-11"
+  },
+  {
+    "id": "401811927",
+    "name": "The Sentry",
+    "date": "2026-01-08"
+  },
+  {
+    "id": "401811928",
+    "name": "Sony Open in Hawaii",
+    "date": "2026-01-15"
+  },
+  {
+    "id": "401811929",
+    "name": "The American Express",
+    "date": "2026-01-22"
+  },
+  {
+    "id": "401811930",
+    "name": "Farmers Insurance Open",
+    "date": "2026-01-29"
+  },
+  {
+    "id": "401811931",
+    "name": "WM Phoenix Open",
+    "date": "2026-02-05"
+  },
+  {
+    "id": "401811932",
+    "name": "AT&T Pebble Beach Pro-Am",
+    "date": "2026-02-12"
+  },
+  {
+    "id": "401811933",
+    "name": "The Genesis Invitational",
+    "date": "2026-02-19"
+  },
+  {
+    "id": "401811934",
+    "name": "Cognizant Classic in The Palm Beaches",
+    "date": "2026-02-26"
+  },
+  {
+    "id": "401811935",
+    "name": "Arnold Palmer Invitational pres. by Mastercard",
+    "date": "2026-03-05"
+  },
+  {
+    "id": "401811936",
+    "name": "Puerto Rico Open",
+    "date": "2026-03-05"
+  },
+  {
+    "id": "401811937",
+    "name": "THE PLAYERS Championship",
+    "date": "2026-03-12"
+  },
+  {
+    "id": "401811938",
+    "name": "Valspar Championship",
+    "date": "2026-03-19"
+  },
+  {
+    "id": "401811939",
+    "name": "Texas Children's Houston Open",
+    "date": "2026-03-26"
+  },
+  {
+    "id": "401811940",
+    "name": "Valero Texas Open",
+    "date": "2026-04-02"
+  },
+  {
+    "id": "401811941",
+    "name": "Masters Tournament",
+    "date": "2026-04-09"
+  },
+  {
+    "id": "401811942",
+    "name": "RBC Heritage",
+    "date": "2026-04-16"
+  },
+  {
+    "id": "401811943",
+    "name": "Zurich Classic of New Orleans",
+    "date": "2026-04-23"
+  },
+  {
+    "id": "401811944",
+    "name": "Cadillac Championship",
+    "date": "2026-04-30"
+  },
+  {
+    "id": "401811945",
+    "name": "Truist Championship",
+    "date": "2026-05-07"
+  },
+  {
+    "id": "401811946",
+    "name": "ONEflight Myrtle Beach Classic",
+    "date": "2026-05-07"
+  },
+  {
+    "id": "401811947",
+    "name": "PGA Championship",
+    "date": "2026-05-14"
+  },
+  {
+    "id": "401811948",
+    "name": "THE CJ CUP Byron Nelson",
+    "date": "2026-05-21"
+  },
+  {
+    "id": "401811949",
+    "name": "Charles Schwab Challenge",
+    "date": "2026-05-28"
+  },
+  {
+    "id": "401811950",
+    "name": "the Memorial Tournament pres. by Workday",
+    "date": "2026-06-04"
+  },
+  {
+    "id": "401811951",
+    "name": "RBC Canadian Open",
+    "date": "2026-06-11"
+  },
+  {
+    "id": "401811952",
+    "name": "U.S. Open",
+    "date": "2026-06-18"
+  },
+  {
+    "id": "401811953",
+    "name": "Travelers Championship",
+    "date": "2026-06-25"
+  },
+  {
+    "id": "401811954",
+    "name": "John Deere Classic",
+    "date": "2026-07-02"
+  },
+  {
+    "id": "401811955",
+    "name": "Genesis Scottish Open",
+    "date": "2026-07-09"
+  },
+  {
+    "id": "401811956",
+    "name": "ISCO Championship",
+    "date": "2026-07-09"
+  },
+  {
+    "id": "401811957",
+    "name": "The Open",
+    "date": "2026-07-16"
+  },
+  {
+    "id": "401811958",
+    "name": "Corales Puntacana Championship",
+    "date": "2026-07-16"
+  },
+  {
+    "id": "401811959",
+    "name": "3M Open",
+    "date": "2026-07-23"
+  },
+  {
+    "id": "401811960",
+    "name": "Rocket Classic",
+    "date": "2026-07-30"
+  },
+  {
+    "id": "401811961",
+    "name": "Wyndham Championship",
+    "date": "2026-08-06"
+  },
+  {
+    "id": "401811962",
+    "name": "FedEx St. Jude Championship",
+    "date": "2026-08-13"
+  },
+  {
+    "id": "401811963",
+    "name": "BMW Championship",
+    "date": "2026-08-20"
+  },
+  {
+    "id": "401811964",
+    "name": "TOUR Championship",
+    "date": "2026-08-27"
+  },
+  {
+    "id": "401850914",
+    "name": "Biltmore Championship Asheville",
+    "date": "2026-09-17"
+  },
+  {
+    "id": "401824815",
+    "name": "Presidents Cup",
+    "date": "2026-09-24"
+  },
+  {
+    "id": "401850915",
+    "name": "Bank of Utah Championship",
+    "date": "2026-10-01"
+  },
+  {
+    "id": "401850916",
+    "name": "Baycurrent Classic",
+    "date": "2026-10-08"
+  },
+  {
+    "id": "401850917",
+    "name": "Butterfield Bermuda Championship",
+    "date": "2026-10-22"
+  },
+  {
+    "id": "401850978",
+    "name": "VidantaWorld Mexico Open",
+    "date": "2026-10-29"
+  },
+  {
+    "id": "401850979",
+    "name": "World Wide Technology Championship",
+    "date": "2026-11-05"
+  },
+  {
+    "id": "401850980",
+    "name": "Good Good Championship",
+    "date": "2026-11-12"
+  },
+  {
+    "id": "401850981",
+    "name": "The RSM Classic",
+    "date": "2026-11-19"
+  },
+  {
+    "id": "401850982",
+    "name": "Hero World Challenge",
+    "date": "2026-12-03"
   }
 ]
