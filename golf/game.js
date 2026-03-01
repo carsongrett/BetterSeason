@@ -274,6 +274,11 @@ const leaveGameHardModal = document.getElementById('leave-game-hard-modal');
 const leaveGameHardModalBackdrop = document.getElementById('leave-game-hard-modal-backdrop');
 const leaveGameHardGo = document.getElementById('leave-game-hard-go');
 const leaveGameHardStay = document.getElementById('leave-game-hard-stay');
+const resultsStatsSection = document.getElementById('results-stats-section');
+const resultsStatsPercentile = document.getElementById('results-stats-percentile');
+const resultsStatsMeta = document.getElementById('results-stats-meta');
+const resultsStatsLeaderboard = document.getElementById('results-stats-leaderboard');
+const resultsStatsLoading = document.getElementById('results-stats-loading');
 
 let state = {
   puzzle: null,
@@ -309,8 +314,21 @@ function getGolfHeadshotUrl(playerName) {
   return `${GOLF_HEADSHOT_URL}/${id}.png`;
 }
 
+/** Daily seed so everyone gets the same puzzle. Use ?test=1 or ?seed=YYYY-MM-DD to force a fixed puzzle for testing. */
 function getSeed() {
-  return Date.now();
+  const params = new URLSearchParams(window.location.search);
+  const testSeed = params.get('seed'); // e.g. ?seed=2025-03-01
+  if (testSeed) {
+    return state.easyMode ? `${testSeed}_majors` : `${testSeed}_all`;
+  }
+  if (params.get('test') === '1') {
+    const d = new Date();
+    const fixed = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    return state.easyMode ? `${fixed}_majors` : `${fixed}_all`;
+  }
+  const d = new Date();
+  const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  return state.easyMode ? `${dateStr}_majors` : `${dateStr}_all`;
 }
 
 function formatScore(n) {
@@ -503,6 +521,38 @@ function setupGolfShareButtons(shareTextX, shareTextSms) {
   }
 }
 
+function renderStatsInModal(stats) {
+  if (!stats) return;
+  if (resultsStatsPercentile) {
+    if (stats.percentile != null) {
+      resultsStatsPercentile.textContent = `You scored in the ${stats.percentile}th percentile.`;
+      resultsStatsPercentile.classList.remove('hidden');
+    } else {
+      resultsStatsPercentile.classList.add('hidden');
+    }
+  }
+  if (resultsStatsMeta) {
+    const parts = [];
+    if (stats.totalPlayers > 0) parts.push(`${stats.totalPlayers} player${stats.totalPlayers !== 1 ? 's' : ''} today`);
+    if (stats.averageScore != null && !isNaN(stats.averageScore)) {
+      const avgStr = formatScore(Math.round(stats.averageScore * 10) / 10);
+      parts.push(`Average score: ${avgStr}`);
+    }
+    resultsStatsMeta.textContent = parts.join(' · ');
+    resultsStatsMeta.classList.toggle('hidden', parts.length === 0);
+  }
+  if (resultsStatsLeaderboard) {
+    resultsStatsLeaderboard.innerHTML = '';
+    (stats.leaderboard || []).forEach((row) => {
+      const li = document.createElement('li');
+      li.className = 'results-stats-leaderboard-row' + (row.isYou ? ' results-stats-leaderboard-row--you' : '');
+      li.textContent = `${row.rank}. ${formatScore(row.score)}${row.isYou ? ' (You)' : ''}`;
+      resultsStatsLeaderboard.appendChild(li);
+    });
+  }
+  if (resultsStatsSection) resultsStatsSection.classList.remove('hidden');
+}
+
 function showResults() {
   const total = state.picks.reduce((a, b) => a + b, 0);
   finalTotal.textContent = formatScore(total);
@@ -511,6 +561,25 @@ function showResults() {
   if (golfShareGrid) golfShareGrid.textContent = shareTextX;
   setupGolfShareButtons(shareTextX, shareTextSms);
   if (resultsModal) resultsModal.classList.remove('hidden');
+  if (resultsStatsSection) resultsStatsSection.classList.add('hidden');
+  if (resultsStatsLoading) {
+    resultsStatsLoading.classList.remove('hidden');
+  }
+
+  const puzzleId = state.seed;
+  const sport = 'pga';
+  const mode = state.easyMode ? 'pick_the_round_majors' : 'pick_the_round';
+  const higherIsBetter = false;
+
+  if (window.GolfStats && window.GolfStats.submitAndFetchStats) {
+    window.GolfStats.submitAndFetchStats(puzzleId, sport, mode, total, higherIsBetter, function (stats) {
+      if (resultsStatsLoading) resultsStatsLoading.classList.add('hidden');
+      if (stats) renderStatsInModal(stats);
+    });
+  } else {
+    if (resultsStatsLoading) resultsStatsLoading.classList.add('hidden');
+  }
+
   playAgainBtn.focus();
 }
 

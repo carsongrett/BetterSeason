@@ -49,6 +49,15 @@
           <button type="button" class="results-modal-close" id="results-modal-close" aria-label="Close">×</button>
           <h2 class="results-modal-title" id="results-title">Your score</h2>
           <p class="results-modal-total" id="final-total"></p>
+          <div class="results-stats-section hidden" id="results-stats-section">
+            <p class="results-stats-percentile" id="results-stats-percentile"></p>
+            <p class="results-stats-meta" id="results-stats-meta"></p>
+            <div class="results-stats-leaderboard-wrap" id="results-stats-leaderboard-wrap">
+              <h3 class="results-stats-leaderboard-title">Top 10</h3>
+              <ol class="results-stats-leaderboard" id="results-stats-leaderboard"></ol>
+            </div>
+          </div>
+          <div class="results-stats-loading hidden" id="results-stats-loading">Loading stats…</div>
           <div class="results-share-section">
             <div class="results-share-grid" id="golf-share-grid"></div>
             <div class="results-share-buttons">
@@ -123,6 +132,9 @@
       <button type="button" class="scorebug-play-again hidden" id="scorebug-play-again">Play again</button>
     </footer>
   </div>
+  <script src="supabase-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="stats.js"></script>
   <script src="game.js"></script>
 </body>
 </html>
