@@ -19,10 +19,49 @@ const LEADERBOARD_URL = 'https://site.api.espn.com/apis/site/v2/sports/golf/lead
 
 // Current/weekend events: default leaderboard (no params) returns the live event.
 
-// Historical majors: use event= (not tournamentId=). tournamentId= returns current
-// event only; event= returns that specific event's competitors.
-// IDs from ESPN URLs: espn.com/golf/leaderboard?tournamentId=...
+// Historical majors: use event= (not tournamentId=). One event per tournament;
+// failed fetches are skipped. Order: by year 1999–2026, then Masters / PGA / U.S. Open / Open.
 const HISTORICAL_EVENT_IDS = [
+  // 1999–2004
+  '127',   // Masters
+  '15',    // Masters
+  '25',    // U.S. Open 2001
+  // 2005–2008
+  '210',   // Masters 2005
+  '219',   // U.S. Open 2005
+  '309',   // Masters 2007
+  '425',   // Masters 2008
+  '433',   // U.S. Open 2008
+  '411',   // British Open 2008
+  '439',   // PGA Championship 2008
+  // 2009
+  '545',   // U.S. Open 2009
+  // 2010
+  '774',   // Masters 2010
+  '797',   // U.S. Open 2010
+  // 2011
+  '980',   // Masters 2011
+  // 2012–2013
+  '1192',  // Masters 2013
+  '1200',  // U.S. Open 2013
+  // 2014–2015
+  '1317',  // Masters 2014
+  '2241',  // Masters 2015
+  '2249',  // U.S. Open 2015
+  // 2016–2017
+  '2493',  // Masters 2016
+  '2505',  // The Open 2016
+  '2700',  // Masters 2017
+  '2710',  // The Open 2017
+  // 2018–2019
+  '401025255', // U.S. Open 2018
+  '401025263', // PGA Championship 2018
+  '401056527', // Masters 2019
+  '401056556', // U.S. Open 2019
+  // 2020
+  '401219478', // Masters 2020
+  '401219333', // U.S. Open 2020
+  '401219481', // PGA Championship 2020
   // 2021
   '401243010', // Masters 2021
   '401243414', // U.S. Open 2021
@@ -30,6 +69,7 @@ const HISTORICAL_EVENT_IDS = [
   '401353232', // Masters 2022
   '401353226', // PGA Championship 2022
   '401353222', // U.S. Open 2022
+  '401353217', // The Open 2022
   // 2023
   '401465508', // Masters 2023
   '401465533', // U.S. Open 2023
@@ -39,7 +79,10 @@ const HISTORICAL_EVENT_IDS = [
   '401580354', // The Open Championship 2024
   '401580355', // U.S. Open 2024
   // 2025
-  '401703504', // Masters Tournament 2025
+  '401703504', // Masters 2025
+  '401703511', // PGA Championship 2025
+  '401703515', // U.S. Open 2025
+  '401703521', // The Open 2025
 ];
 
 function fetch(url) {

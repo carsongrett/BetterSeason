@@ -158,9 +158,10 @@ function buildPuzzle(rows, seed, rankMap, alltimeSet) {
     const hasRecentEvent = events.some((e) => e.year >= RECENT_YEAR_START && e.year <= MAX_YEAR);
     return distinctYears >= MIN_DISTINCT_YEARS || hasRecentEvent;
   });
-  if (playersWithEnough.length < GOLFERS_PER_GAME) {
+  const playersWithHeadshot = playersWithEnough.filter(([playerName]) => hasGolfHeadshot(playerName));
+  if (playersWithHeadshot.length < GOLFERS_PER_GAME) {
     throw new Error(
-      `Need at least ${GOLFERS_PER_GAME} golfers with ${CARDS_PER_GOLFER}+ events. Found ${playersWithEnough.length}.`
+      `Need at least ${GOLFERS_PER_GAME} golfers with headshots and ${CARDS_PER_GOLFER}+ events. Found ${playersWithHeadshot.length}.`
     );
   }
   const getWeight = (playerName) => {
@@ -180,7 +181,7 @@ function buildPuzzle(rows, seed, rankMap, alltimeSet) {
   };
   const TOP_15_RANK = 15;
   const selected = [];
-  let pool = playersWithEnough.map((entry) => ({ entry, weight: getWeight(entry[0]) }));
+  let pool = playersWithHeadshot.map((entry) => ({ entry, weight: getWeight(entry[0]) }));
   const top15Pool = rankMap && rankMap.size
     ? pool.filter((p) => {
         const rank = rankMap.get(normalizeForMatch(p.entry[0]));
@@ -288,6 +289,14 @@ let hasShownHowToThisSession = false;
 function normalizeNameForLookup(name) {
   if (!name || typeof name !== 'string') return '';
   return name.trim().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+}
+
+function hasGolfHeadshot(playerName) {
+  const playerIds = state.golfPlayerIds;
+  if (!playerIds || typeof playerIds !== 'object') return false;
+  const raw = (playerName || '').trim();
+  if (!raw) return false;
+  return !!(playerIds[raw] || playerIds[normalizeNameForLookup(raw)]);
 }
 
 function getGolfHeadshotUrl(playerName) {
