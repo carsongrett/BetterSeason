@@ -406,6 +406,67 @@
         lbEl.appendChild(li);
       });
 
+      function captureAndSave() {
+        html2canvas(document.getElementById('share-card'), {
+          scale: 2,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: '#0f1412',
+          width: 360,
+          height: 640
+        }).then(function (canvas) {
+          canvas.toBlob(function (blob) {
+            if (!blob) {
+              downloadFallback(canvas);
+              return;
+            }
+            var file = new File([blob], 'best-ball-scorecard.png', { type: 'image/png' });
+            if (typeof navigator !== 'undefined' && navigator.share) {
+              var canShare = !navigator.canShare || navigator.canShare({ files: [file] });
+              if (canShare) {
+                navigator.share({
+                  files: [file],
+                  title: 'Best Ball Scorecard',
+                  text: 'My Best Ball scorecard'
+                }).then(function () {
+                  if (autoOpen) {
+                  var o = document.getElementById('auto-overlay');
+                  if (o) { o.textContent = 'Saved. You can close this tab.'; }
+                }
+                }).catch(function (e) {
+                  if (e.name !== 'AbortError') downloadFallback(canvas);
+                });
+                return;
+              }
+            }
+            downloadFallback(canvas);
+          }, 'image/png');
+        });
+      }
+
+      function downloadFallback(canvas) {
+        var link = document.createElement('a');
+        link.download = 'best-ball-' + (date.replace(/\s/g, '-')) + '.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        if (autoOpen) {
+          var o = document.getElementById('auto-overlay');
+          if (o) { o.textContent = 'Downloaded. You can close this tab.'; }
+        }
+      }
+
+      var autoOpen = params.get('auto') === '1';
+      if (autoOpen) {
+        var overlay = document.createElement('div');
+        overlay.id = 'auto-overlay';
+        overlay.style.cssText = 'position:fixed;inset:0;background:#0f1412;display:flex;align-items:center;justify-content:center;z-index:9999;font-family:DM Sans,sans-serif;color:#e8edea;font-size:1.1rem;';
+        overlay.textContent = 'Preparing scorecard…';
+        document.body.appendChild(overlay);
+        setTimeout(function () {
+          captureAndSave();
+        }, 1800);
+      }
+
       document.getElementById('download-btn').onclick = function () {
         html2canvas(document.getElementById('share-card'), {
           scale: 2,

@@ -555,6 +555,7 @@ function setupGolfShareButtons(shareTextX, shareTextSms) {
           if (url) params.set('headshot' + (i + 1), url);
         });
       }
+      params.set('auto', '1');
       window.open('share-card-mock.html?' + params.toString(), '_blank', 'noopener');
     };
   }
