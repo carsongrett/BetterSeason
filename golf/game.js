@@ -1,6 +1,6 @@
 /**
  * Pick the Round — Golf game
- * 4 golfers × 3 cards (events). Tap a card → flip → score locks in. Total = sum of 4 picks.
+ * 4 golfers × 3 cards (tournaments). Tap a card → flip → score locks in. Total = sum of 4 picks.
  * Data: golf_results.csv (player_name, event_name, year, score_to_par, position)
  */
 
@@ -34,16 +34,16 @@ const RESULTS_MODAL_DELAY_MS = 2000;
 const MIN_YEAR = 2001;
 const MAX_YEAR = 2026;
 
-// Player pool: require 4+ distinct years of events, unless they have an event in 2022–2026 (new/relevant)
+// Player pool: require 4+ distinct years of tournaments, unless they have a tournament in 2022–2026 (new/relevant)
 const MIN_DISTINCT_YEARS = 4;
-const RECENT_YEAR_START = 2022; // 2022–MAX_YEAR = "recent"; players with an event here skip the distinct-years rule
-// Card selection: when a player has any event from this year onward, require at least 1 of their 3 cards to be from this set
+const RECENT_YEAR_START = 2022; // 2022–MAX_YEAR = "recent"; players with a tournament here skip the distinct-years rule
+// Card selection: when a player has any tournament from this year onward, require at least 1 of their 3 cards to be from this set
 const RECENT_CARD_YEAR = 2015;
 
 // Only use results where the player made the cut (exclude CUT, WD, DQ, MDF)
 const EXCLUDED_POSITIONS = new Set(['cut', 'wd', 'dq', 'mdf']);
 
-// Normal mode: only these four majors (exact event_name match in CSV; include all variants in data)
+// Normal mode: only these four majors (exact event_name match in CSV; include all tournament name variants in data)
 const MAJOR_EVENT_NAMES = new Set([
   'The Masters',
   'Masters Tournament',
@@ -161,7 +161,7 @@ function buildPuzzle(rows, seed, rankMap, alltimeSet) {
   const playersWithHeadshot = playersWithEnough.filter(([playerName]) => hasGolfHeadshot(playerName));
   if (playersWithHeadshot.length < GOLFERS_PER_GAME) {
     throw new Error(
-      `Need at least ${GOLFERS_PER_GAME} golfers with headshots and ${CARDS_PER_GOLFER}+ events. Found ${playersWithHeadshot.length}.`
+      `Need at least ${GOLFERS_PER_GAME} golfers with headshots and ${CARDS_PER_GOLFER}+ tournaments. Found ${playersWithHeadshot.length}.`
     );
   }
   const getWeight = (playerName) => {
@@ -257,6 +257,7 @@ const playAgainBtn = document.getElementById('play-again-btn');
 const scorebugEl = document.getElementById('scorebug');
 const scorebugValue = document.getElementById('scorebug-value');
 const scorebugPlayAgain = document.getElementById('scorebug-play-again');
+const scorebugShareBtn = document.getElementById('scorebug-share-btn');
 const howToModal = document.getElementById('how-to-modal');
 const howToModalBackdrop = document.getElementById('how-to-modal-backdrop');
 const howToModalClose = document.getElementById('how-to-modal-close');
@@ -270,10 +271,15 @@ const howToDetailModal = document.getElementById('how-to-detail-modal');
 const howToDetailModalBackdrop = document.getElementById('how-to-detail-modal-backdrop');
 const howToDetailModalClose = document.getElementById('how-to-detail-modal-close');
 const hardModeBtn = document.getElementById('hard-mode-btn');
+const easyModeBtn = document.getElementById('easy-mode-btn');
 const leaveGameHardModal = document.getElementById('leave-game-hard-modal');
 const leaveGameHardModalBackdrop = document.getElementById('leave-game-hard-modal-backdrop');
 const leaveGameHardGo = document.getElementById('leave-game-hard-go');
 const leaveGameHardStay = document.getElementById('leave-game-hard-stay');
+const leaveGameEasyModal = document.getElementById('leave-game-easy-modal');
+const leaveGameEasyModalBackdrop = document.getElementById('leave-game-easy-modal-backdrop');
+const leaveGameEasyGo = document.getElementById('leave-game-easy-go');
+const leaveGameEasyStay = document.getElementById('leave-game-easy-stay');
 const resultsStatsSection = document.getElementById('results-stats-section');
 const resultsStatsPercentile = document.getElementById('results-stats-percentile');
 const resultsStatsLeaderboard = document.getElementById('results-stats-leaderboard');
@@ -338,7 +344,7 @@ function formatScore(n) {
   return n > 0 ? `+${n}` : String(n);
 }
 
-/** Normalize event name for display: strip year prefix, strip "World Golf Championships-", fix capitalization. */
+/** Normalize tournament name for display: strip year prefix, strip "World Golf Championships-", fix capitalization. */
 function formatEventNameForDisplay(name) {
   if (!name || typeof name !== 'string') return '';
   let s = name.trim();
@@ -452,6 +458,9 @@ function updateScorebug() {
   scorebugEl.classList.remove('scorebug--under', 'scorebug--over', 'scorebug--even');
   if (scorebugPlayAgain) {
     scorebugPlayAgain.classList.toggle('hidden', defined.length !== 4);
+  }
+  if (scorebugShareBtn) {
+    scorebugShareBtn.classList.toggle('hidden', defined.length !== 4);
   }
   if (defined.length === 0) {
     scorebugValue.textContent = '—';
@@ -687,12 +696,29 @@ if (leaveGameHardGo) leaveGameHardGo.addEventListener('click', () => {
   window.location.href = window.location.pathname + '?mode=normal';
 });
 
+function showLeaveGameEasyModal() {
+  if (leaveGameEasyModal) leaveGameEasyModal.classList.remove('hidden');
+}
+function closeLeaveGameEasyModal() {
+  if (leaveGameEasyModal) leaveGameEasyModal.classList.add('hidden');
+}
+if (easyModeBtn) easyModeBtn.addEventListener('click', showLeaveGameEasyModal);
+if (leaveGameEasyModalBackdrop) leaveGameEasyModalBackdrop.addEventListener('click', closeLeaveGameEasyModal);
+if (leaveGameEasyStay) leaveGameEasyStay.addEventListener('click', closeLeaveGameEasyModal);
+if (leaveGameEasyGo) leaveGameEasyGo.addEventListener('click', () => {
+  closeLeaveGameEasyModal();
+  window.location.href = window.location.pathname;
+});
+
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && howToDetailModal && !howToDetailModal.classList.contains('hidden')) {
     closeHowToDetailModal();
   }
   if (e.key === 'Escape' && leaveGameHardModal && !leaveGameHardModal.classList.contains('hidden')) {
     closeLeaveGameHardModal();
+  }
+  if (e.key === 'Escape' && leaveGameEasyModal && !leaveGameEasyModal.classList.contains('hidden')) {
+    closeLeaveGameEasyModal();
   }
 });
 
@@ -703,6 +729,7 @@ function handlePlayAgain() {
 
 playAgainBtn.addEventListener('click', handlePlayAgain);
 if (scorebugPlayAgain) scorebugPlayAgain.addEventListener('click', handlePlayAgain);
+if (scorebugShareBtn) scorebugShareBtn.addEventListener('click', showResults);
 
 function loadGolfPlayerIds() {
   return fetch(GOLF_PLAYER_IDS_URL)
@@ -772,9 +799,14 @@ function updatePageTitleAndHeader() {
   const titleEl = document.getElementById('golf-page-title');
   if (titleEl) titleEl.textContent = title;
   const hardWrap = document.getElementById('hard-mode-btn-wrap');
+  const easyWrap = document.getElementById('easy-mode-btn-wrap');
   if (hardWrap) {
     if (state.easyMode) hardWrap.classList.remove('hidden');
     else hardWrap.classList.add('hidden');
+  }
+  if (easyWrap) {
+    if (state.easyMode) easyWrap.classList.add('hidden');
+    else easyWrap.classList.remove('hidden');
   }
 }
 

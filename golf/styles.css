@@ -263,10 +263,12 @@ body {
   border-color: var(--muted);
 }
 
+#easy-mode-btn-wrap.hidden,
 #hard-mode-btn-wrap.hidden {
   display: none;
 }
 
+.easy-mode-btn-icon,
 .hard-mode-btn-icon {
   display: inline-flex;
   align-items: center;
@@ -280,6 +282,7 @@ body {
   border-radius: 50%;
 }
 
+.how-to-play-btn:hover .easy-mode-btn-icon,
 .how-to-play-btn:hover .hard-mode-btn-icon {
   color: var(--text);
   border-color: var(--muted);
@@ -734,10 +737,9 @@ body {
 
 .results-share-buttons {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: stretch;
   gap: 0.5rem;
-  justify-content: center;
-  align-items: center;
 }
 
 .results-share-buttons .share-btn {
@@ -750,6 +752,8 @@ body {
   border-radius: var(--radius);
   cursor: pointer;
   transition: background 0.2s;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .results-share-buttons .share-btn:hover {
@@ -1112,6 +1116,7 @@ body {
   text-align: center;
 }
 
+.scorebug-share,
 .scorebug-play-again {
   font: inherit;
   font-size: 0.8rem;
@@ -1125,10 +1130,12 @@ body {
   cursor: pointer;
 }
 
+.scorebug-share:hover,
 .scorebug-play-again:hover {
   background: rgba(255, 255, 255, 0.3);
 }
 
+.scorebug-share.hidden,
 .scorebug-play-again.hidden {
   display: none;
 }
