@@ -779,6 +779,13 @@ const shareNativeBtn = document.getElementById('share-native-btn');
 const shareSmsBtn = document.getElementById('share-sms-btn');
 const shareXBtn = document.getElementById('share-x-btn');
 const newGameBtn = document.getElementById('new-game-btn');
+const resultsStatsSection = document.getElementById('results-stats-section');
+const resultsStatsPercentile = document.getElementById('results-stats-percentile');
+const resultsStatsAverage = document.getElementById('results-stats-average');
+const resultsStatsLeaderboard = document.getElementById('results-stats-leaderboard');
+const resultsStatsLeaderboardListWrap = document.getElementById('results-stats-leaderboard-list-wrap');
+const resultsStatsLeaderboardToggle = document.getElementById('results-stats-leaderboard-toggle');
+const resultsStatsLoading = document.getElementById('results-stats-loading');
 const resultsModeButtons = document.getElementById('results-mode-buttons');
 const resultsSportToolbar = document.getElementById('results-sport-toolbar');
 const howToBtn = document.getElementById('how-to-btn');
@@ -1240,8 +1247,8 @@ function goNextBlindResumeRound() {
 function renderResultsModeButtons(justPlayedMode) {
   resultsModeButtons.innerHTML = '';
   let allModes;
-  if (state.sport === 'nfl') allModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.BLIND_RESUME];
-  else if (state.sport === 'nba') allModes = [MODES.DAILY, MODES.BLIND_RESUME_NBA];
+  if (state.sport === 'nfl') allModes = [MODES.DAILY, MODES.ROOKIE_QB];
+  else if (state.sport === 'nba') allModes = [MODES.DAILY];
   else if (state.sport === 'mlb') allModes = [MODES.MLB_BATTERS, MODES.MLB_PITCHERS];
   else allModes = [MODES.DAILY];
   const otherModes = allModes.filter(m => m !== justPlayedMode);
@@ -1386,7 +1393,7 @@ function renderRound() {
   statPicks.appendChild(wrap);
 
   confirmBtn.disabled = true;
-  confirmBtn.textContent = state.currentRound < 2 ? 'Next round →' : 'See results';
+  confirmBtn.textContent = 'Confirm';
   confirmBtn.onclick = handleConfirm;
   confirmBtn.style.display = 'none';
 }
@@ -1401,7 +1408,7 @@ function pickStat(index, pick, row) {
   if (allPicked) {
     confirmBtn.style.display = '';
     confirmBtn.disabled = false;
-    confirmBtn.textContent = state.currentRound < 2 ? 'Next round →' : 'See results';
+    confirmBtn.textContent = 'Confirm';
   }
 }
 
@@ -1561,23 +1568,99 @@ function buildShareText(mode, score, roundScores, sport, forSms) {
   return text.trimEnd() + urlSuffix;
 }
 
+/** Preview text only (no URL) for native share — URL is passed separately to navigator.share. */
+function buildSharePreview(mode, score, roundScores, sport) {
+  const scoreStr = `${score}pts`;
+  const shareTitle = getShareTitle(mode, sport);
+  const dateStr = getShareDateStr();
+  const dailyModes = ['daily', 'rookie_qb', 'mlb_batters', 'mlb_pitchers', 'blind_resume', 'blind_resume_nba'];
+  const includeDate = dailyModes.includes(mode) || mode === 'blitz';
+  const firstLine = includeDate ? `${scoreStr} - ${shareTitle} ${dateStr}` : `${scoreStr} - ${shareTitle}`;
+  let text = firstLine;
+  if (roundScores && roundScores.length > 0) {
+    text += '\n\n';
+    roundScores.forEach(({ position, score: rs, total: t }, idx) => {
+      const correct = '✅'.repeat(rs);
+      const wrong = '❌'.repeat(t - rs);
+      if (mode === 'rookie_qb' || mode === 'mlb_batters' || mode === 'mlb_pitchers') {
+        text += `Rd. ${idx + 1}  ${correct}${wrong}  ${rs}/${t}\n`;
+      } else {
+        text += `${position}  ${correct}${wrong}  ${rs}/${t}\n`;
+      }
+    });
+  }
+  return text.trimEnd();
+}
+
 function buildShareGridForMode(mode, score, roundScores, sport) {
-  return buildShareText(mode, score, roundScores, sport, false);
+  return buildSharePreview(mode, score, roundScores, sport);
 }
 
 function buildShareGrid() {
   return buildShareGridForMode(state.mode, state.score, state.roundScores, state.sport);
 }
 
+function formatResultsScore(score) {
+  return String(score);
+}
+
+function renderResultsStats(stats) {
+  if (!stats) return;
+  if (resultsStatsPercentile) {
+    const hasPercentile = stats.percentile != null;
+    const hasPlayers = stats.totalPlayers > 0;
+    if (hasPercentile && hasPlayers) {
+      resultsStatsPercentile.textContent = 'You beat ' + stats.percentile + '% of the ' + stats.totalPlayers + ' player' + (stats.totalPlayers !== 1 ? 's' : '') + ' today';
+      resultsStatsPercentile.classList.remove('hidden');
+    } else {
+      resultsStatsPercentile.classList.add('hidden');
+    }
+  }
+  if (resultsStatsAverage) {
+    if (stats.averageScore != null && !isNaN(stats.averageScore)) {
+      const avgVal = Math.round(stats.averageScore * 10) / 10;
+      resultsStatsAverage.textContent = 'Average Score ' + avgVal;
+      resultsStatsAverage.classList.remove('hidden');
+    } else {
+      resultsStatsAverage.classList.add('hidden');
+    }
+  }
+  if (resultsStatsLeaderboard) {
+    resultsStatsLeaderboard.innerHTML = '';
+    (stats.leaderboard || []).forEach((row) => {
+      const li = document.createElement('li');
+      li.className = 'results-stats-leaderboard-row' + (row.isYou ? ' results-stats-leaderboard-row--you' : '');
+      const initialsPart = row.initials ? ' ' + row.initials : '';
+      li.textContent = `${row.rank}. ${formatResultsScore(row.score)}${initialsPart}${row.isYou ? ' (You)' : ''}`;
+      resultsStatsLeaderboard.appendChild(li);
+    });
+  }
+  if (resultsStatsLeaderboardListWrap) resultsStatsLeaderboardListWrap.classList.add('hidden');
+  if (resultsStatsLeaderboardToggle) {
+    resultsStatsLeaderboardToggle.textContent = 'See Top 10';
+    resultsStatsLeaderboardToggle.setAttribute('aria-expanded', 'false');
+  }
+  if (resultsStatsSection) resultsStatsSection.classList.remove('hidden');
+}
+
+function toggleResultsLeaderboard() {
+  if (!resultsStatsLeaderboardListWrap || !resultsStatsLeaderboardToggle) return;
+  const isHidden = resultsStatsLeaderboardListWrap.classList.contains('hidden');
+  resultsStatsLeaderboardListWrap.classList.toggle('hidden', !isHidden);
+  resultsStatsLeaderboardToggle.textContent = isHidden ? 'Hide leaderboard' : 'See Top 10';
+  resultsStatsLeaderboardToggle.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+}
+
 function setupShareButtons(shareTextX, shareTextSms) {
   const hasWebShare = typeof navigator !== 'undefined' && navigator.share;
+  const sharePreview = buildSharePreview(state.mode, state.score, state.roundScores, state.sport);
   if (shareNativeBtn) {
     if (hasWebShare) {
       shareNativeBtn.classList.remove('hidden');
       shareNativeBtn.onclick = async () => {
         try {
           await navigator.share({
-            text: shareTextSms,
+            text: sharePreview,
             url: SHARE_URL_PLACEHOLDER,
           });
         } catch (e) {
@@ -1590,11 +1673,7 @@ function setupShareButtons(shareTextX, shareTextSms) {
   }
   if (shareSmsBtn) {
     shareSmsBtn.classList.toggle('hidden', !!hasWebShare);
-    shareSmsBtn.onclick = () => { window.location.href = 'sms:?body=' + encodeURIComponent(shareTextSms); };
-  }
-  if (shareXBtn) {
-    shareXBtn.classList.remove('hidden');
-    shareXBtn.onclick = () => { window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareTextX)); };
+    shareSmsBtn.onclick = () => { window.location.href = 'sms:?body=' + encodeURIComponent(sharePreview); };
   }
 }
 
@@ -1629,6 +1708,24 @@ function showResults() {
   setupShareButtons(shareTextX, shareTextSms);
 
   const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS, MODES.BLIND_RESUME, MODES.BLIND_RESUME_NBA];
+  const statsDailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS];
+
+  if (resultsStatsSection) resultsStatsSection.classList.add('hidden');
+  if (resultsStatsLoading) resultsStatsLoading.classList.add('hidden');
+
+  if (statsDailyModes.includes(state.mode) && state.sport && window.BetterSeasonStats && window.BetterSeasonStats.submitAndFetchStats) {
+    const puzzleId = state.seed + '-' + state.sport + '-' + state.mode;
+    const sport = state.sport;
+    const mode = state.mode;
+    const score = state.score;
+    const higherIsBetter = true;
+    if (resultsStatsLoading) resultsStatsLoading.classList.remove('hidden');
+    window.BetterSeasonStats.submitAndFetchStats(puzzleId, sport, mode, score, higherIsBetter, function (stats) {
+      if (resultsStatsLoading) resultsStatsLoading.classList.add('hidden');
+      if (stats) renderResultsStats(stats);
+    });
+  }
+
   newGameBtn.style.display = dailyModes.includes(state.mode) ? 'none' : 'inline-flex';
   newGameBtn.onclick = () => {
     if (state.mode === MODES.BLITZ) {
@@ -1784,6 +1881,10 @@ function setupStartBtn() {
 
 function setupHomeBtn() {
   homeBtn.addEventListener('click', goToStartScreen);
+}
+
+if (resultsStatsLeaderboardToggle) {
+  resultsStatsLeaderboardToggle.addEventListener('click', toggleResultsLeaderboard);
 }
 
 function setupInitialsModal() {

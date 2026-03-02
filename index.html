@@ -180,19 +180,31 @@
         <div class="results-score" id="results-score"></div>
         <div class="results-streak" id="results-streak"></div>
         <p class="come-back-tomorrow" id="come-back-tomorrow">Come back tomorrow!</p>
+        <div class="results-stats-section hidden" id="results-stats-section">
+          <p class="results-stats-oneline" id="results-stats-percentile"></p>
+          <p class="results-stats-average" id="results-stats-average"></p>
+          <div class="results-stats-leaderboard-wrap" id="results-stats-leaderboard-wrap">
+            <button type="button" class="results-stats-leaderboard-toggle" id="results-stats-leaderboard-toggle" aria-expanded="false">See Top 10</button>
+            <div class="results-stats-leaderboard-list-wrap hidden" id="results-stats-leaderboard-list-wrap">
+              <h3 class="results-stats-leaderboard-title">Top 10</h3>
+              <ol class="results-stats-leaderboard" id="results-stats-leaderboard"></ol>
+            </div>
+          </div>
+        </div>
+        <div class="results-stats-loading hidden" id="results-stats-loading">Loading stats…</div>
         <div class="share-grid" id="share-grid"></div>
-        <div class="share-buttons">
-          <button class="share-btn share-btn-x" id="share-x-btn" aria-label="Share on X" title="Share on X">
-            <svg class="share-x-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          </button>
-          <button class="share-btn share-btn-native hidden" id="share-native-btn">Share</button>
-          <button class="share-btn share-btn-fallback" id="share-sms-btn">SMS</button>
+        <div class="share-buttons results-share-buttons">
+          <button class="share-btn share-btn-native hidden" id="share-native-btn">Share (text)</button>
+          <button class="share-btn share-btn-fallback" id="share-sms-btn">Share (text)</button>
         </div>
         <button class="new-game-btn" id="new-game-btn">New Game</button>
       </section>
     </main>
   </div>
   <script src="common/player-initials.js"></script>
+  <script src="golf/supabase-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="common/stats.js"></script>
   <script src="game.js"></script>
 </body>
 </html>
