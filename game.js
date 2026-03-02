@@ -873,6 +873,12 @@ function initGame(mode) {
   blitzTimerEl.classList.remove('visible');
   homeBtn.style.display = 'flex';
 
+  if (state.sport === 'nfl' || state.sport === 'nba' || state.sport === 'mlb') {
+    document.body.setAttribute('data-sport', state.sport);
+  } else {
+    document.body.removeAttribute('data-sport');
+  }
+
   if (mode === MODES.BLITZ) {
     state.data = state.allData[state.sport];
     state.blitzTimeLeft = 60;
@@ -1566,6 +1572,7 @@ function showResults() {
   roundScreen.classList.remove('active');
   resultsScreen.classList.add('active');
   homeBtn.style.display = 'flex';
+  document.body.removeAttribute('data-sport');
 
   if (state.mode === MODES.BLITZ) {
     resultsScore.textContent = state.score + ' pts';
@@ -1624,6 +1631,7 @@ function goToStartScreen() {
   statPicks.style.display = '';
   confirmBtn.style.display = '';
   homeBtn.style.display = 'none';
+  document.body.removeAttribute('data-sport');
   startScreen.classList.add('active');
   roundScreen.classList.remove('active');
   resultsScreen.classList.remove('active');
