@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Share card mock — Golf</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Page (for design iteration only) */
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      background: #1a1a1a;
+      color: #e8edea;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .mock-notice {
+      font-size: 0.85rem;
+      color: #e8edea;
+      text-align: center;
+      max-width: 360px;
+    }
+    .download-wrap {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+    .download-btn {
+      font: inherit;
+      font-weight: 600;
+      padding: 0.65rem 1.25rem;
+      background: #2d9d64;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    .download-btn:hover {
+      background: #38b86c;
+    }
+
+    /* ——— SHARE CARD 9:16 (Instagram story) ——— */
+    .share-card {
+      width: 360px;
+      height: 640px;
+      background: #0f1412;
+      border-radius: 16px;
+      padding: 1.75rem 1.5rem;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+      border: 1px solid #2d3834;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .share-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('../logos/tall golf painting.png') center bottom / cover no-repeat;
+      opacity: 0.18;
+      z-index: 0;
+      border-radius: inherit;
+      pointer-events: none;
+    }
+
+    .share-card-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .share-card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .share-card-logo {
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .share-card-mode {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e8edea;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+
+    .share-card-date {
+      font-size: 1.3rem;
+      color: #e8edea;
+      margin-bottom: 0.5rem;
+    }
+
+    .share-card-percentile {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #2d9d64;
+      margin-bottom: 1rem;
+    }
+
+    .share-card-leaderboard-wrap {
+      flex: 1;
+      min-height: 0;
+    }
+
+    .share-card-leaderboard-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #e8edea;
+      margin: 0 0 0.4rem;
+    }
+
+    .share-card-leaderboard {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 1.2rem;
+      color: #e8edea;
+    }
+
+    .share-card-leaderboard li {
+      padding: 0.2rem 0;
+    }
+
+    .share-card-leaderboard li.you {
+      font-weight: 600;
+      color: #2d9d64;
+    }
+
+    .share-card-brand {
+      font-size: 1rem;
+      color: #e8edea;
+      margin-top: auto;
+      padding-top: 1rem;
+    }
+
+    .share-card-handle {
+      font-size: 1rem;
+      color: #e8edea;
+      margin-top: 0.25rem;
+    }
+
+    /* Right column: score above headshot/emoji rows */
+    .share-card-right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-left: 1rem;
+      padding-top: 4.25rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .share-card-score {
+      font-size: 3.5rem;
+      font-weight: 700;
+      line-height: 1;
+      margin: 0 0 0.75rem;
+      color: #e8edea;
+      /* Align with "Mar 1": header (56px) + header margin (0.75rem) */
+      margin-top: calc(56px + 0.75rem);
+    }
+
+    .share-card-players {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.6rem;
+      position: relative;
+    }
+
+    .share-card-player-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .share-card-player-headshot {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--surface, #232d28);
+      flex-shrink: 0;
+    }
+
+    .share-card-player-headshot.placeholder {
+      background: #2d3834;
+      object-fit: none;
+    }
+
+    .share-card-player-emoji {
+      font-size: 2.2rem;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+  <p class="mock-notice">Share card mock — 9:16 for Insta story. Edit CSS here to tweak layout. Download uses this card only.</p>
+
+  <div class="share-card" id="share-card">
+    <div class="share-card-main">
+      <div class="share-card-header">
+        <img class="share-card-logo" id="card-logo" src="../logos/BS 500x500.png" alt="">
+        <div class="share-card-mode" id="card-mode">Best Ball ⛳</div>
+      </div>
+      <div class="share-card-date" id="card-date">Mar 1</div>
+      <div class="share-card-percentile" id="card-percentile"></div>
+      <div class="share-card-leaderboard-wrap">
+        <h3 class="share-card-leaderboard-title">Top 10</h3>
+        <ol class="share-card-leaderboard" id="card-leaderboard"></ol>
+      </div>
+      <div class="share-card-brand" id="card-brand">betterseason.live/golf</div>
+      <div class="share-card-handle" id="card-handle">@BetterSznGame</div>
+    </div>
+    <div class="share-card-right">
+      <div class="share-card-score" id="card-score">−27</div>
+      <div class="share-card-players" id="card-players">
+        <!-- 4 rows: headshot + emoji, filled by JS -->
+      </div>
+    </div>
+  </div>
+
+  <div class="download-wrap">
+    <button type="button" class="download-btn" id="download-btn">Download as PNG</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+
+      function formatScore(n) {
+        n = parseInt(n, 10);
+        if (isNaN(n)) return '—';
+        if (n === 0) return 'E';
+        return n > 0 ? '+' + n : String(n);
+      }
+
+      function pickToEmoji(pick) {
+        pick = parseInt(pick, 10);
+        if (isNaN(pick)) return '⬜';
+        if (pick < 0) return '🟩';
+        if (pick <= 5) return '🟨';
+        return '🟥';
+      }
+
+      var score = params.get('score');
+      var date = params.get('date') || 'Mar 1';
+      var mode = params.get('mode') || 'majors';
+      var picksStr = params.get('picks') || '';
+      var percentile = params.get('percentile');
+      var leaderboardStr = params.get('leaderboard');
+      var youRank = params.get('youRank');
+      youRank = youRank != null && youRank !== '' ? parseInt(youRank, 10) : null;
+
+      var modeLabel = mode === 'hard' ? 'Best Ball (Hard)' : 'Best Ball';
+      document.getElementById('card-mode').textContent = modeLabel + ' ⛳';
+      document.getElementById('card-score').textContent = formatScore(score);
+      document.getElementById('card-date').textContent = date;
+      document.getElementById('card-brand').textContent = 'betterseason.live/golf';
+      document.getElementById('card-handle').textContent = '@BetterSznGame';
+
+      var percentileEl = document.getElementById('card-percentile');
+      if (percentile != null && percentile !== '') {
+        percentileEl.textContent = percentile + 'th percentile';
+        percentileEl.style.display = '';
+      } else {
+        percentileEl.style.display = 'none';
+      }
+
+      var picks = picksStr ? picksStr.split(',').map(function (p) { return p.trim(); }) : [];
+      if (picks.length < 4) picks = ['-5', '-3', '-10', '-9'];
+      var headshots = [
+        params.get('headshot1'),
+        params.get('headshot2'),
+        params.get('headshot3'),
+        params.get('headshot4')
+      ];
+      var playersEl = document.getElementById('card-players');
+      playersEl.innerHTML = '';
+      for (var i = 0; i < 4; i++) {
+        var row = document.createElement('div');
+        row.className = 'share-card-player-row';
+        if (headshots[i]) {
+          var img = document.createElement('img');
+          img.alt = '';
+          img.className = 'share-card-player-headshot';
+          img.src = headshots[i];
+          img.onerror = function () {
+            this.style.display = 'none';
+            var next = this.nextElementSibling;
+            if (next) next.style.display = 'block';
+          };
+          var placeholder = document.createElement('div');
+          placeholder.className = 'share-card-player-headshot placeholder';
+          placeholder.style.display = 'none';
+          row.appendChild(img);
+          row.appendChild(placeholder);
+        } else {
+          var placeholder = document.createElement('div');
+          placeholder.className = 'share-card-player-headshot placeholder';
+          row.appendChild(placeholder);
+        }
+        var emojiSpan = document.createElement('span');
+        emojiSpan.className = 'share-card-player-emoji';
+        emojiSpan.textContent = pickToEmoji(picks[i]);
+        row.appendChild(emojiSpan);
+        playersEl.appendChild(row);
+      }
+
+      var lbEl = document.getElementById('card-leaderboard');
+      lbEl.innerHTML = '';
+      var scores = [];
+      if (leaderboardStr) {
+        scores = leaderboardStr.split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+      }
+      if (scores.length === 0) {
+        scores = [-27, -16, -7, 2, 5, 8, 12, 15, 18, 22];
+        youRank = 1;
+      }
+      scores.forEach(function (s, i) {
+        var rank = i + 1;
+        var isYou = youRank != null && rank === youRank;
+        var li = document.createElement('li');
+        li.className = isYou ? 'you' : '';
+        li.textContent = rank + '. ' + formatScore(s) + (isYou ? ' (You)' : '');
+        lbEl.appendChild(li);
+      });
+
+      document.getElementById('download-btn').onclick = function () {
+        html2canvas(document.getElementById('share-card'), {
+          scale: 2,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: '#0f1412',
+          width: 360,
+          height: 640
+        }).then(function (canvas) {
+          var link = document.createElement('a');
+          link.download = 'best-ball-' + (date.replace(/\s/g, '-')) + '.png';
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+        });
+      };
+    })();
+  </script>
+</body>
+</html>

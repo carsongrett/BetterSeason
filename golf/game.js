@@ -264,7 +264,7 @@ const howToModalBtn = document.getElementById('how-to-modal-btn');
 const golfShareGrid = document.getElementById('golf-share-grid');
 const golfShareNativeBtn = document.getElementById('golf-share-native-btn');
 const golfShareSmsBtn = document.getElementById('golf-share-sms-btn');
-const golfShareXBtn = document.getElementById('golf-share-x-btn');
+const golfSaveImageBtn = document.getElementById('golf-save-image-btn');
 const howToPlayBtn = document.getElementById('how-to-play-btn');
 const howToDetailModal = document.getElementById('how-to-detail-modal');
 const howToDetailModalBackdrop = document.getElementById('how-to-detail-modal-backdrop');
@@ -276,8 +276,9 @@ const leaveGameHardGo = document.getElementById('leave-game-hard-go');
 const leaveGameHardStay = document.getElementById('leave-game-hard-stay');
 const resultsStatsSection = document.getElementById('results-stats-section');
 const resultsStatsPercentile = document.getElementById('results-stats-percentile');
-const resultsStatsMeta = document.getElementById('results-stats-meta');
 const resultsStatsLeaderboard = document.getElementById('results-stats-leaderboard');
+const resultsStatsLeaderboardListWrap = document.getElementById('results-stats-leaderboard-list-wrap');
+const resultsStatsLeaderboardToggle = document.getElementById('results-stats-leaderboard-toggle');
 const resultsStatsLoading = document.getElementById('results-stats-loading');
 
 let state = {
@@ -492,6 +493,20 @@ function buildGolfShareText(total, forSms) {
   return body + handlePart;
 }
 
+/** Share preview only (no handle or URL) for display in the modal. */
+function buildGolfSharePreview(total) {
+  const dateStr = getGolfShareDateStr();
+  const scoreStr = formatScore(total);
+  const modeLabel = state.easyMode ? 'Best Ball' : 'Best Ball (Hard)';
+  const emojiRow = (state.picks || []).map(scoreToShareEmoji).join('\n');
+  const lines = [
+    `${modeLabel}⛳ ${dateStr}`,
+    scoreStr,
+    emojiRow || '',
+  ].filter(Boolean);
+  return lines.join('\n');
+}
+
 function setupGolfShareButtons(shareTextX, shareTextSms) {
   const hasWebShare = typeof navigator !== 'undefined' && navigator.share;
   if (golfShareNativeBtn) {
@@ -515,32 +530,53 @@ function setupGolfShareButtons(shareTextX, shareTextSms) {
     golfShareSmsBtn.classList.toggle('hidden', !!hasWebShare);
     golfShareSmsBtn.onclick = () => { window.location.href = 'sms:?body=' + encodeURIComponent(shareTextSms); };
   }
-  if (golfShareXBtn) {
-    golfShareXBtn.classList.remove('hidden');
-    golfShareXBtn.onclick = () => { window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareTextX)); };
+  if (golfSaveImageBtn) {
+    golfSaveImageBtn.onclick = () => {
+      const dateStr = getGolfShareDateStr();
+      const picksParam = (state.picks || []).map((p) => p).join(',');
+      const params = new URLSearchParams({
+        score: String(total),
+        date: dateStr,
+        mode: state.easyMode ? 'majors' : 'hard',
+        picks: picksParam,
+      });
+      if (state.lastPercentile != null) params.set('percentile', String(state.lastPercentile));
+      const lb = state.lastLeaderboard || [];
+      if (lb.length > 0) {
+        params.set('leaderboard', lb.map((r) => r.score).join(','));
+        const youRow = lb.find((r) => r.isYou);
+        if (youRow) params.set('youRank', String(youRow.rank));
+      }
+      if (state.puzzle && state.puzzle.length >= 4) {
+        state.puzzle.forEach((golfer, i) => {
+          const url = getGolfHeadshotUrl(golfer.player_name);
+          if (url) params.set('headshot' + (i + 1), url);
+        });
+      }
+      window.open('share-card-mock.html?' + params.toString(), '_blank', 'noopener');
+    };
   }
 }
 
 function renderStatsInModal(stats) {
   if (!stats) return;
+  // One line: percentile · players · avg
   if (resultsStatsPercentile) {
-    if (stats.percentile != null) {
-      resultsStatsPercentile.textContent = `You scored in the ${stats.percentile}th percentile.`;
+    const parts = [];
+    if (stats.percentile != null) parts.push(`${stats.percentile}th percentile`);
+    if (stats.totalPlayers > 0) parts.push(`${stats.totalPlayers} player${stats.totalPlayers !== 1 ? 's' : ''} today`);
+    if (stats.averageScore != null && !isNaN(stats.averageScore)) {
+      const avgStr = formatScore(Math.round(stats.averageScore * 10) / 10);
+      parts.push(`Avg ${avgStr}`);
+    }
+    if (parts.length > 0) {
+      resultsStatsPercentile.textContent = 'You: ' + parts.join(' · ');
       resultsStatsPercentile.classList.remove('hidden');
     } else {
       resultsStatsPercentile.classList.add('hidden');
     }
   }
-  if (resultsStatsMeta) {
-    const parts = [];
-    if (stats.totalPlayers > 0) parts.push(`${stats.totalPlayers} player${stats.totalPlayers !== 1 ? 's' : ''} today`);
-    if (stats.averageScore != null && !isNaN(stats.averageScore)) {
-      const avgStr = formatScore(Math.round(stats.averageScore * 10) / 10);
-      parts.push(`Average score: ${avgStr}`);
-    }
-    resultsStatsMeta.textContent = parts.join(' · ');
-    resultsStatsMeta.classList.toggle('hidden', parts.length === 0);
-  }
+  // Leaderboard: populate list, keep collapsed by default
   if (resultsStatsLeaderboard) {
     resultsStatsLeaderboard.innerHTML = '';
     (stats.leaderboard || []).forEach((row) => {
@@ -550,15 +586,32 @@ function renderStatsInModal(stats) {
       resultsStatsLeaderboard.appendChild(li);
     });
   }
+  if (resultsStatsLeaderboardListWrap) resultsStatsLeaderboardListWrap.classList.add('hidden');
+  if (resultsStatsLeaderboardToggle) {
+    resultsStatsLeaderboardToggle.textContent = 'See Top 10';
+    resultsStatsLeaderboardToggle.setAttribute('aria-expanded', 'false');
+  }
   if (resultsStatsSection) resultsStatsSection.classList.remove('hidden');
+  state.lastPercentile = stats.percentile != null ? stats.percentile : undefined;
+  state.lastLeaderboard = stats.leaderboard || [];
 }
+
+function toggleLeaderboardInModal() {
+  if (!resultsStatsLeaderboardListWrap || !resultsStatsLeaderboardToggle) return;
+  const isHidden = resultsStatsLeaderboardListWrap.classList.contains('hidden');
+  resultsStatsLeaderboardListWrap.classList.toggle('hidden', !isHidden);
+  resultsStatsLeaderboardToggle.textContent = isHidden ? 'Hide leaderboard' : 'See Top 10';
+  resultsStatsLeaderboardToggle.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+}
+
+if (resultsStatsLeaderboardToggle) resultsStatsLeaderboardToggle.addEventListener('click', toggleLeaderboardInModal);
 
 function showResults() {
   const total = state.picks.reduce((a, b) => a + b, 0);
   finalTotal.textContent = formatScore(total);
   const shareTextX = buildGolfShareText(total, false);
   const shareTextSms = buildGolfShareText(total, true);
-  if (golfShareGrid) golfShareGrid.textContent = shareTextX;
+  if (golfShareGrid) golfShareGrid.textContent = buildGolfSharePreview(total);
   setupGolfShareButtons(shareTextX, shareTextSms);
   if (resultsModal) resultsModal.classList.remove('hidden');
   if (resultsStatsSection) resultsStatsSection.classList.add('hidden');

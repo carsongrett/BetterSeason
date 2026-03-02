@@ -641,24 +641,43 @@ body {
   display: none;
 }
 
-.results-stats-percentile {
+.results-stats-oneline {
   font-weight: 600;
-  margin: 0 0 0.35rem;
+  margin: 0 0 0.5rem;
   color: var(--text);
+  font-size: 0.95rem;
 }
 
-.results-stats-meta {
-  font-size: 0.9rem;
-  color: var(--muted);
-  margin: 0 0 0.75rem;
-}
-
-.results-stats-meta.hidden {
+.results-stats-oneline.hidden {
   display: none;
 }
 
 .results-stats-leaderboard-wrap {
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.results-stats-leaderboard-toggle {
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  margin: 0 0 0.25rem;
+}
+
+.results-stats-leaderboard-toggle:hover {
+  text-decoration: underline;
+}
+
+.results-stats-leaderboard-list-wrap {
+  margin-top: 0.35rem;
+}
+
+.results-stats-leaderboard-list-wrap.hidden {
+  display: none;
 }
 
 .results-stats-leaderboard-title {
