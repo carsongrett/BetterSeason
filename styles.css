@@ -522,7 +522,7 @@ a.sport-card {
 /* ========== ROUND SCREEN ========== */
 .round-header {
   flex-shrink: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 0.6rem;
   text-align: center;
 }
 
@@ -570,7 +570,7 @@ a.sport-card {
   font-size: 0.95rem;
   font-weight: 600;
   color: #c0c0c0;
-  margin-top: 0.6rem;
+  margin-top: 0.4rem;
 }
 
 /* Matchup - player cards */
@@ -579,7 +579,7 @@ a.sport-card {
   grid-template-columns: 1fr auto 1fr;
   gap: 1rem;
   align-items: stretch;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.85rem;
   flex-shrink: 0;
 }
 
@@ -672,24 +672,10 @@ a.sport-card {
   border-collapse: collapse;
 }
 
-.stat-table th,
 .stat-table td {
-  padding: 0.45rem 0.5rem;
+  padding: 0.3rem 0.35rem;
   vertical-align: middle;
   text-align: center;
-}
-
-.stat-table th {
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: #888;
-}
-
-.stat-table th:first-child {
-  text-align: left;
-  padding-left: 0;
 }
 
 .stat-table td:first-child,
@@ -701,6 +687,7 @@ a.sport-card {
   letter-spacing: 0.04em;
   text-align: left;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  padding-right: 0.5rem;
 }
 
 .pick-cell {
@@ -778,7 +765,7 @@ a.sport-card {
   font-size: 0.95rem;
   font-weight: 700;
   color: #e0e0e0;
-  margin-top: 0.2rem;
+  margin-top: 0.15rem;
 }
 
 .stat-table tr.revealed .headshot-pick {
@@ -791,11 +778,11 @@ a.sport-card {
   background: inherit;
 }
 
-/* Confirm button */
+/* Confirm / Next round button */
 .confirm-btn {
   flex-shrink: 0;
-  margin-top: 1rem;
-  padding: 1rem 1.5rem;
+  margin-top: 0.5rem;
+  padding: 0.75rem 1.25rem;
   font-size: 1.05rem;
   font-weight: 800;
   font-family: 'Inter', sans-serif;

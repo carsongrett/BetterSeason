@@ -203,6 +203,22 @@ function getNflHeadshotUrl(playerName) {
   return `${NFL_HEADSHOT_URL}/${id}.png`;
 }
 
+/** True if we have headshot IDs for this sport and the player is in the map. Used to filter pools so only players with headshots can be chosen. */
+function playerHasHeadshot(playerName, sport) {
+  if (sport === 'nfl') return getNflHeadshotUrl(playerName) != null;
+  if (sport === 'nba') return getNbaHeadshotUrl(playerName) != null;
+  if (sport === 'mlb') return getMlbHeadshotUrl(playerName) != null;
+  return false;
+}
+
+/** True when the round screen will show headshots (sport is nfl/nba/mlb and we have player IDs). */
+function headshotsEnabledForSport(sport) {
+  if (sport === 'nfl') return !!state.allData?.nfl?.playerIds;
+  if (sport === 'nba') return !!state.allData?.nba?.playerIds;
+  if (sport === 'mlb') return !!state.allData?.mlb?.playerIds;
+  return false;
+}
+
 const MLB_STAT_NAMES = {
   R: 'Runs',
   HR: 'Home Runs',
@@ -924,7 +940,10 @@ function initGame(mode) {
   for (let r = 0; r < 3; r++) {
     const pos = posOrder[r];
     const stats = isRookieQB ? pickRookieQBStats(state.rng) : pickStatsForRound(pos, state.rng, state.sport, mode);
-    const pool = state.data[pos];
+    let pool = state.data[pos];
+    if (headshotsEnabledForSport(state.sport) && Array.isArray(pool)) {
+      pool = pool.filter(p => playerHasHeadshot(p.Player, state.sport));
+    }
     const matchup = generateMatchup(pool, stats, usedKeys, state.rng, pos, false, state.sport);
     if (!matchup) {
       if (!pool || pool.length < 2) continue;
@@ -954,6 +973,7 @@ function startBlitzTimer() {
     if (state.blitzTimeLeft <= 0) {
       clearInterval(state.blitzTimerId);
       state.blitzTimerId = null;
+      confirmBtn.style.display = '';
       confirmBtn.disabled = true;
       confirmBtn.textContent = "Time's up!";
       endBlitz();
@@ -967,7 +987,10 @@ function addBlitzRound() {
   const roundIndex = state.rounds.length;
   const pos = posOrder[roundIndex % posOrder.length];
   const stats = pickStatsForRound(pos, state.rng, state.sport, state.mode);
-  const pool = state.data[pos];
+  let pool = state.data[pos];
+  if (headshotsEnabledForSport(state.sport) && Array.isArray(pool)) {
+    pool = pool.filter(p => playerHasHeadshot(p.Player, state.sport));
+  }
   const usedKeys = state.blitzUsedKeys.get(pos) || new Set();
   const matchup = generateMatchup(pool, stats, usedKeys, state.rng, pos, true, state.sport);
   if (!matchup) return;
@@ -1313,7 +1336,7 @@ function renderRound() {
   table.className = 'stat-table';
   table.setAttribute('role', 'grid');
   table.setAttribute('aria-label', 'Stat picks');
-  table.innerHTML = '<thead><tr><th>Stat</th><th>Player A</th><th>Player B</th></tr></thead><tbody></tbody>';
+  table.innerHTML = '<tbody></tbody>';
   const tbody = table.querySelector('tbody');
 
   for (let i = 0; i < r.stats.length; i++) {
@@ -1356,8 +1379,9 @@ function renderRound() {
   statPicks.appendChild(wrap);
 
   confirmBtn.disabled = true;
-  confirmBtn.textContent = 'Confirm';
+  confirmBtn.textContent = state.currentRound < 2 ? 'Next round →' : 'See results';
   confirmBtn.onclick = handleConfirm;
+  confirmBtn.style.display = 'none';
 }
 
 function pickStat(index, pick, row) {
@@ -1366,7 +1390,12 @@ function pickStat(index, pick, row) {
   btns.forEach(b => b.classList.remove('selected'));
   const chosen = row.querySelector(`.headshot-pick[data-pick="${pick}"]`);
   chosen.classList.add('selected');
-  confirmBtn.disabled = state.picks.some(p => p == null);
+  const allPicked = !state.picks.some(p => p == null);
+  if (allPicked) {
+    confirmBtn.style.display = '';
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = state.currentRound < 2 ? 'Next round →' : 'See results';
+  }
 }
 
 function handleConfirm() {
