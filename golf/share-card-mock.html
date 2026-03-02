@@ -422,22 +422,19 @@
             }
             var file = new File([blob], 'best-ball-scorecard.png', { type: 'image/png' });
             if (typeof navigator !== 'undefined' && navigator.share) {
-              var canShare = !navigator.canShare || navigator.canShare({ files: [file] });
-              if (canShare) {
-                navigator.share({
-                  files: [file],
-                  title: 'Best Ball Scorecard',
-                  text: 'My Best Ball scorecard'
-                }).then(function () {
-                  if (autoOpen) {
+              navigator.share({
+                files: [file],
+                title: 'Best Ball Scorecard',
+                text: 'My Best Ball scorecard'
+              }).then(function () {
+                if (autoOpen) {
                   var o = document.getElementById('auto-overlay');
                   if (o) { o.textContent = 'Saved. You can close this tab.'; }
                 }
-                }).catch(function (e) {
-                  if (e.name !== 'AbortError') downloadFallback(canvas);
-                });
-                return;
-              }
+              }).catch(function (e) {
+                if (e.name !== 'AbortError') downloadFallback(canvas);
+              });
+              return;
             }
             downloadFallback(canvas);
           }, 'image/png');
@@ -459,8 +456,8 @@
       if (autoOpen) {
         var overlay = document.createElement('div');
         overlay.id = 'auto-overlay';
-        overlay.style.cssText = 'position:fixed;inset:0;background:#0f1412;display:flex;align-items:center;justify-content:center;z-index:9999;font-family:DM Sans,sans-serif;color:#e8edea;font-size:1.1rem;';
-        overlay.textContent = 'Preparing scorecard…';
+        overlay.style.cssText = 'position:fixed;inset:0;background:#0f1412;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;font-family:DM Sans,sans-serif;color:#e8edea;font-size:1.1rem;text-align:center;padding:2rem;box-sizing:border-box;';
+        overlay.innerHTML = '<span>Preparing scorecard…</span><span style="margin-top:0.75rem;font-size:0.9rem;color:#8a9a92;">Then choose &quot;Save Image&quot; or &quot;Add to Photos&quot; to save to your camera roll.</span>';
         document.body.appendChild(overlay);
         setTimeout(function () {
           captureAndSave();
