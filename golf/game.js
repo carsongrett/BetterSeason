@@ -998,14 +998,9 @@ const gridWrapper = document.getElementById('grid-wrapper');
 const alreadyPlayedWrap = document.getElementById('already-played-wrap');
 
 function showAlreadyPlayedView(seed, result) {
-  const modeLabel = state.easyMode ? 'Best Ball' : 'Best Ball (Hard)';
   if (gridWrapper) gridWrapper.classList.remove('hidden');
   if (alreadyPlayedWrap) {
-    const msg = alreadyPlayedWrap.querySelector('.already-played-msg');
-    const sub = alreadyPlayedWrap.querySelector('.already-played-sub');
     const shareBtns = alreadyPlayedWrap.querySelector('.already-played-share-buttons');
-    if (msg) msg.textContent = "You've already played " + modeLabel + ' today.';
-    if (sub) sub.textContent = 'Come back tomorrow for a new puzzle.';
     if (shareBtns) shareBtns.classList.toggle('hidden', !result || typeof result.total !== 'number');
     alreadyPlayedWrap.classList.remove('hidden');
     if (result && typeof result.total === 'number') setupAlreadyPlayedShareButtons(result.total);

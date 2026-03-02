@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Best Ball — Golf</title>
+  <link rel="icon" type="image/x-icon" href="../logos/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../logos/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../logos/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../logos/apple-touch-icon.png">
+  <link rel="manifest" href="../logos/site.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&display=swap" rel="stylesheet">
@@ -26,8 +31,6 @@
         <div class="grid" id="grid" role="grid" aria-label="Golfers and rounds"></div>
       </div>
       <div class="already-played-wrap hidden" id="already-played-wrap" aria-live="polite">
-        <p class="already-played-msg" id="already-played-msg">You've already played today.</p>
-        <p class="already-played-sub">Come back tomorrow for a new puzzle.</p>
         <div class="already-played-share-buttons results-share-buttons">
           <button type="button" class="share-btn" id="already-played-image-btn">Share Scorecard (image)</button>
           <button type="button" class="share-btn" id="already-played-text-btn">Share Scorecard (text)</button>
@@ -104,6 +107,7 @@
           <h2 class="how-to-modal-title" id="how-to-title">How to play</h2>
           <p>Pick <strong>one historical tournament per golfer</strong> — select their lowest tournament score relative to par.</p>
           <p><strong>Your 4 golfer's scores will be your final score.</strong></p>
+          <p class="how-to-modal-note">One puzzle per day — resets at midnight Central.</p>
           <p class="how-to-modal-note">*All players made the cut.</p>
           <button type="button" class="how-to-modal-btn" id="how-to-modal-btn">Got it</button>
         </div>
@@ -154,7 +158,7 @@
             </section>
             <section class="how-to-detail-section">
               <h3 class="how-to-detail-heading">Game modes</h3>
-              <p><strong>Best Ball</strong> uses only the four majors: Masters, PGA Championship, U.S. Open, and The Open Championship. <strong>Best Ball (Hard)</strong> uses all tournaments 2020–2025. Choose the mode on the Better Season home screen.</p>
+              <p><strong>Best Ball</strong> uses only the four majors: Masters, PGA Championship, U.S. Open, and The Open Championship. <strong>Best Ball (Hard)</strong> uses all tournaments 2001–2026. Choose the mode on the Better Season home screen.</p>
             </section>
             <p class="how-to-detail-note">*All players in the data made the cut for the tournaments shown.</p>
           </div>
