@@ -284,7 +284,6 @@ const golfShareGrid = document.getElementById('golf-share-grid');
 const golfShareNativeBtn = document.getElementById('golf-share-native-btn');
 const golfShareSmsBtn = document.getElementById('golf-share-sms-btn');
 const golfSaveImageBtn = document.getElementById('golf-save-image-btn');
-const initialsBtn = document.getElementById('initials-btn');
 const howToPlayBtn = document.getElementById('how-to-play-btn');
 const howToDetailModal = document.getElementById('how-to-detail-modal');
 const howToDetailModalBackdrop = document.getElementById('how-to-detail-modal-backdrop');
@@ -868,25 +867,6 @@ if (howToPlayBtn) howToPlayBtn.addEventListener('click', showHowToDetailModal);
 if (howToDetailModalBackdrop) howToDetailModalBackdrop.addEventListener('click', closeHowToDetailModal);
 if (howToDetailModalClose) howToDetailModalClose.addEventListener('click', closeHowToDetailModal);
 
-function updateInitialsButtonText() {
-  if (!initialsBtn || !window.PlayerInitials) return;
-  const initials = window.PlayerInitials.getInitials();
-  initialsBtn.textContent = initials || 'Set';
-}
-
-function openInitialsModal() {
-  if (!initialsModal) return;
-  initialsModal.classList.remove('hidden');
-  if (initialsError) {
-    initialsError.classList.add('hidden');
-    initialsError.textContent = '';
-  }
-  if (initialsInput) {
-    initialsInput.value = (window.PlayerInitials && window.PlayerInitials.getInitials()) || '';
-    initialsInput.focus();
-  }
-}
-
 function handleInitialsSubmit() {
   const raw = initialsInput ? initialsInput.value.trim() : '';
   const result = window.PlayerInitials && window.PlayerInitials.validate ? window.PlayerInitials.validate(raw) : { valid: false, message: 'Enter 2 letters.' };
@@ -899,7 +879,6 @@ function handleInitialsSubmit() {
   }
   if (window.PlayerInitials && window.PlayerInitials.setInitials) window.PlayerInitials.setInitials(result.normalized);
   if (initialsModal) initialsModal.classList.add('hidden');
-  updateInitialsButtonText();
   if (window.__golfInitialsSubmitCallback) {
     const fn = window.__golfInitialsSubmitCallback;
     window.__golfInitialsSubmitCallback = null;
@@ -907,7 +886,6 @@ function handleInitialsSubmit() {
   }
 }
 
-if (initialsBtn) initialsBtn.addEventListener('click', openInitialsModal);
 if (initialsSubmit) initialsSubmit.addEventListener('click', handleInitialsSubmit);
 if (initialsModalBackdrop) {
   initialsModalBackdrop.addEventListener('click', function () {
@@ -920,7 +898,6 @@ if (initialsModalBackdrop) {
     }
   });
 }
-updateInitialsButtonText();
 
 function showLeaveGameHardModal() {
   if (leaveGameHardModal) leaveGameHardModal.classList.remove('hidden');

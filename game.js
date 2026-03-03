@@ -1714,7 +1714,12 @@ function showResults() {
   resultsScreen.classList.add('active');
   homeBtn.style.display = 'flex';
   if (initialsBtn) initialsBtn.style.display = 'none';
-  document.body.removeAttribute('data-sport');
+  /* Keep data-sport on body so results (game over) page keeps the tall painting background */
+  if (state.sport !== 'nfl' && state.sport !== 'nba' && state.sport !== 'mlb') {
+    document.body.removeAttribute('data-sport');
+  } else {
+    document.body.setAttribute('data-sport', state.sport);
+  }
 
   if (state.mode === MODES.BLITZ) {
     resultsScore.textContent = state.score + ' pts';
