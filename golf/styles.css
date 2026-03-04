@@ -758,8 +758,26 @@ body::before {
 }
 
 .results-stats-leaderboard-row {
+  display: grid;
+  grid-template-columns: 2rem 3rem 1fr;
+  gap: 0.5rem;
+  align-items: baseline;
   padding: 0.25rem 0;
   color: var(--text);
+}
+
+.results-stats-leaderboard-rank {
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+.results-stats-leaderboard-initials {
+  font-variant-numeric: tabular-nums;
+}
+
+.results-stats-leaderboard-score {
+  text-align: left;
+  font-variant-numeric: tabular-nums;
 }
 
 .results-stats-leaderboard-row--you {

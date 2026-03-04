@@ -578,9 +578,11 @@ function buildGolfShareText(total, forSms) {
   const scoreStr = formatScore(total);
   const modeLabel = state.easyMode ? 'Best Ball' : 'Best Ball (Hard)';
   const emojiRow = (state.picks || []).map(scoreToShareEmoji).join('\n');
+  const percentileLine = state.lastPercentile != null ? `${state.lastPercentile}th percentile` : '';
   const lines = [
     `${modeLabel}⛳ ${dateStr}`,
     scoreStr,
+    percentileLine,
     emojiRow || '',
   ].filter(Boolean);
   const urlPart = GOLF_SHARE_URL ? `\n\n${GOLF_SHARE_URL}` : '';
@@ -597,9 +599,11 @@ function buildGolfSharePreview(total) {
   const scoreStr = formatScore(total);
   const modeLabel = state.easyMode ? 'Best Ball' : 'Best Ball (Hard)';
   const emojiRow = (state.picks || []).map(scoreToShareEmoji).join('\n');
+  const percentileLine = state.lastPercentile != null ? `${state.lastPercentile}th percentile` : '';
   const lines = [
     `${modeLabel}⛳ ${dateStr}`,
     scoreStr,
+    percentileLine,
     emojiRow || '',
   ].filter(Boolean);
   return lines.join('\n');
@@ -732,14 +736,24 @@ function renderStatsInModal(stats) {
       resultsStatsPercentile.classList.add('hidden');
     }
   }
-  // Leaderboard: populate list, keep collapsed by default
+  // Leaderboard: populate list with rank (left), initials, score columns; keep collapsed by default
   if (resultsStatsLeaderboard) {
     resultsStatsLeaderboard.innerHTML = '';
     (stats.leaderboard || []).forEach((row) => {
       const li = document.createElement('li');
       li.className = 'results-stats-leaderboard-row' + (row.isYou ? ' results-stats-leaderboard-row--you' : '');
-      const initialsPart = row.initials ? ' ' + row.initials : '';
-      li.textContent = `${row.rank}. ${formatScore(row.score)}${initialsPart}${row.isYou ? ' (You)' : ''}`;
+      const rankSpan = document.createElement('span');
+      rankSpan.className = 'results-stats-leaderboard-rank';
+      rankSpan.textContent = row.rank + '.';
+      const initialsSpan = document.createElement('span');
+      initialsSpan.className = 'results-stats-leaderboard-initials';
+      initialsSpan.textContent = row.initials || '—';
+      const scoreSpan = document.createElement('span');
+      scoreSpan.className = 'results-stats-leaderboard-score';
+      scoreSpan.textContent = formatScore(row.score) + (row.isYou ? ' (You)' : '');
+      li.appendChild(rankSpan);
+      li.appendChild(initialsSpan);
+      li.appendChild(scoreSpan);
       resultsStatsLeaderboard.appendChild(li);
     });
   }
@@ -752,6 +766,12 @@ function renderStatsInModal(stats) {
   state.lastPercentile = stats.percentile != null ? stats.percentile : undefined;
   state.lastLeaderboard = stats.leaderboard || [];
   state.lastTotalPlayers = stats.totalPlayers != null ? stats.totalPlayers : undefined;
+  // Rebuild share text so it includes percentile
+  const total = state.picks.reduce((a, b) => a + b, 0);
+  const shareTextX = buildGolfShareText(total, false);
+  const shareTextSms = buildGolfShareText(total, true);
+  if (golfShareGrid) golfShareGrid.textContent = buildGolfSharePreview(total);
+  setupGolfShareButtons(shareTextX, shareTextSms, total);
 }
 
 function toggleLeaderboardInModal() {
@@ -781,12 +801,45 @@ function runSubmitAndShowStats(total) {
       if (resultsStatsLoading) resultsStatsLoading.classList.add('hidden');
       if (stats) {
         renderStatsInModal(stats);
+        state.hasSubmittedForSeed = true;
         setStoredResult(state.seed, {
           picks: state.picks.slice(),
           total,
           lastPercentile: state.lastPercentile,
           lastTotalPlayers: state.lastTotalPlayers,
           lastLeaderboard: state.lastLeaderboard || [],
+          hasSubmittedForSeed: true,
+        });
+      }
+    });
+  } else {
+    if (resultsStatsLoading) resultsStatsLoading.classList.add('hidden');
+  }
+
+  if (resultsModalClose) resultsModalClose.focus();
+}
+
+function runFetchOnlyAndShowStats(total) {
+  const puzzleId = state.seed;
+  const higherIsBetter = false;
+
+  if (resultsModal) resultsModal.classList.remove('hidden');
+  if (resultsStatsSection) resultsStatsSection.classList.add('hidden');
+  if (resultsShareSection) resultsShareSection.classList.remove('hidden');
+  if (resultsStatsLoading) resultsStatsLoading.classList.remove('hidden');
+
+  if (window.GolfStats && window.GolfStats.fetchStatsOnly) {
+    window.GolfStats.fetchStatsOnly(puzzleId, total, higherIsBetter, function (stats) {
+      if (resultsStatsLoading) resultsStatsLoading.classList.add('hidden');
+      if (stats) {
+        renderStatsInModal(stats);
+        setStoredResult(state.seed, {
+          picks: state.picks.slice(),
+          total,
+          lastPercentile: state.lastPercentile,
+          lastTotalPlayers: state.lastTotalPlayers,
+          lastLeaderboard: state.lastLeaderboard || [],
+          hasSubmittedForSeed: true,
         });
       }
     });
@@ -806,6 +859,7 @@ function showResults() {
     lastPercentile: state.lastPercentile,
     lastTotalPlayers: state.lastTotalPlayers,
     lastLeaderboard: state.lastLeaderboard || [],
+    hasSubmittedForSeed: state.hasSubmittedForSeed || false,
   });
   finalTotal.textContent = formatScore(total);
   const shareTextX = buildGolfShareText(total, false);
@@ -824,7 +878,11 @@ function showResults() {
     return;
   }
 
-  runSubmitAndShowStats(total);
+  if (state.hasSubmittedForSeed) {
+    runFetchOnlyAndShowStats(total);
+  } else {
+    runSubmitAndShowStats(total);
+  }
 }
 
 function closeResultsModal() {
@@ -1069,6 +1127,7 @@ function initGame() {
           state.lastPercentile = result.lastPercentile;
           state.lastTotalPlayers = result.lastTotalPlayers;
           state.lastLeaderboard = result.lastLeaderboard || [];
+          state.hasSubmittedForSeed = result.hasSubmittedForSeed || false;
         }
         renderGrid();
         updateScorebug();

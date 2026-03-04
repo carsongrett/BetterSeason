@@ -104,6 +104,12 @@ body[data-sport]::before {
   transition: all 0.2s ease;
 }
 
+/* In-game (NFL/NBA/MLB): ? sits to the left of initials on the right */
+.header.in-game .how-to-btn {
+  left: auto;
+  right: 4.5rem;
+}
+
 .how-to-btn:hover {
   border-color: rgba(255, 255, 255, 0.35);
   color: #fff;
@@ -112,7 +118,7 @@ body[data-sport]::before {
 
 .home-btn {
   position: absolute;
-  right: 1rem;
+  left: 1rem;
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
@@ -498,6 +504,43 @@ a.sport-card {
 
 .modal p:last-of-type {
   margin-bottom: 1.25rem;
+}
+
+.how-to-modal-body {
+  margin-bottom: 1rem;
+}
+
+.how-to-modal-body p {
+  margin-bottom: 0.6rem;
+}
+
+.how-to-modal-body .how-to-objective {
+  color: #e0e0e0;
+}
+
+.how-to-modal-body .how-to-note {
+  font-size: 0.85rem;
+  color: #909090;
+  margin-top: 0.5rem;
+}
+
+.about-link {
+  display: inline-block;
+  margin: -0.25rem 0 0.5rem;
+  padding: 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #a0a0a0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-family: inherit;
+}
+
+.about-link:hover {
+  color: #f59e0b;
 }
 
 .modal-close {
@@ -1079,8 +1122,26 @@ a.sport-card {
 }
 
 .results-stats-leaderboard-row {
+  display: grid;
+  grid-template-columns: 2rem 3rem 1fr;
+  gap: 0.5rem;
+  align-items: baseline;
   padding: 0.35rem 0;
   color: #f0f0f0;
+}
+
+.results-stats-leaderboard-rank {
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+.results-stats-leaderboard-initials {
+  font-variant-numeric: tabular-nums;
+}
+
+.results-stats-leaderboard-score {
+  text-align: left;
+  font-variant-numeric: tabular-nums;
 }
 
 .results-stats-leaderboard-row--you {

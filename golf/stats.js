@@ -127,11 +127,24 @@
     });
   }
 
+  /**
+   * Fetch leaderboard/stats only (no submit). Use when re-opening results modal so we don't duplicate submit.
+   * Callback(stats) with stats object or null if failed.
+   */
+  function fetchStatsOnly(puzzleId, score, higherIsBetter, callback) {
+    const anonymousId = getOrCreateAnonymousId();
+    fetchScoresForPuzzle(puzzleId, higherIsBetter).then(function (rows) {
+      const stats = rows ? computeStats(rows, score, anonymousId, higherIsBetter) : null;
+      if (typeof callback === 'function') callback(stats);
+    });
+  }
+
   window.GolfStats = {
     getOrCreateAnonymousId: getOrCreateAnonymousId,
     submitScore: submitScore,
     fetchScoresForPuzzle: fetchScoresForPuzzle,
     submitAndFetchStats: submitAndFetchStats,
+    fetchStatsOnly: fetchStatsOnly,
     computeStats: computeStats
   };
 })();

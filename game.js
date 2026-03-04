@@ -76,6 +76,108 @@ const NFL_ONLY_MODES = ['rookie_qb', 'blind_resume'];
 const NBA_ONLY_MODES = ['blind_resume_nba'];
 const MLB_ONLY_MODES = ['mlb_batters', 'mlb_pitchers'];
 
+/** Returns { title, body } for the How to Play modal based on sport and mode. */
+function getHowToContent(sport, mode) {
+  const dailyNote = '<p class="how-to-note">Daily puzzle — resets at midnight. Same puzzle for everyone.</p>';
+  const onePoint = '<p>One point per correct pick.</p>';
+
+  if (sport === 'nfl') {
+    if (mode === MODES.DAILY) {
+      return {
+        title: 'How to Play — NFL Daily',
+        body: '<p class="how-to-objective"><strong>Goal:</strong> Get 9 points by picking which player had the <strong>better stat</strong> in each category.</p>' +
+          '<p>You’ll see 3 rounds. Each round is one matchup: two players and three stat categories (e.g. passing yards, touchdowns, team wins). Tap the player’s headshot next to each category for who had the better stat — higher is better (except for picks like interceptions, where lower is better).</p>' +
+          onePoint +
+          dailyNote
+      };
+    }
+    if (mode === MODES.ROOKIE_QB) {
+      return {
+        title: 'How to Play — Rookie QBs',
+        body: '<p class="how-to-objective"><strong>Goal:</strong> Score 12 points. Pick which <strong>rookie QB</strong> had the better stat in each category.</p>' +
+          '<p>All players are QBs from their rookie season (2016–2025). You’ll see 12 categories: TD, Int, Rush Yds, Team Wins, and more. Tap the player’s headshot next to each category for who had the better number. Lower is better for interceptions; higher for everything else.</p>' +
+          onePoint +
+          dailyNote
+      };
+    }
+    if (mode === MODES.BLIND_RESUME) {
+      return {
+        title: 'How to Play — Blind Resume (NFL)',
+        body: '<p class="how-to-objective"><strong>Goal:</strong> Guess the <strong>player</strong> as their stats are revealed.</p>' +
+          '<p>You’ll see one stat at a time (pass yards, TD, Int, rush yards, etc.). Type the player’s name in the box — suggestions appear as you type. Correct guess ends the round and scores points. Three rounds total.</p>' +
+          '<p class="how-to-note">Daily puzzle — resets at midnight. Same puzzle for everyone.</p>'
+      };
+    }
+    if (mode === MODES.BLITZ) {
+      return {
+        title: 'How to Play — NFL Blitz',
+        body: '<p class="how-to-objective"><strong>Goal:</strong> Score as many points as you can in <strong>60 seconds</strong>.</p>' +
+          '<p>Same as Daily: pick which player had the better stat in each category. Rounds keep coming until time runs out. One point per correct pick. No daily reset — play anytime.</p>'
+      };
+    }
+  }
+
+  if (sport === 'nba') {
+    if (mode === MODES.DAILY) {
+      return {
+        title: 'How to Play — NBA Daily',
+        body: '<p class="how-to-objective"><strong>Goal:</strong> Get 9 points by picking which player had the <strong>better stat</strong> in each category.</p>' +
+          '<p>You’ll see 3 rounds. Each round is one matchup: two players and three stat categories (e.g. points, rebounds, assists per game). Tap the player’s headshot next to each category for who had the better stat — higher is better.</p>' +
+          onePoint +
+          dailyNote
+      };
+    }
+    if (mode === MODES.BLIND_RESUME_NBA) {
+      return {
+        title: 'How to Play — Blind Resume (NBA)',
+        body: '<p class="how-to-objective"><strong>Goal:</strong> Guess the <strong>player</strong> as their stats are revealed.</p>' +
+          '<p>You’ll see one stat at a time (PTS/G, REB/G, AST/G, 3P/G, FT%, etc.). Type the player’s name in the box — suggestions appear as you type. Correct guess ends the round and scores points. Three rounds total.</p>' +
+          '<p class="how-to-note">Daily puzzle — resets at midnight. Same puzzle for everyone.</p>'
+      };
+    }
+    if (mode === MODES.BLITZ) {
+      return {
+        title: 'How to Play — NBA Blitz',
+        body: '<p class="how-to-objective"><strong>Goal:</strong> Score as many points as you can in <strong>60 seconds</strong>.</p>' +
+          '<p>Same as Daily: pick which player had the better stat in each category. Rounds keep coming until time runs out. One point per correct pick. No daily reset — play anytime.</p>'
+      };
+    }
+  }
+
+  if (sport === 'mlb') {
+    if (mode === MODES.MLB_BATTERS) {
+      return {
+        title: 'How to Play — MLB Batters',
+        body: '<p class="how-to-objective"><strong>Goal:</strong> Get 9 points by picking which <strong>batter</strong> had the better stat in each category.</p>' +
+          '<p>All stats are from 2025. You’ll see 3 rounds; each round is one matchup with three batting categories (e.g. AVG, HR, OPS). Tap the player’s headshot next to each category for who had the better stat — higher is better.</p>' +
+          onePoint +
+          dailyNote
+      };
+    }
+    if (mode === MODES.MLB_PITCHERS) {
+      return {
+        title: 'How to Play — MLB Pitchers',
+        body: '<p class="how-to-objective"><strong>Goal:</strong> Get 9 points by picking which <strong>pitcher</strong> had the better stat in each category.</p>' +
+          '<p>All stats are from 2025. You’ll see 3 rounds; each round is one matchup with three pitching categories (e.g. ERA, WHIP, K/9). Tap the player’s headshot next to each category for who had the better stat — lower is better for ERA and WHIP; higher for strikeouts and wins.</p>' +
+          onePoint +
+          dailyNote
+      };
+    }
+    if (mode === MODES.BLITZ) {
+      return {
+        title: 'How to Play — MLB Blitz',
+        body: '<p class="how-to-objective"><strong>Goal:</strong> Score as many points as you can in <strong>60 seconds</strong>.</p>' +
+          '<p>Pick which player (batter or pitcher, depending on the round) had the better stat. Rounds keep coming until time runs out. One point per correct pick. No daily reset — play anytime.</p>'
+      };
+    }
+  }
+
+  return {
+    title: 'How to Play',
+    body: '<p>Pick which player had the better stat in each category. Rounds and stats vary by sport and mode.</p>' + onePoint + dailyNote
+  };
+}
+
 function getTodaySeed() {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -794,9 +896,15 @@ const resultsStatsLeaderboardToggle = document.getElementById('results-stats-lea
 const resultsStatsLoading = document.getElementById('results-stats-loading');
 const resultsModeButtons = document.getElementById('results-mode-buttons');
 const resultsSportToolbar = document.getElementById('results-sport-toolbar');
+const mainHeader = document.getElementById('main-header');
 const howToBtn = document.getElementById('how-to-btn');
 const howToModal = document.getElementById('how-to-modal');
+const howToModalTitle = document.getElementById('how-to-modal-title');
+const howToModalBody = document.getElementById('how-to-modal-body');
 const modalClose = document.getElementById('modal-close');
+const aboutModal = document.getElementById('about-modal');
+const aboutModalClose = document.getElementById('about-modal-close');
+const aboutLink = document.getElementById('about-link');
 const homeBtn = document.getElementById('home-btn');
 const initialsBtn = document.getElementById('initials-btn');
 const initialsModal = document.getElementById('initials-modal');
@@ -906,7 +1014,12 @@ function initGame(mode) {
   resultsScreen.classList.remove('active');
   blitzTimerEl.classList.remove('visible');
   homeBtn.style.display = 'flex';
-  if (initialsBtn) initialsBtn.style.display = 'none';
+  if (initialsBtn) {
+    initialsBtn.style.display = 'flex';
+    updateInitialsButtonText();
+  }
+  if (howToBtn) howToBtn.style.display = 'flex';
+  if (mainHeader) mainHeader.classList.add('in-game');
 
   if (state.sport === 'nfl' || state.sport === 'nba' || state.sport === 'mlb') {
     document.body.setAttribute('data-sport', state.sport);
@@ -1297,7 +1410,12 @@ function showDailyAlreadyPlayed() {
   roundScreen.classList.remove('active');
   resultsScreen.classList.add('active');
   homeBtn.style.display = 'flex';
-  if (initialsBtn) initialsBtn.style.display = 'none';
+  if (initialsBtn) {
+    initialsBtn.style.display = 'flex';
+    updateInitialsButtonText();
+  }
+  if (howToBtn) howToBtn.style.display = 'flex';
+  if (mainHeader) mainHeader.classList.add('in-game');
   const score = parseInt(getStoredDailyScore(state.sport, state.mode), 10);
   const roundScores = getStoredRoundScores(state.sport, state.mode);
   const total = (state.mode === MODES.ROOKIE_QB) ? 12 : (state.mode === MODES.BLIND_RESUME || state.mode === MODES.BLIND_RESUME_NBA) ? null : 9;
@@ -1575,6 +1693,7 @@ function buildShareText(mode, score, roundScores, sport, forSms) {
       ? `\n\n${SHARE_X_USERNAME}\n${SHARE_URL_PLACEHOLDER}`
       : SHARE_URL_PLACEHOLDER ? `\n\n${SHARE_URL_PLACEHOLDER}` : '';
   let text = firstLine;
+  if (state.lastPercentile != null) text += '\n' + state.lastPercentile + '% percentile';
   if (roundScores && roundScores.length > 0) {
     text += '\n\n';
     roundScores.forEach(({ position, score: rs, total: t }, idx) => {
@@ -1601,6 +1720,7 @@ function buildSharePreview(mode, score, roundScores, sport) {
   const includeDate = dailyModes.includes(mode) || mode === 'blitz';
   const firstLine = includeDate ? `${scoreStr} - ${shareTitle} ${dateStr}` : `${scoreStr} - ${shareTitle}`;
   let text = firstLine;
+  if (state.lastPercentile != null) text += '\n' + state.lastPercentile + '% percentile';
   if (roundScores && roundScores.length > 0) {
     text += '\n\n';
     roundScores.forEach(({ position, score: rs, total: t }, idx) => {
@@ -1656,8 +1776,18 @@ function renderResultsStats(stats) {
     (stats.leaderboard || []).forEach((row) => {
       const li = document.createElement('li');
       li.className = 'results-stats-leaderboard-row' + (row.isYou ? ' results-stats-leaderboard-row--you' : '');
-      const initialsPart = row.initials ? ' ' + row.initials : '';
-      li.textContent = `${row.rank}. ${formatResultsScore(row.score)}${initialsPart}${row.isYou ? ' (You)' : ''}`;
+      const rankSpan = document.createElement('span');
+      rankSpan.className = 'results-stats-leaderboard-rank';
+      rankSpan.textContent = row.rank + '.';
+      const initialsSpan = document.createElement('span');
+      initialsSpan.className = 'results-stats-leaderboard-initials';
+      initialsSpan.textContent = row.initials || '—';
+      const scoreSpan = document.createElement('span');
+      scoreSpan.className = 'results-stats-leaderboard-score';
+      scoreSpan.textContent = formatResultsScore(row.score) + (row.isYou ? ' (You)' : '');
+      li.appendChild(rankSpan);
+      li.appendChild(initialsSpan);
+      li.appendChild(scoreSpan);
       resultsStatsLeaderboard.appendChild(li);
     });
   }
@@ -1667,6 +1797,12 @@ function renderResultsStats(stats) {
     resultsStatsLeaderboardToggle.setAttribute('aria-expanded', 'false');
   }
   if (resultsStatsSection) resultsStatsSection.classList.remove('hidden');
+  state.lastPercentile = stats.percentile != null ? stats.percentile : undefined;
+  // Rebuild share card and buttons so they include percentile
+  if (shareGrid) shareGrid.textContent = buildShareGrid();
+  const shareTextX = buildShareText(state.mode, state.score, state.roundScores, state.sport, false);
+  const shareTextSms = buildShareText(state.mode, state.score, state.roundScores, state.sport, true);
+  setupShareButtons(shareTextX, shareTextSms);
 }
 
 function toggleResultsLeaderboard() {
@@ -1713,7 +1849,12 @@ function showResults() {
   roundScreen.classList.remove('active');
   resultsScreen.classList.add('active');
   homeBtn.style.display = 'flex';
-  if (initialsBtn) initialsBtn.style.display = 'none';
+  if (initialsBtn) {
+    initialsBtn.style.display = 'flex';
+    updateInitialsButtonText();
+  }
+  if (howToBtn) howToBtn.style.display = 'flex';
+  if (mainHeader) mainHeader.classList.add('in-game');
   /* Keep data-sport on body so results (game over) page keeps the tall painting background */
   if (state.sport !== 'nfl' && state.sport !== 'nba' && state.sport !== 'mlb') {
     document.body.removeAttribute('data-sport');
@@ -1769,6 +1910,17 @@ function showResults() {
 
 function setupHowToPlay() {
   howToBtn.addEventListener('click', () => {
+    const onStartScreen = startScreen && startScreen.classList.contains('active');
+    if (onStartScreen && aboutModal) {
+      aboutModal.classList.add('open');
+      aboutModal.setAttribute('aria-hidden', 'false');
+      return;
+    }
+    const sport = state.sport || 'nfl';
+    const mode = state.mode || MODES.DAILY;
+    const { title, body } = getHowToContent(sport, mode);
+    if (howToModalTitle) howToModalTitle.textContent = title;
+    if (howToModalBody) howToModalBody.innerHTML = body;
     howToModal.classList.add('open');
     howToModal.setAttribute('aria-hidden', 'false');
   });
@@ -1778,6 +1930,28 @@ function setupHowToPlay() {
   });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && howToModal.classList.contains('open')) closeHowToModal();
+  });
+}
+
+function setupAbout() {
+  if (!aboutModal) return;
+  if (aboutModalClose) {
+    aboutModalClose.addEventListener('click', () => {
+      aboutModal.classList.remove('open');
+      aboutModal.setAttribute('aria-hidden', 'true');
+    });
+  }
+  aboutModal.addEventListener('click', (e) => {
+    if (e.target === aboutModal) {
+      aboutModal.classList.remove('open');
+      aboutModal.setAttribute('aria-hidden', 'true');
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && aboutModal && aboutModal.classList.contains('open')) {
+      aboutModal.classList.remove('open');
+      aboutModal.setAttribute('aria-hidden', 'true');
+    }
   });
 }
 
@@ -1826,6 +2000,8 @@ function goToStartScreen() {
     initialsBtn.style.display = 'flex';
     updateInitialsButtonText();
   }
+  if (howToBtn) howToBtn.style.display = 'flex';
+  if (mainHeader) mainHeader.classList.remove('in-game');
   document.body.removeAttribute('data-sport');
   startScreen.classList.add('active');
   roundScreen.classList.remove('active');
@@ -1958,6 +2134,7 @@ function setupInitialsModal() {
 async function main() {
   try {
     setupHowToPlay();
+    setupAbout();
     setupHomeBtn();
     setupInitialsModal();
     setupSportTabs();
