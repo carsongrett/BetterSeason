@@ -33,6 +33,7 @@ const GOLF_RESULT_KEY_PREFIX = 'betterseason_golf_result_';
 const GOLF_HEADSHOT_FALLBACK_SVG = 'data:image/svg+xml,' + encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" fill="%234a5568"><ellipse cx="50" cy="38" rx="22" ry="26"/><path d="M15 120c0-22 15-40 35-40s35 18 35 40z"/></svg>'
 );
+const MASTERS_LOGO_URL = '../logos/masters_tournament_icon-logo_brandlogos.net_xjp0a.png';
 
 // Delay before showing results modal after the last card is picked (so user can see the final grid)
 const RESULTS_MODAL_DELAY_MS = 2000;
@@ -504,11 +505,16 @@ function renderGrid() {
       cardEl.dataset.card = cardIndex;
       const scoreBg = getScoreBackgroundColor(card.score_to_par);
       const displayName = formatEventNameForDisplay(card.event_name);
+      const isMasters = state.golfMode === 'masters';
+      const frontContent = isMasters
+        ? `<img class="masters-card-logo" src="${MASTERS_LOGO_URL}" alt="" width="48" height="48">
+           <span class="masters-card-year">${card.year}</span>`
+        : `<span class="event-name">${escapeHtml(displayName)}</span>
+           <span class="event-year">${card.year}</span>`;
       cardEl.innerHTML = `
         <div class="card-inner">
-          <div class="card-front">
-            <span class="event-name">${escapeHtml(displayName)}</span>
-            <span class="event-year">${card.year}</span>
+          <div class="card-front${isMasters ? ' masters-card-front' : ''}">
+            ${frontContent}
           </div>
           <div class="card-back" style="--score-bg: ${scoreBg}">
             <span class="card-back-event">${escapeHtml(displayName)} ${card.year}</span>

@@ -612,6 +612,24 @@ body::before {
   flex-shrink: 0;
 }
 
+/* Masters mode: logo + large year on card front */
+.masters-card-front {
+  gap: 0.35rem;
+}
+.masters-card-front .masters-card-logo {
+  width: clamp(36px, 10vw, 52px);
+  height: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.masters-card-front .masters-card-year {
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.1;
+  flex-shrink: 0;
+}
+
 .card-back .score {
   font-size: clamp(1.5rem, 4vw, 2.1rem);
   font-weight: 700;
