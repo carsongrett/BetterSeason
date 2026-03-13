@@ -344,7 +344,7 @@
       youRank = youRank != null && youRank !== '' ? parseInt(youRank, 10) : null;
       var youInitials = params.get('youInitials') || '';
 
-      var modeLabel = (mode === 'hard' || mode === 'normal') ? 'Best Ball (Hard)' : 'Best Ball';
+      var modeLabel = mode === 'masters' ? 'Masters' : (mode === 'hard' || mode === 'normal') ? 'Best Ball (Hard)' : 'Best Ball';
       document.getElementById('card-mode').textContent = modeLabel + ' ⛳';
       document.getElementById('card-score').textContent = formatScore(score);
       document.getElementById('card-date').textContent = formatDateForCard(date);

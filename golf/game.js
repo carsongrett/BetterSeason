@@ -61,6 +61,8 @@ const MAJOR_EVENT_NAMES = new Set([
   'The Open',
   'British Open Championship',
 ]);
+// The Masters only (same year range; used for "The Masters" daily game)
+const MASTERS_EVENT_NAMES = new Set(['The Masters', 'Masters Tournament']);
 
 // Seeded RNG for repeatable puzzles. Date string (e.g. "2026-03-02_majors") must be hashed to a number so mulberry32 gets a proper numeric state.
 function hashSeedToNumber(seedStr) {
@@ -136,7 +138,8 @@ function parseCSV(text) {
   return rows;
 }
 
-function loadData(easyMode) {
+/** @param {'majors'|'normal'|'masters'} golfMode */
+function loadData(golfMode) {
   return fetch(DATA_URL)
     .then((r) => {
       if (!r.ok) throw new Error(`Failed to load ${DATA_URL}: ${r.status}`);
@@ -158,8 +161,10 @@ function loadData(easyMode) {
         }))
         .filter((r) => r.player_name && !isNaN(r.score_to_par))
         .filter((r) => r.year >= MIN_YEAR && r.year <= MAX_YEAR);
-      if (easyMode) {
+      if (golfMode === 'majors') {
         out = out.filter((r) => MAJOR_EVENT_NAMES.has(r.event_name));
+      } else if (golfMode === 'masters') {
+        out = out.filter((r) => MASTERS_EVENT_NAMES.has(r.event_name));
       }
       return out;
     });
@@ -313,15 +318,21 @@ const initialsInput = document.getElementById('initials-input');
 const initialsSubmit = document.getElementById('initials-submit');
 const initialsError = document.getElementById('initials-error');
 
+/** 'majors' = Best Ball (4 majors), 'normal' = Best Ball (Hard) all events, 'masters' = The Masters only. Hard mode is hidden in UI but still in code. */
+function getGolfModeFromUrl() {
+  const m = (new URLSearchParams(window.location.search).get('mode') || '').toLowerCase();
+  if (m === 'masters') return 'masters';
+  if (m === 'hard' || m === 'normal') return 'normal';
+  return 'majors';
+}
+
 let state = {
   puzzle: null,
   picks: [], // one score_to_par per row (index = row)
   seed: 0,
   golfPlayerIds: {}, // name -> ESPN id for headshots
-  easyMode: (function () {
-    const m = new URLSearchParams(window.location.search).get('mode');
-    return m !== 'hard' && m !== 'normal'; // no param or other = majors; ?mode=hard or ?mode=normal = Best Ball (Hard)
-  })(),
+  golfMode: getGolfModeFromUrl(),
+  get easyMode() { return state.golfMode !== 'normal'; }, // true for majors/masters (used where we only need "not hard")
 };
 let hasShownHowToThisSession = false;
 
@@ -410,17 +421,16 @@ function getTodayCentralDateString() {
 /** Daily seed so everyone gets the same puzzle. Use ?test=1 or ?seed=YYYY-MM-DD to force a fixed puzzle for testing. */
 function getSeed() {
   const params = new URLSearchParams(window.location.search);
+  const suffix = state.golfMode === 'normal' ? '_all' : state.golfMode === 'masters' ? '_masters' : '_majors';
   const testSeed = params.get('seed'); // e.g. ?seed=2025-03-01
-  if (testSeed) {
-    return state.easyMode ? `${testSeed}_majors` : `${testSeed}_all`;
-  }
+  if (testSeed) return testSeed + suffix;
   if (params.get('test') === '1') {
     const d = new Date();
     const fixed = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    return state.easyMode ? `${fixed}_majors` : `${fixed}_all`;
+    return fixed + suffix;
   }
   const dateStr = getTodayCentralDateString();
-  return state.easyMode ? `${dateStr}_majors` : `${dateStr}_all`;
+  return dateStr + suffix;
 }
 
 function formatScore(n) {
@@ -576,11 +586,12 @@ function scoreToShareEmoji(scoreToPar) {
 function buildGolfShareText(total, forSms) {
   const dateStr = getGolfShareDateStr();
   const scoreStr = formatScore(total);
-  const modeLabel = state.easyMode ? 'Best Ball' : 'Best Ball (Hard)';
+  const modeLabel = state.golfMode === 'masters' ? 'Masters' : state.golfMode === 'normal' ? 'Best Ball (Hard)' : 'Best Ball';
+  const modeEmoji = state.golfMode === 'masters' ? 'Masters ⛳' : modeLabel + ' ⛳';
   const emojiRow = (state.picks || []).map(scoreToShareEmoji).join('\n');
   const percentileLine = state.lastPercentile != null ? `${state.lastPercentile}th percentile` : '';
   const lines = [
-    `${modeLabel}⛳ ${dateStr}`,
+    `${modeEmoji} ${dateStr}`,
     scoreStr,
     percentileLine,
     emojiRow || '',
@@ -597,11 +608,12 @@ function buildGolfShareText(total, forSms) {
 function buildGolfSharePreview(total) {
   const dateStr = getGolfShareDateStr();
   const scoreStr = formatScore(total);
-  const modeLabel = state.easyMode ? 'Best Ball' : 'Best Ball (Hard)';
+  const modeLabel = state.golfMode === 'masters' ? 'Masters' : state.golfMode === 'normal' ? 'Best Ball (Hard)' : 'Best Ball';
+  const modeEmoji = state.golfMode === 'masters' ? 'Masters ⛳' : modeLabel + ' ⛳';
   const emojiRow = (state.picks || []).map(scoreToShareEmoji).join('\n');
   const percentileLine = state.lastPercentile != null ? `${state.lastPercentile}th percentile` : '';
   const lines = [
-    `${modeLabel}⛳ ${dateStr}`,
+    `${modeEmoji} ${dateStr}`,
     scoreStr,
     percentileLine,
     emojiRow || '',
@@ -640,7 +652,7 @@ function setupGolfShareButtons(shareTextX, shareTextSms, total) {
       const params = new URLSearchParams({
         score: String(total),
         date: dateStr,
-        mode: state.easyMode ? 'majors' : 'hard',
+        mode: state.golfMode === 'masters' ? 'masters' : state.golfMode === 'normal' ? 'hard' : 'majors',
         picks: picksParam,
       });
       if (state.lastPercentile != null) params.set('percentile', String(state.lastPercentile));
@@ -678,7 +690,7 @@ function setupAlreadyPlayedShareButtons(total) {
       const params = new URLSearchParams({
         score: String(total),
         date: dateStr,
-        mode: state.easyMode ? 'majors' : 'hard',
+        mode: state.golfMode === 'masters' ? 'masters' : state.golfMode === 'normal' ? 'hard' : 'majors',
         picks: picksParam,
       });
       if (state.lastPercentile != null) params.set('percentile', String(state.lastPercentile));
@@ -788,7 +800,7 @@ if (resultsStatsLeaderboardToggle) resultsStatsLeaderboardToggle.addEventListene
 function runSubmitAndShowStats(total) {
   const puzzleId = state.seed;
   const sport = 'pga';
-  const mode = state.easyMode ? 'pick_the_round_majors' : 'pick_the_round';
+  const mode = state.golfMode === 'masters' ? 'pick_the_round_masters' : state.golfMode === 'normal' ? 'pick_the_round' : 'pick_the_round_majors';
   const higherIsBetter = false;
 
   if (resultsModal) resultsModal.classList.remove('hidden');
@@ -971,7 +983,11 @@ if (leaveGameHardGo) leaveGameHardGo.addEventListener('click', () => {
   window.location.href = window.location.pathname + '?mode=hard';
 });
 
+const leaveGameEasyTitleEl = document.getElementById('leave-game-easy-title');
 function showLeaveGameEasyModal() {
+  if (leaveGameEasyTitleEl) {
+    leaveGameEasyTitleEl.textContent = state.golfMode === 'masters' ? 'Switch to Best Ball?' : 'Switch to The Masters?';
+  }
   if (leaveGameEasyModal) leaveGameEasyModal.classList.remove('hidden');
 }
 function closeLeaveGameEasyModal() {
@@ -982,7 +998,8 @@ if (leaveGameEasyModalBackdrop) leaveGameEasyModalBackdrop.addEventListener('cli
 if (leaveGameEasyStay) leaveGameEasyStay.addEventListener('click', closeLeaveGameEasyModal);
 if (leaveGameEasyGo) leaveGameEasyGo.addEventListener('click', () => {
   closeLeaveGameEasyModal();
-  window.location.href = window.location.pathname;
+  const base = window.location.pathname;
+  window.location.href = state.golfMode === 'masters' ? base : base + '?mode=masters';
 });
 
 document.addEventListener('keydown', (e) => {
@@ -1062,19 +1079,33 @@ function loadRankings() {
 }
 
 function updatePageTitleAndHeader() {
-  const title = state.easyMode ? 'Best Ball' : 'Best Ball (Hard)';
+  const title = state.golfMode === 'masters' ? 'The Masters' : state.golfMode === 'normal' ? 'Best Ball (Hard)' : 'Best Ball';
   document.title = title + ' — Golf';
   const titleEl = document.getElementById('golf-page-title');
   if (titleEl) titleEl.textContent = title;
   const hardWrap = document.getElementById('hard-mode-btn-wrap');
   const easyWrap = document.getElementById('easy-mode-btn-wrap');
-  if (hardWrap) {
-    if (state.easyMode) hardWrap.classList.remove('hidden');
-    else hardWrap.classList.add('hidden');
-  }
+  const easyBtnText = document.querySelector('#easy-mode-btn-wrap .how-to-play-btn-text');
+  const easyBtnLabel = document.querySelector('#easy-mode-btn-wrap .mode-toggle-label');
+  // Hard mode: always hidden (not removed) so it can be re-enabled later
+  if (hardWrap) hardWrap.classList.add('hidden');
   if (easyWrap) {
-    if (state.easyMode) easyWrap.classList.add('hidden');
-    else easyWrap.classList.remove('hidden');
+    easyWrap.classList.remove('hidden');
+    if (state.golfMode === 'masters') {
+      if (easyBtnText) easyBtnText.textContent = 'Best Ball';
+      if (easyBtnLabel) easyBtnLabel.textContent = 'Best Ball';
+      if (easyModeBtn) {
+        easyModeBtn.setAttribute('aria-label', 'Switch to Best Ball');
+        easyModeBtn.title = 'Best Ball (4 majors)';
+      }
+    } else {
+      if (easyBtnText) easyBtnText.textContent = 'The Masters';
+      if (easyBtnLabel) easyBtnLabel.textContent = 'Masters';
+      if (easyModeBtn) {
+        easyModeBtn.setAttribute('aria-label', 'Switch to The Masters');
+        easyModeBtn.title = 'The Masters only';
+      }
+    }
   }
 }
 
@@ -1113,11 +1144,12 @@ function initGame() {
     picks: [],
     seed,
     golfPlayerIds: state.golfPlayerIds || {},
-    easyMode: state.easyMode,
+    golfMode: getGolfModeFromUrl(),
+    get easyMode() { return state.golfMode !== 'normal'; },
   };
   updatePageTitleAndHeader();
   if (!wasCompleted) hideAlreadyPlayedView();
-  Promise.all([loadGolfPlayerIds(), loadData(state.easyMode), loadRankings(), loadTopPlayersAlltime()])
+  Promise.all([loadGolfPlayerIds(), loadData(state.golfMode), loadRankings(), loadTopPlayersAlltime()])
     .then(([, rows, rankMap, alltimeSet]) => {
       state.puzzle = buildPuzzle(rows, seed, rankMap, alltimeSet);
       if (wasCompleted) {

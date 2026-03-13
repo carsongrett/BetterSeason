@@ -183,6 +183,13 @@ function getTodaySeed() {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
+/** Date string for (today - offsetDays), e.g. offset 1 = yesterday. */
+function getDateStringForOffset(offsetDays) {
+  const d = new Date();
+  d.setDate(d.getDate() - offsetDays);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
 function getGameNumber() {
   // In daily mode, derive puzzle number from epoch days
   const epoch = new Date(2024, 8, 4); // NFL season start reference
@@ -796,10 +803,12 @@ function isNoMatchPair(posA, posB, sport) {
   );
 }
 
-function generateMatchup(pool, stats, usedKeys, rng, position, allowReuseWhenEmpty = false, sport = 'nfl') {
+function generateMatchup(pool, stats, usedKeys, rng, position, allowReuseWhenEmpty = false, sport = 'nfl', excludedKeys = null) {
   const list = Array.isArray(pool) ? pool : (pool || []);
   const minRatio = getRatioThreshold(position, sport);
   let validPairs = [];
+  const combinedExcluded = new Set(usedKeys);
+  if (excludedKeys && excludedKeys.size) excludedKeys.forEach(k => combinedExcluded.add(k));
 
   function collectPairs(keys) {
     const pairs = [];
@@ -818,9 +827,9 @@ function generateMatchup(pool, stats, usedKeys, rng, position, allowReuseWhenEmp
     return pairs;
   }
 
-  validPairs = collectPairs(usedKeys);
+  validPairs = collectPairs(combinedExcluded);
   if (validPairs.length === 0 && allowReuseWhenEmpty) {
-    validPairs = collectPairs(new Set());
+    validPairs = collectPairs(usedKeys);
   }
   if (validPairs.length === 0) return null;
 
@@ -829,9 +838,12 @@ function generateMatchup(pool, stats, usedKeys, rng, position, allowReuseWhenEmp
   return rng() < 0.5 ? [a, b] : [b, a];
 }
 
-function getRound3Position(seed, rng, mode, sport) {
+function getRound3Position(seed, rng, mode, sport, forDate = null) {
   if (sport === 'nfl') {
-    if (mode === MODES.DAILY) return (new Date().getDate()) % 2 === 0 ? 'WR' : 'TE';
+    if (mode === MODES.DAILY) {
+      const d = forDate ? new Date(forDate) : new Date();
+      return d.getDate() % 2 === 0 ? 'WR' : 'TE';
+    }
     const h = seed.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
     return h % 2 === 0 ? 'WR' : 'TE';
   }
@@ -850,19 +862,70 @@ function getPoolForPosition(sport, pos, data) {
   return data[pos] || [];
 }
 
-function getPositionOrder(sport, seed, rng, mode) {
+function getPositionOrder(sport, seed, rng, mode, forDate = null) {
   const cfg = SPORT_CONFIG[sport];
   if (mode === MODES.MLB_BATTERS) return ['BATTERS', 'BATTERS', 'BATTERS'];
   if (mode === MODES.MLB_PITCHERS) return ['PITCHERS', 'PITCHERS', 'PITCHERS'];
   if (!cfg) return ['QB', 'RB', 'WR'];
   if (sport === 'nfl') {
-    return ['QB', 'RB', getRound3Position(seed, rng, mode, sport)];
+    return ['QB', 'RB', getRound3Position(seed, rng, mode, sport, forDate)];
   }
   if (sport === 'nba') {
     const groups = ['GUARDS', 'BIGS'];
     return [groups[Math.floor(rng() * 2)], groups[Math.floor(rng() * 2)], groups[Math.floor(rng() * 2)]];
   }
   return ['QB', 'RB', 'WR'];
+}
+
+const RECENT_DAYS_EXCLUDE = 2; // Exclude players who appeared in the last N days from today's daily puzzle.
+
+/** Returns the set of player keys that would have been used on the given date for the given sport/mode (deterministic from date seed). */
+function getPlayerKeysUsedOnDay(dateString, sport, mode, allData) {
+  const isRookieQB = mode === MODES.ROOKIE_QB;
+  const isMLBBatters = mode === MODES.MLB_BATTERS;
+  const isMLBPitchers = mode === MODES.MLB_PITCHERS;
+  let data;
+  if (isRookieQB) data = { QB: allData?.nfl?.ROOKIE_QB || [] };
+  else if (isMLBBatters || isMLBPitchers) data = allData?.mlb || {};
+  else data = allData?.[sport] || {};
+  const rng = createSeededRandom(dateString);
+  const posOrder = isRookieQB ? ['QB', 'QB', 'QB'] : getPositionOrder(sport, dateString, rng, mode, dateString);
+  const usedKeys = new Set();
+  const resultKeys = new Set();
+  const headshotsOn = sport === 'nba' && !!allData?.nba?.playerIds ||
+    sport === 'nfl' && !!allData?.nfl?.playerIds || sport === 'mlb' && !!allData?.mlb?.playerIds;
+  for (let r = 0; r < 3; r++) {
+    const pos = posOrder[r];
+    const stats = isRookieQB ? pickRookieQBStats(rng) : pickStatsForRound(pos, rng, sport, mode);
+    let pool = getPoolForPosition(sport, pos, data);
+    if (headshotsOn && Array.isArray(pool)) pool = pool.filter(p => playerHasHeadshot(p.Player, sport));
+    const matchup = generateMatchup(pool, stats, usedKeys, rng, pos, false, sport);
+    if (matchup) {
+      const [a, b] = matchup;
+      usedKeys.add(playerKey(a));
+      usedKeys.add(playerKey(b));
+      resultKeys.add(playerKey(a));
+      resultKeys.add(playerKey(b));
+    } else if (pool && pool.length >= 2) {
+      const a = pool[0], b = pool[1];
+      usedKeys.add(playerKey(a));
+      usedKeys.add(playerKey(b));
+      resultKeys.add(playerKey(a));
+      resultKeys.add(playerKey(b));
+    }
+  }
+  return resultKeys;
+}
+
+/** Set of player keys that appeared in the last RECENT_DAYS_EXCLUDE days (for daily modes). */
+function getRecentPlayerKeys(sport, mode, allData) {
+  const recent = new Set();
+  for (let offset = 1; offset <= RECENT_DAYS_EXCLUDE; offset++) {
+    const dateStr = getDateStringForOffset(offset);
+    const keys = getPlayerKeysUsedOnDay(dateStr, sport, mode, allData);
+    keys.forEach(k => recent.add(k));
+  }
+  return recent;
 }
 
 // --- DOM ---
@@ -1068,6 +1131,7 @@ function initGame(mode) {
   const usedKeys = new Set();
   const statsPerRound = 3;
   const totalPoints = 9;
+  const recentKeys = getRecentPlayerKeys(state.sport, mode, state.allData);
 
   for (let r = 0; r < 3; r++) {
     const pos = posOrder[r];
@@ -1076,7 +1140,10 @@ function initGame(mode) {
     if (headshotsEnabledForSport(state.sport) && Array.isArray(pool)) {
       pool = pool.filter(p => playerHasHeadshot(p.Player, state.sport));
     }
-    const matchup = generateMatchup(pool, stats, usedKeys, state.rng, pos, false, state.sport);
+    let matchup = generateMatchup(pool, stats, usedKeys, state.rng, pos, false, state.sport, recentKeys);
+    if (!matchup && recentKeys.size > 0) {
+      matchup = generateMatchup(pool, stats, usedKeys, state.rng, pos, false, state.sport, null);
+    }
     if (!matchup) {
       if (!pool || pool.length < 2) continue;
       const a = pool[0], b = pool[1];
@@ -2021,7 +2088,7 @@ function updateStartScreen() {
     card.classList.toggle('selected', card.dataset.sport === state.sport);
   });
   document.querySelectorAll('.mode-card--pga-only').forEach(card => {
-    card.style.display = state.sport === 'pga' ? 'flex' : 'none';
+    card.style.display = state.sport === 'pga' && !card.classList.contains('mode-card--hidden') ? 'flex' : 'none';
   });
   document.querySelectorAll('.mode-card--nfl-only').forEach(card => {
     card.style.display = state.sport === 'nfl' ? '' : 'none';
@@ -2039,7 +2106,7 @@ function updateStartScreen() {
     card.classList.toggle('selected', card.dataset.mode === state.mode);
   });
   const sportAvailable = AVAILABLE_SPORTS.includes(state.sport);
-  const pgaReady = state.sport === 'pga' && (state.mode === 'pick_the_round' || state.mode === 'pick_the_round_majors');
+  const pgaReady = state.sport === 'pga' && (state.mode === 'pick_the_round' || state.mode === 'pick_the_round_majors' || state.mode === 'pick_the_round_masters');
   startBtn.disabled = state.sport === 'pga' ? !pgaReady : (!state.mode || !sportAvailable);
 }
 
@@ -2077,8 +2144,8 @@ function setupModeCards() {
 
 function setupStartBtn() {
   startBtn.addEventListener('click', () => {
-    if (state.sport === 'pga' && (state.mode === 'pick_the_round' || state.mode === 'pick_the_round_majors')) {
-      const mode = state.mode === 'pick_the_round_majors' ? 'majors' : 'normal';
+    if (state.sport === 'pga' && (state.mode === 'pick_the_round' || state.mode === 'pick_the_round_majors' || state.mode === 'pick_the_round_masters')) {
+      const mode = state.mode === 'pick_the_round_majors' ? 'majors' : state.mode === 'pick_the_round_masters' ? 'masters' : 'normal';
       window.location.href = 'golf/?mode=' + mode;
       return;
     }

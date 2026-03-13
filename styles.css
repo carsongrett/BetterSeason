@@ -366,6 +366,11 @@ a.sport-card {
   display: none;
 }
 
+/* Hidden mode cards (e.g. Best Ball Hard) — not removed, so they can be re-enabled later */
+.mode-card.mode-card--hidden {
+  display: none !important;
+}
+
 /* Blind Resume modes – hidden for now; remove this block to show again */
 .mode-card[data-mode="blind_resume"],
 .mode-card[data-mode="blind_resume_nba"] {
