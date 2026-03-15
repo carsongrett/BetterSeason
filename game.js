@@ -404,7 +404,7 @@ async function loadData() {
   for (const f of NFL_FILES) {
     try {
       const [pos, year] = f.split('_');
-      const res = await fetch(`data/${f}.csv`);
+      const res = await fetch(`/data/${f}.csv`);
       if (!res.ok) throw new Error(`${f}.csv: ${res.status}`);
       const text = await res.text();
       const lines = text.trim().split('\n');
@@ -429,7 +429,7 @@ async function loadData() {
   for (const f of NBA_FILES) {
     try {
       const [sport, year] = f.split('_');
-      const res = await fetch(`data/${f}.csv`);
+      const res = await fetch(`/data/${f}.csv`);
       if (!res.ok) throw new Error(`${f}.csv: ${res.status}`);
       const text = await res.text();
       const lines = text.trim().split('\n');
@@ -458,7 +458,7 @@ async function loadData() {
   }
 
   try {
-    const rosterRes = await fetch('data/nba-player-ids.json');
+    const rosterRes = await fetch('/data/nba-player-ids.json');
     if (rosterRes.ok) {
       const rosterJson = await rosterRes.json();
       all.nba.playerIds = rosterJson.players || {};
@@ -470,7 +470,7 @@ async function loadData() {
   }
 
   try {
-    const res = await fetch(`data/${encodeURIComponent(BLIND_QB_FILE)}`);
+    const res = await fetch(`/data/${encodeURIComponent(BLIND_QB_FILE)}`);
     if (!res.ok) throw new Error(`${BLIND_QB_FILE}: ${res.status}`);
     const text = await res.text();
     const lines = text.trim().split('\n');
@@ -491,7 +491,7 @@ async function loadData() {
   }
 
   try {
-    const res = await fetch(`data/${encodeURIComponent(BLIND_BASKETBALL_FILE)}`);
+    const res = await fetch(`/data/${encodeURIComponent(BLIND_BASKETBALL_FILE)}`);
     if (!res.ok) throw new Error(`${BLIND_BASKETBALL_FILE}: ${res.status}`);
     const text = await res.text();
     const lines = text.trim().split('\n');
@@ -512,7 +512,7 @@ async function loadData() {
   }
 
   try {
-    const res = await fetch(`data/${encodeURIComponent(ROOKIE_QB_FILE)}`);
+    const res = await fetch(`/data/${encodeURIComponent(ROOKIE_QB_FILE)}`);
     if (!res.ok) throw new Error(`${ROOKIE_QB_FILE}: ${res.status}`);
     const text = await res.text();
     const lines = text.trim().split('\n');
@@ -532,7 +532,7 @@ async function loadData() {
   }
 
   try {
-    const nflRosterRes = await fetch('data/nfl-player-ids.json');
+    const nflRosterRes = await fetch('/data/nfl-player-ids.json');
     if (nflRosterRes.ok) {
       const nflRosterJson = await nflRosterRes.json();
       all.nfl.playerIds = nflRosterJson.players || {};
@@ -545,7 +545,7 @@ async function loadData() {
 
   for (const f of [MLB_BATTERS_FILE, MLB_PITCHERS_FILE]) {
     try {
-      const res = await fetch(`data/${encodeURIComponent(f)}`);
+      const res = await fetch(`/data/${encodeURIComponent(f)}`);
       if (!res.ok) throw new Error(`${f}: ${res.status}`);
       const text = await res.text();
       const lines = text.trim().split('\n');
@@ -567,7 +567,7 @@ async function loadData() {
   }
 
   try {
-    const mlbRosterRes = await fetch('data/mlb-player-ids.json');
+    const mlbRosterRes = await fetch('/data/mlb-player-ids.json');
     if (mlbRosterRes.ok) {
       const mlbRosterJson = await mlbRosterRes.json();
       all.mlb.playerIds = mlbRosterJson.players || {};

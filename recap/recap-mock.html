@@ -82,20 +82,20 @@
       color: var(--text);
       margin-bottom: 1rem;
     }
-    /* Grid — same as game over screen */
+    /* Single grid — rows align across columns */
     .recap-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-rows: auto auto repeat(3, minmax(0, 1fr));
       gap: 0.5rem;
       width: 100%;
     }
-    .recap-grid-col {
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-      align-items: center;
-      justify-content: flex-start;
-      min-width: 0;
+    .recap-grid .recap-headshot {
+      justify-self: center;
+    }
+    .recap-grid .recap-name {
+      place-self: center;
+      min-height: 2em;
     }
     .recap-headshot {
       width: 40px;
@@ -119,6 +119,7 @@
     }
     .recap-card-cell {
       width: 100%;
+      min-height: 0;
       aspect-ratio: 3/4;
       border-radius: 8px;
       display: flex;
@@ -161,34 +162,26 @@
       </div>
       <div class="recap-date">March 13</div>
       <div class="recap-grid">
-        <div class="recap-grid-col">
-          <div class="recap-headshot"><img src="https://a.espncdn.com/i/headshots/golf/players/full/33046.png" alt=""></div>
-          <div class="recap-name">Sepp Straka</div>
-          <div class="recap-card-cell" style="background: hsl(152, 40%, 50%)"><span class="recap-card-event">PGA Champ 2023</span><span class="recap-card-score">-2</span></div>
-          <div class="recap-card-cell" style="background: hsl(48, 52%, 44%)"><span class="recap-card-event">The Open 2024</span><span class="recap-card-score">+4</span></div>
-          <div class="recap-card-cell" style="background: hsl(0, 54%, 42%)"><span class="recap-card-event">Masters 2023</span><span class="recap-card-score">+7</span></div>
-        </div>
-        <div class="recap-grid-col">
-          <div class="recap-headshot"><img src="https://a.espncdn.com/i/headshots/golf/players/full/35944.png" alt=""></div>
-          <div class="recap-name">Thriston Lawrence</div>
-          <div class="recap-card-cell" style="background: hsl(0, 54%, 42%)"><span class="recap-card-event">PGA Champ 2023</span><span class="recap-card-score">+11</span></div>
-          <div class="recap-card-cell" style="background: hsl(0, 54%, 42%)"><span class="recap-card-event">U.S. Open 2025</span><span class="recap-card-score">+6</span></div>
-          <div class="recap-card-cell" style="background: hsl(152, 40%, 50%)"><span class="recap-card-event">The Open 2025</span><span class="recap-card-score">-1</span></div>
-        </div>
-        <div class="recap-grid-col">
-          <div class="recap-headshot"><img src="https://a.espncdn.com/i/headshots/golf/players/full/335.png" alt=""></div>
-          <div class="recap-name">Rory Sabbatini</div>
-          <div class="recap-card-cell" style="background: hsl(0, 54%, 42%)"><span class="recap-card-event">U.S. Open 2008</span><span class="recap-card-score">+12</span></div>
-          <div class="recap-card-cell" style="background: hsl(152, 40%, 50%)"><span class="recap-card-event">Masters 2009</span><span class="recap-card-score">-2</span></div>
-          <div class="recap-card-cell" style="background: hsl(0, 54%, 42%)"><span class="recap-card-event">U.S. Open 2020</span><span class="recap-card-score">+24</span></div>
-        </div>
-        <div class="recap-grid-col">
-          <div class="recap-headshot"><img src="https://a.espncdn.com/i/headshots/golf/players/full/569.png" alt=""></div>
-          <div class="recap-name">Justin Rose</div>
-          <div class="recap-card-cell" style="background: hsl(152, 42%, 46%)"><span class="recap-card-event">PGA Champ 2018</span><span class="recap-card-score">-7</span></div>
-          <div class="recap-card-cell" style="background: hsl(152, 40%, 50%)"><span class="recap-card-event">Masters 2012</span><span class="recap-card-score">-4</span></div>
-          <div class="recap-card-cell" style="background: hsl(48, 52%, 44%)"><span class="recap-card-event">British Open 2009</span><span class="recap-card-score">+2</span></div>
-        </div>
+        <div class="recap-headshot"><img src="https://a.espncdn.com/i/headshots/golf/players/full/33046.png" alt=""></div>
+        <div class="recap-headshot"><img src="https://a.espncdn.com/i/headshots/golf/players/full/35944.png" alt=""></div>
+        <div class="recap-headshot"><img src="https://a.espncdn.com/i/headshots/golf/players/full/335.png" alt=""></div>
+        <div class="recap-headshot"><img src="https://a.espncdn.com/i/headshots/golf/players/full/569.png" alt=""></div>
+        <div class="recap-name">Sepp Straka</div>
+        <div class="recap-name">Thriston Lawrence</div>
+        <div class="recap-name">Rory Sabbatini</div>
+        <div class="recap-name">Justin Rose</div>
+        <div class="recap-card-cell" style="background: hsl(152, 40%, 50%)"><span class="recap-card-event">PGA Champ 2023</span><span class="recap-card-score">-2</span></div>
+        <div class="recap-card-cell" style="background: hsl(0, 54%, 42%)"><span class="recap-card-event">PGA Champ 2023</span><span class="recap-card-score">+11</span></div>
+        <div class="recap-card-cell" style="background: hsl(0, 54%, 42%)"><span class="recap-card-event">U.S. Open 2008</span><span class="recap-card-score">+12</span></div>
+        <div class="recap-card-cell" style="background: hsl(152, 42%, 46%)"><span class="recap-card-event">PGA Champ 2018</span><span class="recap-card-score">-7</span></div>
+        <div class="recap-card-cell" style="background: hsl(48, 52%, 44%)"><span class="recap-card-event">The Open 2024</span><span class="recap-card-score">+4</span></div>
+        <div class="recap-card-cell" style="background: hsl(0, 54%, 42%)"><span class="recap-card-event">U.S. Open 2025</span><span class="recap-card-score">+6</span></div>
+        <div class="recap-card-cell" style="background: hsl(152, 40%, 50%)"><span class="recap-card-event">Masters 2009</span><span class="recap-card-score">-2</span></div>
+        <div class="recap-card-cell" style="background: hsl(152, 40%, 50%)"><span class="recap-card-event">Masters 2012</span><span class="recap-card-score">-4</span></div>
+        <div class="recap-card-cell" style="background: hsl(0, 54%, 42%)"><span class="recap-card-event">Masters 2023</span><span class="recap-card-score">+7</span></div>
+        <div class="recap-card-cell" style="background: hsl(152, 40%, 50%)"><span class="recap-card-event">The Open 2025</span><span class="recap-card-score">-1</span></div>
+        <div class="recap-card-cell" style="background: hsl(0, 54%, 42%)"><span class="recap-card-event">U.S. Open 2020</span><span class="recap-card-score">+24</span></div>
+        <div class="recap-card-cell" style="background: hsl(48, 52%, 44%)"><span class="recap-card-event">British Open 2009</span><span class="recap-card-score">+2</span></div>
       </div>
       <div class="recap-brand">betterseason.live/golf</div>
     </div>
