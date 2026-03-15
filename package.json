@@ -5,7 +5,15 @@
   "description": "Better Season game",
   "engines": { "node": "20.x" },
   "scripts": {
-    "generate-favicons": "node scripts/generate-favicons.js"
+    "generate-favicons": "node scripts/generate-favicons.js",
+    "recap": "node recap/generate.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.0",
+    "form-data": "^4.0.0",
+    "puppeteer": "^23.0.0"
   },
   "devDependencies": {
     "png-to-ico": "^3.0.1",

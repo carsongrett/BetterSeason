@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>Better Season - NFL Daily</title>
+  <meta name="description" content="Better Season NFL Daily. Pick which player had the better stat. Resets at midnight.">
+  <link rel="icon" type="image/x-icon" href="../logos/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../logos/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../logos/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../logos/apple-touch-icon.png">
+  <link rel="manifest" href="../logos/site.webmanifest">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Better Season - NFL Daily">
+  <meta property="og:description" content="Better Season is an athletic resume game. Pick which player had the better stat.">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Better Season - NFL Daily">
+  <meta name="twitter:description" content="Better Season is an athletic resume game. Pick which player had the better stat.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <div id="app">
+    <header class="header" id="main-header">
+      <button class="home-btn" id="home-btn" type="button" aria-label="Home" title="Home" style="display: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </button>
+      <button class="how-to-btn" id="how-to-btn" type="button" aria-label="How to play" style="display: none;">?</button>
+      <h1>Better Season</h1>
+      <button class="initials-btn" id="initials-btn" type="button" aria-label="Change initials" title="Change initials" style="display: none;"></button>
+    </header>
+
+    <div class="modal-overlay" id="initials-modal" aria-hidden="true">
+      <div class="modal">
+        <h2>Change initials</h2>
+        <p>Your initials appear on game leaderboards (max 2 letters).</p>
+        <input type="text" id="initials-input" class="initials-input" maxlength="2" placeholder="e.g. JD" autocomplete="off" aria-label="Your initials">
+        <p class="initials-error hidden" id="initials-error" aria-live="polite"></p>
+        <button class="modal-close" id="initials-submit">OK</button>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="how-to-modal" aria-hidden="true">
+      <div class="modal">
+        <h2 id="how-to-modal-title">How to Play</h2>
+        <div id="how-to-modal-body" class="how-to-modal-body"></div>
+        <button class="modal-close" id="modal-close">Got it</button>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="about-modal" aria-hidden="true">
+      <div class="modal">
+        <h2>About</h2>
+        <p>Better Season is an athletic resume game. Pick a sport and a game mode, then see how well you know the numbers — pick which player had the better stat in each round.</p>
+        <p>Daily puzzles reset at midnight. Same puzzle for everyone that day.</p>
+        <button class="modal-close" id="about-modal-close">Got it</button>
+      </div>
+    </div>
+
+    <main class="main">
+      <section id="start-screen" class="screen active">
+        <div class="start-content">
+          <p class="tagline">Better Season is an athletic resume game.</p>
+          <p class="sport-prompt">Pick a sport</p>
+          <div class="sport-tabs">
+            <button class="sport-card sport-card--nfl" data-sport="nfl">
+              <span class="sport-card-icon">🏈</span>
+              <span class="sport-card-title">NFL</span>
+            </button>
+            <button class="sport-card sport-card--nba" data-sport="nba">
+              <span class="sport-card-icon">🏀</span>
+              <span class="sport-card-title">NBA</span>
+            </button>
+            <button class="sport-card sport-card--mlb" data-sport="mlb">
+              <span class="sport-card-icon">⚾</span>
+              <span class="sport-card-title">MLB</span>
+            </button>
+            <button class="sport-card sport-card--pga" data-sport="pga" type="button">
+              <span class="sport-card-icon">⛳</span>
+              <span class="sport-card-title">PGA</span>
+            </button>
+          </div>
+          <p class="start-prompt">Choose a game mode</p>
+          <div class="mode-options">
+            <button class="mode-card mode-card--pga-only" data-mode="pick_the_round_majors">
+              <span class="mode-card-badge mode-card-badge--daily">Daily</span>
+              <span class="mode-card-title">Best Ball</span>
+              <span class="mode-card-desc">The top tournaments.</span>
+            </button>
+            <button class="mode-card mode-card--pga-only mode-card--hidden" data-mode="pick_the_round" aria-hidden="true">
+              <span class="mode-card-badge mode-card-badge--daily">Daily</span>
+              <span class="mode-card-title">Best Ball (Hard)</span>
+              <span class="mode-card-desc">All historical tournaments.</span>
+            </button>
+            <button class="mode-card mode-card--pga-only" data-mode="pick_the_round_masters">
+              <span class="mode-card-badge mode-card-badge--daily">Daily</span>
+              <span class="mode-card-title">The Masters</span>
+              <span class="mode-card-desc">Masters only, different players and years.</span>
+            </button>
+            <button class="mode-card mode-card--nfl-nba" data-mode="daily">
+              <span class="mode-card-badge mode-card-badge--daily">Daily</span>
+              <span class="mode-card-title">Daily</span>
+              <span class="mode-card-desc">The classic. Resets at midnight.</span>
+            </button>
+            <button class="mode-card mode-card--nfl-only" data-mode="rookie_qb">
+              <span class="mode-card-badge mode-card-badge--daily">Daily</span>
+              <span class="mode-card-title">Rookie QBs</span>
+              <span class="mode-card-desc">Rookies from 2016-2025.</span>
+            </button>
+            <button class="mode-card mode-card--nfl-only" data-mode="blind_resume">
+              <span class="mode-card-badge mode-card-badge--daily">Daily</span>
+              <span class="mode-card-title">Blind Resume</span>
+              <span class="mode-card-desc">Guess the player as stats are revealed.</span>
+            </button>
+            <button class="mode-card mode-card--nba-only" data-mode="blind_resume_nba">
+              <span class="mode-card-badge mode-card-badge--daily">Daily</span>
+              <span class="mode-card-title">Blind Resume</span>
+              <span class="mode-card-desc">Guess the player as stats are revealed.</span>
+            </button>
+            <button class="mode-card mode-card--mlb-only" data-mode="mlb_batters">
+              <span class="mode-card-badge mode-card-badge--daily">Daily</span>
+              <span class="mode-card-title">Daily (Batters)</span>
+              <span class="mode-card-desc">2025 batting stats.</span>
+            </button>
+            <button class="mode-card mode-card--mlb-only" data-mode="mlb_pitchers">
+              <span class="mode-card-badge mode-card-badge--daily">Daily</span>
+              <span class="mode-card-title">Daily (Pitchers)</span>
+              <span class="mode-card-desc">2025 pitching stats.</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="round-screen" class="screen">
+        <div class="round-header">
+          <div class="header-badges">
+            <span class="position-badge" id="position-label"></span>
+            <span class="round-badge" id="round-indicator"></span>
+            <span class="blitz-timer" id="blitz-timer" aria-hidden="true">60</span>
+          </div>
+          <p class="round-instruction" id="round-instruction">Who had the better season?</p>
+        </div>
+        <div class="blind-resume-wrap" id="blind-resume-wrap" style="display: none;">
+          <div class="blind-resume-score-row">
+            <span class="blind-resume-score-label">Score</span>
+            <span class="blind-resume-score-value" id="blind-resume-score">0</span>
+          </div>
+          <div class="blind-resume-guess-wrap">
+            <input type="text" class="blind-resume-input" id="blind-resume-input" placeholder="Type player name..." autocomplete="off">
+            <div class="blind-resume-dropdown" id="blind-resume-dropdown"></div>
+            <button class="confirm-btn blind-resume-submit" id="blind-resume-submit" disabled>Guess</button>
+          </div>
+          <div class="blind-resume-stats" id="blind-resume-stats"></div>
+          <p class="blind-resume-feedback" id="blind-resume-feedback"></p>
+        </div>
+        <div class="matchup" id="matchup-wrap">
+          <div class="player player-a">
+            <div class="player-headshot" id="player-a-headshot" aria-hidden="true"></div>
+            <div class="player-name" id="player-a-name"></div>
+            <div class="player-meta" id="player-a-meta"></div>
+          </div>
+          <div class="vs">vs</div>
+          <div class="player player-b">
+            <div class="player-headshot" id="player-b-headshot" aria-hidden="true"></div>
+            <div class="player-name" id="player-b-name"></div>
+            <div class="player-meta" id="player-b-meta"></div>
+          </div>
+        </div>
+        <div class="stat-picks" id="stat-picks"></div>
+        <button class="confirm-btn" id="confirm-btn" disabled>Confirm</button>
+      </section>
+
+      <section id="results-screen" class="screen">
+        <div class="results-sport-toolbar" id="results-sport-toolbar"></div>
+        <div class="results-mode-buttons" id="results-mode-buttons"></div>
+        <p class="results-label">Final Score</p>
+        <div class="results-score" id="results-score"></div>
+        <div class="results-streak" id="results-streak"></div>
+        <p class="come-back-tomorrow" id="come-back-tomorrow">Come back tomorrow!</p>
+        <div class="results-stats-section hidden" id="results-stats-section">
+          <p class="results-stats-oneline" id="results-stats-percentile"></p>
+          <p class="results-stats-average" id="results-stats-average"></p>
+          <div class="results-stats-leaderboard-wrap" id="results-stats-leaderboard-wrap">
+            <button type="button" class="results-stats-leaderboard-toggle" id="results-stats-leaderboard-toggle" aria-expanded="false">See Top 10</button>
+            <div class="results-stats-leaderboard-list-wrap hidden" id="results-stats-leaderboard-list-wrap">
+              <h3 class="results-stats-leaderboard-title">Top 10</h3>
+              <ol class="results-stats-leaderboard" id="results-stats-leaderboard"></ol>
+            </div>
+          </div>
+        </div>
+        <div class="results-stats-loading hidden" id="results-stats-loading">Loading stats…</div>
+        <div class="share-grid" id="share-grid"></div>
+        <div class="share-buttons results-share-buttons">
+          <button class="share-btn share-btn-native hidden" id="share-native-btn">Share (text)</button>
+          <button class="share-btn share-btn-fallback" id="share-sms-btn">Share (text)</button>
+        </div>
+        <button class="new-game-btn" id="new-game-btn">New Game</button>
+      </section>
+    </main>
+  </div>
+  <script src="../common/player-initials.js"></script>
+  <script src="../golf/supabase-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../common/stats.js"></script>
+  <script src="../game.js"></script>
+</body>
+</html>

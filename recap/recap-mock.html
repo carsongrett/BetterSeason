@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daily Recap — Design Mock</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1412;
+      --surface: #1a211d;
+      --card-face: #232d28;
+      --text: #e8edea;
+      --muted: #8a9a92;
+      --border: #2d3834;
+      --radius: 12px;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      background: #1a1a1a;
+      color: var(--text);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .mock-note {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    /* ——— RECAP CARD ——— */
+    .recap-card {
+      width: 360px;
+      background: var(--bg);
+      border-radius: 16px;
+      padding: 1.5rem 1.25rem;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .recap-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('../logos/tall golf painting.png') center bottom / cover no-repeat;
+      opacity: 0.18;
+      z-index: 0;
+      border-radius: inherit;
+      pointer-events: none;
+    }
+    .recap-content {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+    .recap-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .recap-logo { width: 48px; height: 48px; object-fit: contain; }
+    .recap-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.75rem;
+      letter-spacing: 0.04em;
+      color: var(--text);
+    }
+    .recap-date {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.02em;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+    /* Grid — same as game over screen */
+    .recap-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.5rem;
+      width: 100%;
+    }
+    .recap-grid-col {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      align-items: center;
+      justify-content: flex-start;
+      min-width: 0;
+    }
+    .recap-headshot {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: var(--card-face);
+    }
+    .recap-headshot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .recap-name {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text);
+      text-align: center;
+      line-height: 1.2;
+      min-height: 2em;
+    }
+    .recap-card-cell {
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.25rem;
+      color: #fff;
+      font-size: 0.75rem;
+      text-align: center;
+    }
+    .recap-card-event {
+      font-size: 0.6rem;
+      line-height: 1.1;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      display: -webkit-box;
+    }
+    .recap-card-score {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-top: 0.2rem;
+    }
+    .recap-brand {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 1rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <p class="mock-note">Design mock — grid layout like game over screen. Refresh after edits.</p>
+  <div class="recap-card" id="recap-card">
+    <div class="recap-content">
+      <div class="recap-header">
+        <img class="recap-logo" src="../logos/BS 500x500.png" alt="">
+        <span class="recap-title">DAILY RECAP</span>
+      </div>
+      <div class="recap-date">March 13</div>
+      <div class="recap-grid">
+        <div class="recap-grid-col">
+          <div class="recap-headshot"><img src="https://a.espncdn.com/i/headshots/golf/players/full/33046.png" alt=""></div>
+          <div class="recap-name">Sepp Straka</div>
+          <div class="recap-card-cell" style="background: hsl(152, 40%, 50%)"><span class="recap-card-event">PGA Champ 2023</span><span class="recap-card-score">-2</span></div>
+          <div class="recap-card-cell" style="background: hsl(48, 52%, 44%)"><span class="recap-card-event">The Open 2024</span><span class="recap-card-score">+4</span></div>
+          <div class="recap-card-cell" style="background: hsl(0, 54%, 42%)"><span class="recap-card-event">Masters 2023</span><span class="recap-card-score">+7</span></div>
+        </div>
+        <div class="recap-grid-col">
+          <div class="recap-headshot"><img src="https://a.espncdn.com/i/headshots/golf/players/full/35944.png" alt=""></div>
+          <div class="recap-name">Thriston Lawrence</div>
+          <div class="recap-card-cell" style="background: hsl(0, 54%, 42%)"><span class="recap-card-event">PGA Champ 2023</span><span class="recap-card-score">+11</span></div>
+          <div class="recap-card-cell" style="background: hsl(0, 54%, 42%)"><span class="recap-card-event">U.S. Open 2025</span><span class="recap-card-score">+6</span></div>
+          <div class="recap-card-cell" style="background: hsl(152, 40%, 50%)"><span class="recap-card-event">The Open 2025</span><span class="recap-card-score">-1</span></div>
+        </div>
+        <div class="recap-grid-col">
+          <div class="recap-headshot"><img src="https://a.espncdn.com/i/headshots/golf/players/full/335.png" alt=""></div>
+          <div class="recap-name">Rory Sabbatini</div>
+          <div class="recap-card-cell" style="background: hsl(0, 54%, 42%)"><span class="recap-card-event">U.S. Open 2008</span><span class="recap-card-score">+12</span></div>
+          <div class="recap-card-cell" style="background: hsl(152, 40%, 50%)"><span class="recap-card-event">Masters 2009</span><span class="recap-card-score">-2</span></div>
+          <div class="recap-card-cell" style="background: hsl(0, 54%, 42%)"><span class="recap-card-event">U.S. Open 2020</span><span class="recap-card-score">+24</span></div>
+        </div>
+        <div class="recap-grid-col">
+          <div class="recap-headshot"><img src="https://a.espncdn.com/i/headshots/golf/players/full/569.png" alt=""></div>
+          <div class="recap-name">Justin Rose</div>
+          <div class="recap-card-cell" style="background: hsl(152, 42%, 46%)"><span class="recap-card-event">PGA Champ 2018</span><span class="recap-card-score">-7</span></div>
+          <div class="recap-card-cell" style="background: hsl(152, 40%, 50%)"><span class="recap-card-event">Masters 2012</span><span class="recap-card-score">-4</span></div>
+          <div class="recap-card-cell" style="background: hsl(48, 52%, 44%)"><span class="recap-card-event">British Open 2009</span><span class="recap-card-score">+2</span></div>
+        </div>
+      </div>
+      <div class="recap-brand">betterseason.live/golf</div>
+    </div>
+  </div>
+</body>
+</html>

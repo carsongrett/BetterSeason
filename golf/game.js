@@ -51,7 +51,7 @@ const RECENT_CARD_YEAR = 2015;
 // Only use results where the player made the cut (exclude CUT, WD, DQ, MDF)
 const EXCLUDED_POSITIONS = new Set(['cut', 'wd', 'dq', 'mdf']);
 
-// Normal mode: only these four majors (exact event_name match in CSV; include all tournament name variants in data)
+// Best Ball (normal): four majors + "fifth–seventh" (The Players, Memorial, Arnold Palmer). Exact event_name match in CSV.
 const MAJOR_EVENT_NAMES = new Set([
   'The Masters',
   'Masters Tournament',
@@ -61,6 +61,11 @@ const MAJOR_EVENT_NAMES = new Set([
   'U.S. Open Golf Championship',
   'The Open',
   'British Open Championship',
+  // Fifth–seventh for casual fans
+  'The Players Championship',
+  'Memorial Tournament',
+  'Arnold Palmer Invitational',
+  'Bay Hill Invitational', // legacy name for Arnold Palmer event
 ]);
 // The Masters only (same year range; used for "The Masters" daily game)
 const MASTERS_EVENT_NAMES = new Set(['The Masters', 'Masters Tournament']);
@@ -1102,7 +1107,7 @@ function updatePageTitleAndHeader() {
       if (easyBtnLabel) easyBtnLabel.textContent = 'Best Ball';
       if (easyModeBtn) {
         easyModeBtn.setAttribute('aria-label', 'Switch to Best Ball');
-        easyModeBtn.title = 'Best Ball (4 majors)';
+        easyModeBtn.title = 'Best Ball (majors + The Players, Memorial, Arnold Palmer)';
       }
     } else {
       if (easyBtnText) easyBtnText.textContent = 'The Masters';

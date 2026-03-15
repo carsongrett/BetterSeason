@@ -932,7 +932,6 @@ function getRecentPlayerKeys(sport, mode, allData) {
 const startScreen = document.getElementById('start-screen');
 const roundScreen = document.getElementById('round-screen');
 const resultsScreen = document.getElementById('results-screen');
-const startBtn = document.getElementById('start-btn');
 const positionLabel = document.getElementById('position-label');
 const playerAName = document.getElementById('player-a-name');
 const playerAMeta = document.getElementById('player-a-meta');
@@ -2105,9 +2104,6 @@ function updateStartScreen() {
   document.querySelectorAll('.mode-card').forEach(card => {
     card.classList.toggle('selected', card.dataset.mode === state.mode);
   });
-  const sportAvailable = AVAILABLE_SPORTS.includes(state.sport);
-  const pgaReady = state.sport === 'pga' && (state.mode === 'pick_the_round' || state.mode === 'pick_the_round_majors' || state.mode === 'pick_the_round_masters');
-  startBtn.disabled = state.sport === 'pga' ? !pgaReady : (!state.mode || !sportAvailable);
 }
 
 function setupSportTabs() {
@@ -2131,31 +2127,31 @@ function setupSportTabs() {
   document.querySelector('.sport-card--nfl').classList.add('selected');
 }
 
+function startFromSelection() {
+  if (state.sport === 'pga' && (state.mode === 'pick_the_round' || state.mode === 'pick_the_round_majors' || state.mode === 'pick_the_round_masters')) {
+    const mode = state.mode === 'pick_the_round_majors' ? 'majors' : state.mode === 'pick_the_round_masters' ? 'masters' : 'normal';
+    window.location.href = 'golf/?mode=' + mode;
+    return;
+  }
+  if (!state.mode) return;
+  const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS, MODES.BLIND_RESUME, MODES.BLIND_RESUME_NBA];
+  if (dailyModes.includes(state.mode) && hasPlayedDailyToday(state.sport, state.mode)) {
+    showDailyAlreadyPlayed();
+  } else {
+    initGame(state.mode);
+  }
+}
+
 function setupModeCards() {
   document.querySelectorAll('.mode-card').forEach(card => {
     card.addEventListener('click', () => {
-      state.mode = card.dataset.mode;
+      const mode = card.dataset.mode;
+      if (!mode) return;
+      state.mode = mode;
       document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
       card.classList.add('selected');
-      updateStartScreen();
+      startFromSelection();
     });
-  });
-}
-
-function setupStartBtn() {
-  startBtn.addEventListener('click', () => {
-    if (state.sport === 'pga' && (state.mode === 'pick_the_round' || state.mode === 'pick_the_round_majors' || state.mode === 'pick_the_round_masters')) {
-      const mode = state.mode === 'pick_the_round_majors' ? 'majors' : state.mode === 'pick_the_round_masters' ? 'masters' : 'normal';
-      window.location.href = 'golf/?mode=' + mode;
-      return;
-    }
-    if (!state.mode) return;
-    const dailyModes = [MODES.DAILY, MODES.ROOKIE_QB, MODES.MLB_BATTERS, MODES.MLB_PITCHERS, MODES.BLIND_RESUME, MODES.BLIND_RESUME_NBA];
-    if (dailyModes.includes(state.mode) && hasPlayedDailyToday(state.sport, state.mode)) {
-      showDailyAlreadyPlayed();
-    } else {
-      initGame(state.mode);
-    }
   });
 }
 
@@ -2219,12 +2215,26 @@ async function main() {
     setupInitialsModal();
     setupSportTabs();
     setupModeCards();
-    setupStartBtn();
     window.addEventListener('pageshow', function (e) {
       if (e.persisted) ensureResultsBackground();
     });
     state.allData = await loadData();
     state.data = state.allData[state.sport];
+
+    const pathSeg = (window.location.pathname || '').split('/').filter(Boolean)[0] || '';
+    const deepLinks = {
+      nfl: ['nfl', MODES.DAILY],
+      mlb: ['mlb', MODES.MLB_BATTERS],
+      nba: ['nba', MODES.DAILY],
+    };
+    const deepLink = deepLinks[pathSeg];
+    if (deepLink) {
+      state.sport = deepLink[0];
+      state.mode = deepLink[1];
+      initGame(deepLink[1]);
+      return;
+    }
+
     goToStartScreen();
   } catch (e) {
     document.body.innerHTML = `
